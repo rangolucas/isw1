@@ -364,45 +364,38 @@ Numero subclass: #Entero
 	poolDictionaries: ''
 	category: 'Numero-Exercise'!
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'LR 9/13/2023 00:02:06'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'LR 9/13/2023 00:44:52'!
 * aMultiplier 
+	^aMultiplier multiplyToEntero: self
 	
-	(aMultiplier isKindOf: self class) ifTrue: [
-		^self class with: value * aMultiplier integerValue
-	] ifFalse: [
-		^self * aMultiplier numerator / aMultiplier denominator
-	]
 	! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'LR 9/12/2023 23:54:06'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'LR 9/13/2023 00:58:35'!
 + anAdder 
 	
-	^(anAdder isKindOf: self class) 
-		ifTrue: [self class with: value + anAdder integerValue]
-		ifFalse: [Fraccion with: anAdder numerator + anAdder denominator over: anAdder denominator]! !
+	^anAdder addToEntero: self! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'LR 9/13/2023 00:11:23'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'LR 9/13/2023 01:03:06'!
 - aSubtrahend 
+	^aSubtrahend subtractFromEntero: self! !
 
-	(aSubtrahend isKindOf: self class) ifTrue: [
-		^self class with: value - aSubtrahend integerValue.	
-	] ifFalse: [
-		^self * aSubtrahend denominator - aSubtrahend numerator / aSubtrahend denominator
-	]! !
-
-!Entero methodsFor: 'arithmetic operations' stamp: 'LR 9/13/2023 00:05:07'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'LR 9/13/2023 01:14:22'!
 / aDivisor 
-	
-	(aDivisor isKindOf: self class) ifTrue: [
-		^Fraccion with: self over: aDivisor
-	] ifFalse: [
-		^self * aDivisor denominator / aDivisor numerator
-	]! !
+	^aDivisor divideFromEntero: self! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'HernanWilkinson 5/7/2016 21:55'!
 // aDivisor 
 	
 	^self class with: value // aDivisor integerValue! !
+
+!Entero methodsFor: 'arithmetic operations' stamp: 'LR 9/13/2023 00:58:35'!
+addToEntero: anAdder
+	^anAdder class with: anAdder integerValue + value! !
+
+!Entero methodsFor: 'arithmetic operations' stamp: 'LR 9/13/2023 01:07:49'!
+divideFromEntero: aDividend
+	^Fraccion with: aDividend over: self
+	! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'HAW 9/24/2018 08:47:50'!
 fibonacci
@@ -422,6 +415,15 @@ fibonacci
 greatestCommonDivisorWith: anEntero 
 	
 	^self class with: (value gcd: anEntero integerValue)! !
+
+!Entero methodsFor: 'arithmetic operations' stamp: 'LR 9/13/2023 00:49:08'!
+multiplyToEntero: anEntero
+	^anEntero class with: anEntero integerValue * value
+	! !
+
+!Entero methodsFor: 'arithmetic operations' stamp: 'LR 9/13/2023 01:01:19'!
+subtractFromEntero: aMinuend
+	^aMinuend class with: aMinuend integerValue - value.	! !
 
 
 !Entero methodsFor: 'comparing' stamp: 'HernanWilkinson 5/7/2016 21:01'!
@@ -544,6 +546,24 @@ Numero subclass: #Fraccion
 	] ifFalse: [
 		^numerator / (denominator * aDivisor)
 	]! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'LR 9/13/2023 00:58:50'!
+addToEntero: anAdder 
+	^Fraccion with: anAdder * denominator + numerator over: denominator! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'LR 9/13/2023 01:09:38'!
+divideFromEntero: aDividend
+	^aDividend * denominator / numerator! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'LR 9/13/2023 00:41:35'!
+multiplyToEntero: anEntero 
+	^anEntero * numerator / denominator
+	! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'LR 9/13/2023 01:02:37'!
+subtractFromEntero: aMinuend 
+	^aMinuend * denominator - numerator / denominator
+	! !
 
 
 !Fraccion methodsFor: 'comparing' stamp: 'HernanWilkinson 5/7/2016 20:42'!
