@@ -35,7 +35,7 @@ test03PopRemovesElementsFromTheStack
 	
 	self assert: stack isEmpty! !
 
-!OOStackTest methodsFor: 'test' stamp: 'NR 5/13/2020 13:30:09'!
+!OOStackTest methodsFor: 'test' stamp: 'LR 9/14/2023 21:13:18'!
 test04PopReturnsLastPushedObject
 
 	| stack pushedObject |
@@ -44,7 +44,7 @@ test04PopReturnsLastPushedObject
 	pushedObject := 'something'.
 	stack push: pushedObject.
 	
-	self assert: stack pop = pushedObject! !
+	self assert: stack pop = pushedObject.! !
 
 !OOStackTest methodsFor: 'test' stamp: 'NR 9/16/2021 17:40:17'!
 test05StackBehavesLIFO
@@ -147,10 +147,40 @@ TestCase subclass: #SentenceFinderByPrefixTest
 
 !classDefinition: #OOStack category: 'Stack-Exercise'!
 Object subclass: #OOStack
-	instanceVariableNames: ''
+	instanceVariableNames: 'items'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
+
+!OOStack methodsFor: 'as yet unclassified' stamp: 'LR 9/14/2023 21:51:40'!
+initialize
+	items := OrderedCollection new.
+	^self! !
+
+!OOStack methodsFor: 'as yet unclassified' stamp: 'LR 9/14/2023 21:50:51'!
+isEmpty
+	^items isEmpty! !
+
+!OOStack methodsFor: 'as yet unclassified' stamp: 'LR 9/14/2023 21:45:12'!
+pop
+	|last|
+	items isEmpty ifTrue: [self error: OOStack stackEmptyErrorDescription ].
+	last := items last.
+	items removeLast.
+	^last! !
+
+!OOStack methodsFor: 'as yet unclassified' stamp: 'LR 9/14/2023 21:46:21'!
+push: anItem
+	items add: anItem! !
+
+!OOStack methodsFor: 'as yet unclassified' stamp: 'LR 9/14/2023 21:46:28'!
+size
+	^items size! !
+
+!OOStack methodsFor: 'as yet unclassified' stamp: 'LR 9/14/2023 21:52:14'!
+top
+	items isEmpty ifTrue: [self error: OOStack stackEmptyErrorDescription ].
+	^items last! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
