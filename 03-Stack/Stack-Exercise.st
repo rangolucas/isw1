@@ -152,35 +152,40 @@ Object subclass: #OOStack
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!OOStack methodsFor: 'as yet unclassified' stamp: 'LR 9/14/2023 21:51:40'!
+!OOStack methodsFor: 'observation' stamp: 'LR 9/15/2023 13:09:33'!
+isEmpty
+	^items size = 1! !
+
+!OOStack methodsFor: 'observation' stamp: 'LR 9/15/2023 14:45:03'!
+size
+	^items size - 1! !
+
+!OOStack methodsFor: 'observation' stamp: 'LR 9/15/2023 14:45:21'!
+top
+	^items last top! !
+
+
+!OOStack methodsFor: 'manipulation' stamp: 'LR 9/15/2023 13:10:45'!
+pop
+	^items last popFrom: self! !
+
+!OOStack methodsFor: 'manipulation' stamp: 'LR 9/15/2023 14:58:25'!
+popNonEmpty
+	| lastItem |
+	lastItem := items last.
+	items removeLast.
+	^lastItem value! !
+
+!OOStack methodsFor: 'manipulation' stamp: 'LR 9/15/2023 13:12:13'!
+push: anItem
+	items add: (OOStackItem of: anItem)! !
+
+
+!OOStack methodsFor: 'initialization' stamp: 'LR 9/15/2023 19:21:03'!
 initialize
 	items := OrderedCollection new.
+	items add: OOStackBase new.
 	^self! !
-
-!OOStack methodsFor: 'as yet unclassified' stamp: 'LR 9/14/2023 21:50:51'!
-isEmpty
-	^items isEmpty! !
-
-!OOStack methodsFor: 'as yet unclassified' stamp: 'LR 9/14/2023 21:45:12'!
-pop
-	|last|
-	items isEmpty ifTrue: [self error: OOStack stackEmptyErrorDescription ].
-	last := items last.
-	items removeLast.
-	^last! !
-
-!OOStack methodsFor: 'as yet unclassified' stamp: 'LR 9/14/2023 21:46:21'!
-push: anItem
-	items add: anItem! !
-
-!OOStack methodsFor: 'as yet unclassified' stamp: 'LR 9/14/2023 21:46:28'!
-size
-	^items size! !
-
-!OOStack methodsFor: 'as yet unclassified' stamp: 'LR 9/14/2023 21:52:14'!
-top
-	items isEmpty ifTrue: [self error: OOStack stackEmptyErrorDescription ].
-	^items last! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -192,6 +197,60 @@ OOStack class
 stackEmptyErrorDescription
 	
 	^ 'stack is empty!!!!!!'! !
+
+
+!classDefinition: #OOStackBase category: 'Stack-Exercise'!
+Object subclass: #OOStackBase
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Stack-Exercise'!
+
+!OOStackBase methodsFor: 'observation' stamp: 'LR 9/15/2023 14:45:59'!
+top
+	self error: OOStack stackEmptyErrorDescription ! !
+
+
+!OOStackBase methodsFor: 'stackManipulation' stamp: 'LR 9/15/2023 13:08:55'!
+popFrom: aStack
+	self error: OOStack stackEmptyErrorDescription ! !
+
+
+!classDefinition: #OOStackItem category: 'Stack-Exercise'!
+Object subclass: #OOStackItem
+	instanceVariableNames: 'value'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Stack-Exercise'!
+
+!OOStackItem methodsFor: 'initialization' stamp: 'LR 9/15/2023 14:50:03'!
+initializeWith: aValue
+	value := aValue.
+	^self! !
+
+
+!OOStackItem methodsFor: 'stackManipulation' stamp: 'LR 9/15/2023 14:43:49'!
+popFrom: aStack
+	^aStack popNonEmpty! !
+
+
+!OOStackItem methodsFor: 'observation' stamp: 'LR 9/15/2023 14:46:13'!
+top
+	^value! !
+
+!OOStackItem methodsFor: 'observation' stamp: 'LR 9/15/2023 19:18:47'!
+value
+	^value! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'OOStackItem class' category: 'Stack-Exercise'!
+OOStackItem class
+	instanceVariableNames: ''!
+
+!OOStackItem class methodsFor: 'as yet unclassified' stamp: 'LR 9/15/2023 13:12:57'!
+of: anItem
+	^self new initializeWith: anItem! !
 
 
 !classDefinition: #SentenceFinderByPrefix category: 'Stack-Exercise'!
