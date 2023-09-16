@@ -139,10 +139,82 @@ test10CanNotTopWhenThereAreNoObjectsInTheStack
 
 !classDefinition: #SentenceFinderByPrefixTest category: 'Stack-Exercise'!
 TestCase subclass: #SentenceFinderByPrefixTest
-	instanceVariableNames: ''
+	instanceVariableNames: 'sentenceFinder'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
+
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LR 9/16/2023 12:53:46'!
+assertThat: aStack onlyHas: aSentence
+	
+	self assert: aStack size equals: 1.
+	self assert: aStack top equals: aSentence! !
+
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LR 9/16/2023 12:01:35'!
+testEmptyResultInStackWithOneSentence
+	| aStackWithOneSentence sentence foundSentences |
+	sentence := 'Winter is here'.
+	aStackWithOneSentence := self stackWithSentence: sentence.
+	
+	foundSentences := sentenceFinder findByPrefix: 'here' in: aStackWithOneSentence.
+	
+	self assert: foundSentences isEmpty! !
+
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LR 9/15/2023 20:23:58'!
+testEmptyResultWhenStackHasNoSentences
+	| anEmptyStack foundSentences |
+	anEmptyStack := OOStack new.
+	
+	foundSentences := sentenceFinder findByPrefix: 'some prefix' in: anEmptyStack.
+	
+	self assert: foundSentences isEmpty
+	! !
+
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LR 9/16/2023 12:53:33'!
+testLookingForPrefixesDoesntModifyTheStack
+	| aStackWithOneSentence sentence |
+	sentence := 'Winter is here'.
+	aStackWithOneSentence := self stackWithSentence: sentence.
+	
+	sentenceFinder findByPrefix: 'Win' in: aStackWithOneSentence.
+	
+	self assertThat: aStackWithOneSentence onlyHas: sentence.! !
+
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LR 9/16/2023 12:54:03'!
+testSingleResultInStackWithOneSentence
+	| aStackWithOneSentence sentence foundSentences |
+	sentence := 'Winter is here'.
+	aStackWithOneSentence := self stackWithSentence: sentence.
+	
+	foundSentences := sentenceFinder findByPrefix: 'Win' in: aStackWithOneSentence.
+	
+	self assertThat: foundSentences onlyHas: sentence! !
+
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LR 9/16/2023 12:01:52'!
+testTwoResultsInStackWithThreeSentences
+	| aStackWithThreeSentences foundSentences |
+	aStackWithThreeSentences := self stackWithSentence: 'Winter is here'.
+	aStackWithThreeSentences push: 'here is Winter'.
+	aStackWithThreeSentences push: 'Winter here is'.
+	
+	foundSentences := sentenceFinder findByPrefix: 'Win' in: aStackWithThreeSentences.
+	
+	self assert: foundSentences size equals: 2.
+	self assert: foundSentences includes: 'Winter is here'.
+	self assert: foundSentences includes: 'Winter here is'.! !
+
+
+!SentenceFinderByPrefixTest methodsFor: 'setup' stamp: 'LR 9/15/2023 19:53:48'!
+setUp
+	sentenceFinder := SentenceFinderByPrefix new! !
+
+
+!SentenceFinderByPrefixTest methodsFor: 'stackInitialization' stamp: 'LR 9/15/2023 20:17:44'!
+stackWithSentence: aSentence
+	| aStack |
+	aStack := OOStack new.
+	aStack push: aSentence.
+	^aStack! !
 
 
 !classDefinition: #OOStack category: 'Stack-Exercise'!
@@ -259,3 +331,40 @@ Object subclass: #SentenceFinderByPrefix
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
+
+!SentenceFinderByPrefix methodsFor: 'main' stamp: 'LR 9/16/2023 12:46:34'!
+findByPrefix: aPrefix in: aStack
+	| complyingSentences auxiliaryStack |
+	
+	complyingSentences := OrderedCollection new.
+	auxiliaryStack := OOStack new.
+	self popAllFrom: aStack into: auxiliaryStack andForEach: [ :poppedSentence | 
+		self addSentence: poppedSentence to: complyingSentences ifItBeginsWith: aPrefix
+	].
+	self popAllFrom: auxiliaryStack into: aStack.
+	^complyingSentences! !
+
+
+!SentenceFinderByPrefix methodsFor: 'auxiliary' stamp: 'LR 9/16/2023 12:39:48'!
+addSentence: aSentence to: aCollection ifItBeginsWith: aPrefix
+	(aSentence beginsWith: aPrefix) ifTrue: [ aCollection add: aSentence ]! !
+
+!SentenceFinderByPrefix methodsFor: 'auxiliary' stamp: 'LR 9/16/2023 12:36:57'!
+popAllFrom: stackToPopFrom into: stackToPushTo
+	self popAllFrom: stackToPopFrom into: stackToPushTo andForEach: []! !
+
+!SentenceFinderByPrefix methodsFor: 'auxiliary' stamp: 'LR 9/16/2023 12:26:51'!
+popAllFrom: aStackToPopFrom into: aStackToPushTo andForEach: aClosureForASentence
+	| poppedSentence |
+	[ aStackToPopFrom isEmpty ] whileFalse: [
+		poppedSentence := self popFrom: aStackToPopFrom into: aStackToPushTo.
+		aClosureForASentence value: poppedSentence
+	]! !
+
+!SentenceFinderByPrefix methodsFor: 'auxiliary' stamp: 'LR 9/16/2023 12:16:44'!
+popFrom: stackToPopFrom into: stackToPushTo
+
+	| poppedSentence |
+	poppedSentence := stackToPopFrom pop.
+	stackToPushTo push: poppedSentence.
+	^poppedSentence! !
