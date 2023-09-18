@@ -144,11 +144,16 @@ TestCase subclass: #SentenceFinderByPrefixTest
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LR 9/16/2023 12:53:46'!
-assertThat: aStack onlyHas: aSentence
-	
-	self assert: aStack size equals: 1.
-	self assert: aStack top equals: aSentence! !
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LR 9/18/2023 10:21:40'!
+testCannotUseInvalidPrefixes
+	| aStack |
+	aStack := OOStack new.
+	self
+		should: [ sentenceFinder findByPrefix: '' in: aStack ]
+		raise: Error
+		withExceptionDo: [:error | 
+			error messageText = (SentenceFinderByPrefix invalidPrefixErrorDescription)
+		]! !
 
 !SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LR 9/16/2023 12:01:35'!
 testEmptyResultInStackWithOneSentence
@@ -170,17 +175,20 @@ testEmptyResultWhenStackHasNoSentences
 	self assert: foundSentences isEmpty
 	! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LR 9/16/2023 12:53:33'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LR 9/18/2023 10:24:11'!
 testLookingForPrefixesDoesntModifyTheStack
-	| aStackWithOneSentence sentence |
-	sentence := 'Winter is here'.
-	aStackWithOneSentence := self stackWithSentence: sentence.
+	| aStackWithTwoSentences firstSentence secondSentence |
+	firstSentence := 'Winter is here'.
+	secondSentence := 'winter is here'.
+	aStackWithTwoSentences := self stackWithSentence: firstSentence.
+	aStackWithTwoSentences push: secondSentence.	
 	
-	sentenceFinder findByPrefix: 'Win' in: aStackWithOneSentence.
+	sentenceFinder findByPrefix: 'Win' in: aStackWithTwoSentences.
 	
-	self assertThat: aStackWithOneSentence onlyHas: sentence.! !
+	self assert: aStackWithTwoSentences pop equals: secondSentence.
+	self assert: aStackWithTwoSentences pop equals: firstSentence.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LR 9/16/2023 12:54:03'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LR 9/18/2023 10:12:53'!
 testSingleResultInStackWithOneSentence
 	| aStackWithOneSentence sentence foundSentences |
 	sentence := 'Winter is here'.
@@ -188,7 +196,8 @@ testSingleResultInStackWithOneSentence
 	
 	foundSentences := sentenceFinder findByPrefix: 'Win' in: aStackWithOneSentence.
 	
-	self assertThat: foundSentences onlyHas: sentence! !
+	self assert: foundSentences size equals: 1.
+	self assert: foundSentences last equals: sentence! !
 
 !SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'LR 9/16/2023 12:01:52'!
 testTwoResultsInStackWithThreeSentences
@@ -332,10 +341,10 @@ Object subclass: #SentenceFinderByPrefix
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!SentenceFinderByPrefix methodsFor: 'main' stamp: 'LR 9/16/2023 12:46:34'!
+!SentenceFinderByPrefix methodsFor: 'main' stamp: 'LR 9/18/2023 09:49:02'!
 findByPrefix: aPrefix in: aStack
 	| complyingSentences auxiliaryStack |
-	
+	self validatePrefix: aPrefix.
 	complyingSentences := OrderedCollection new.
 	auxiliaryStack := OOStack new.
 	self popAllFrom: aStack into: auxiliaryStack andForEach: [ :poppedSentence | 
@@ -349,9 +358,9 @@ findByPrefix: aPrefix in: aStack
 addSentence: aSentence to: aCollection ifItBeginsWith: aPrefix
 	(aSentence beginsWith: aPrefix) ifTrue: [ aCollection add: aSentence ]! !
 
-!SentenceFinderByPrefix methodsFor: 'auxiliary' stamp: 'LR 9/16/2023 12:36:57'!
+!SentenceFinderByPrefix methodsFor: 'auxiliary' stamp: 'LR 9/18/2023 10:07:21'!
 popAllFrom: stackToPopFrom into: stackToPushTo
-	self popAllFrom: stackToPopFrom into: stackToPushTo andForEach: []! !
+	self popAllFrom: stackToPopFrom into: stackToPushTo andForEach: [:x | ]! !
 
 !SentenceFinderByPrefix methodsFor: 'auxiliary' stamp: 'LR 9/16/2023 12:26:51'!
 popAllFrom: aStackToPopFrom into: aStackToPushTo andForEach: aClosureForASentence
@@ -368,3 +377,19 @@ popFrom: stackToPopFrom into: stackToPushTo
 	poppedSentence := stackToPopFrom pop.
 	stackToPushTo push: poppedSentence.
 	^poppedSentence! !
+
+!SentenceFinderByPrefix methodsFor: 'auxiliary' stamp: 'LR 9/18/2023 09:54:17'!
+validatePrefix: aPrefix
+	((aPrefix = '') or: (aPrefix includesSubString: '')) ifTrue: [
+		self error: self class invalidPrefixErrorDescription
+	]! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'SentenceFinderByPrefix class' category: 'Stack-Exercise'!
+SentenceFinderByPrefix class
+	instanceVariableNames: ''!
+
+!SentenceFinderByPrefix class methodsFor: 'as yet unclassified' stamp: 'LR 9/18/2023 10:00:35'!
+invalidPrefixErrorDescription
+	^'A prefix cannot be blank or contain spaces'! !
