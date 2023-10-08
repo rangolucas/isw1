@@ -20,8 +20,8 @@ test01MarsRoverProcessEmptyCommand
 	
 	self assert: (marsRover isAt: 0@0 facing: north).! !
 
-!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:57:16'!
-test02MarsRoverProcessEmptyCommand
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 20:07:59'!
+test02MarsRoverProcessMoveForwardsCommand
 	|marsRover|
 	
 	marsRover := MarsRover deployAt: 0@0 facing: north.
@@ -29,8 +29,8 @@ test02MarsRoverProcessEmptyCommand
 	
 	self assert: (marsRover isAt: 0@1 facing: north).! !
 
-!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:57:25'!
-test03MarsRoverProcessEmptyCommand
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 20:08:06'!
+test03MarsRoverProcessMoveBackwardsCommand
 	|marsRover|
 	
 	marsRover := MarsRover deployAt: 0@0 facing: north.
@@ -38,8 +38,8 @@ test03MarsRoverProcessEmptyCommand
 	
 	self assert: (marsRover isAt: 0@-1 facing: north).! !
 
-!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:57:32'!
-test04MarsRoverProcessEmptyCommand
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 20:08:37'!
+test04MarsRoverProcessRotateLeftCommandWhenFacingNorth
 	|marsRover|
 	
 	marsRover := MarsRover deployAt: 0@0 facing: north.
@@ -47,8 +47,8 @@ test04MarsRoverProcessEmptyCommand
 	
 	self assert: (marsRover isAt: 0@0 facing: west).! !
 
-!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:57:42'!
-test05MarsRoverProcessEmptyCommand
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 20:08:31'!
+test05MarsRoverProcessRotateLeftCommandWhenFacingWest
 	|marsRover|
 	
 	marsRover := MarsRover deployAt: 0@0 facing: west.
@@ -64,97 +64,6 @@ test06MarsRoverProcessErroneousCommand
 	marsRover processCommand: 'x'.
 	
 	self assert: (marsRover isAt: 0@0 facing: north).! !
-
-
-!classDefinition: #CommandBase category: 'MarsRoverExercise'!
-Object subclass: #CommandBase
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'MarsRoverExercise'!
-
-!CommandBase methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:57:29'!
-isSentTo: aMarsRover
-
-	self subclassResponsibility! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'CommandBase class' category: 'MarsRoverExercise'!
-CommandBase class
-	instanceVariableNames: ''!
-
-!CommandBase class methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 02:12:19'!
-commandParse: aCommandCharacter
-	(aCommandCharacter = 'f') ifTrue: [^CommandForward new.].
-	(aCommandCharacter = 'b') ifTrue: [^CommandBackward new.].
-	(aCommandCharacter = 'l') ifTrue: [^CommandLeft new.].
-	(aCommandCharacter = 'r') ifTrue: [^CommandRight new.].
-	^CommandNotRecognized new.! !
-
-
-!classDefinition: #CommandBackward category: 'MarsRoverExercise'!
-CommandBase subclass: #CommandBackward
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'MarsRoverExercise'!
-
-!CommandBackward methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:57:48'!
-isSentTo: aMarsRover
-	
-	aMarsRover moveBackwards.! !
-
-
-!classDefinition: #CommandForward category: 'MarsRoverExercise'!
-CommandBase subclass: #CommandForward
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'MarsRoverExercise'!
-
-!CommandForward methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:58:05'!
-isSentTo: aMarsRover
-	
-	aMarsRover moveForwards.! !
-
-
-!classDefinition: #CommandLeft category: 'MarsRoverExercise'!
-CommandBase subclass: #CommandLeft
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'MarsRoverExercise'!
-
-!CommandLeft methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:58:33'!
-isSentTo: aMarsRover
-	
-	aMarsRover rotateLeft.! !
-
-
-!classDefinition: #CommandNotRecognized category: 'MarsRoverExercise'!
-CommandBase subclass: #CommandNotRecognized
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'MarsRoverExercise'!
-
-!CommandNotRecognized methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 02:11:53'!
-isSentTo: aMarsRover
-	^self.! !
-
-
-!classDefinition: #CommandRight category: 'MarsRoverExercise'!
-CommandBase subclass: #CommandRight
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'MarsRoverExercise'!
-
-!CommandRight methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:58:53'!
-isSentTo: aMarsRover
-	
-	aMarsRover rotateRight.! !
 
 
 !classDefinition: #MarsRover category: 'MarsRoverExercise'!
@@ -178,10 +87,10 @@ with: aPoint facing: aCardinalPoint
 	facing := aCardinalPoint.! !
 
 
-!MarsRover methodsFor: 'processing' stamp: 'BR 10/8/2023 02:07:51'!
+!MarsRover methodsFor: 'processing' stamp: 'LR 10/8/2023 20:06:29'!
 processCommand: aCommand
 	
-	(CommandBase commandParse: aCommand) isSentTo: self.
+	(MarsRoverCommand commandParse: aCommand) isSentTo: self.
 	! !
 
 
@@ -212,6 +121,97 @@ MarsRover class
 !MarsRover class methodsFor: 'as yet unclassified' stamp: 'BR 10/5/2023 21:33:19'!
 deployAt: aPoint facing: aCardinalPoint
 	^MarsRover new with: aPoint facing: aCardinalPoint.! !
+
+
+!classDefinition: #MarsRoverCommand category: 'MarsRoverExercise'!
+Object subclass: #MarsRoverCommand
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!MarsRoverCommand methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:57:29'!
+isSentTo: aMarsRover
+
+	self subclassResponsibility! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'MarsRoverCommand class' category: 'MarsRoverExercise'!
+MarsRoverCommand class
+	instanceVariableNames: ''!
+
+!MarsRoverCommand class methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 20:07:38'!
+commandParse: aCommandCharacter
+	(aCommandCharacter = 'f') ifTrue: [^MoveForwardsCommand new.].
+	(aCommandCharacter = 'b') ifTrue: [^MoveBackwardsCommand new.].
+	(aCommandCharacter = 'l') ifTrue: [^RotateLeftCommand new.].
+	(aCommandCharacter = 'r') ifTrue: [^RotateRightCommand new.].
+	^CommandNotRecognized new.! !
+
+
+!classDefinition: #CommandNotRecognized category: 'MarsRoverExercise'!
+MarsRoverCommand subclass: #CommandNotRecognized
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!CommandNotRecognized methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 02:11:53'!
+isSentTo: aMarsRover
+	^self.! !
+
+
+!classDefinition: #MoveBackwardsCommand category: 'MarsRoverExercise'!
+MarsRoverCommand subclass: #MoveBackwardsCommand
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!MoveBackwardsCommand methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:57:48'!
+isSentTo: aMarsRover
+	
+	aMarsRover moveBackwards.! !
+
+
+!classDefinition: #MoveForwardsCommand category: 'MarsRoverExercise'!
+MarsRoverCommand subclass: #MoveForwardsCommand
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!MoveForwardsCommand methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:58:05'!
+isSentTo: aMarsRover
+	
+	aMarsRover moveForwards.! !
+
+
+!classDefinition: #RotateLeftCommand category: 'MarsRoverExercise'!
+MarsRoverCommand subclass: #RotateLeftCommand
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!RotateLeftCommand methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:58:33'!
+isSentTo: aMarsRover
+	
+	aMarsRover rotateLeft.! !
+
+
+!classDefinition: #RotateRightCommand category: 'MarsRoverExercise'!
+MarsRoverCommand subclass: #RotateRightCommand
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!RotateRightCommand methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:58:53'!
+isSentTo: aMarsRover
+	
+	aMarsRover rotateRight.! !
 
 
 !classDefinition: #Orientation category: 'MarsRoverExercise'!

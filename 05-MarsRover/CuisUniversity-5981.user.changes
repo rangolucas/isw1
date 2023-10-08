@@ -1084,3 +1084,141 @@ test06MarsRoverProcessErroneousCommand
 
 !testRun: #TestMarsRover #test06MarsRoverProcessErroneousCommand stamp: 'LR 10/8/2023 19:57:54'!
 PASSED!
+
+----STARTUP---- (8 October 2023 20:05:56) as /Users/lucas.rango/workspace/cuisUniversity/CuisUniversity-5981.image!
+
+
+----End fileIn of /Users/lucas.rango/workspace/fceyn/isw1/05-MarsRover/MarsRoverExercise.st----!
+
+!classRenamed: #CommandBase as: #MarsRoverCommand stamp: 'LR 10/8/2023 20:06:29'!
+Smalltalk renameClassNamed: #CommandBase as: #MarsRoverCommand!
+!MarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 20:06:29' prior: 50651668!
+processCommand: aCommand
+	
+	(MarsRoverCommand commandParse: aCommand) isSentTo: self.
+	! !
+
+!classRenamed: #CommandBackward as: #MoveBackwardsCommand stamp: 'LR 10/8/2023 20:06:48'!
+Smalltalk renameClassNamed: #CommandBackward as: #MoveBackwardsCommand!
+!MarsRoverCommand class methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 20:06:48' prior: 50651543!
+commandParse: aCommandCharacter
+	(aCommandCharacter = 'f') ifTrue: [^CommandForward new.].
+	(aCommandCharacter = 'b') ifTrue: [^MoveBackwardsCommand new.].
+	(aCommandCharacter = 'l') ifTrue: [^CommandLeft new.].
+	(aCommandCharacter = 'r') ifTrue: [^CommandRight new.].
+	^CommandNotRecognized new.! !
+
+!classRenamed: #CommandForward as: #MoveForwardsCommand stamp: 'LR 10/8/2023 20:06:59'!
+Smalltalk renameClassNamed: #CommandForward as: #MoveForwardsCommand!
+!MarsRoverCommand class methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 20:07:00' prior: 50651812!
+commandParse: aCommandCharacter
+	(aCommandCharacter = 'f') ifTrue: [^MoveForwardsCommand new.].
+	(aCommandCharacter = 'b') ifTrue: [^MoveBackwardsCommand new.].
+	(aCommandCharacter = 'l') ifTrue: [^CommandLeft new.].
+	(aCommandCharacter = 'r') ifTrue: [^CommandRight new.].
+	^CommandNotRecognized new.! !
+
+!classRenamed: #CommandLeft as: #RotateLeftCommand stamp: 'LR 10/8/2023 20:07:13'!
+Smalltalk renameClassNamed: #CommandLeft as: #RotateLeftCommand!
+!MarsRoverCommand class methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 20:07:13' prior: 50651830!
+commandParse: aCommandCharacter
+	(aCommandCharacter = 'f') ifTrue: [^MoveForwardsCommand new.].
+	(aCommandCharacter = 'b') ifTrue: [^MoveBackwardsCommand new.].
+	(aCommandCharacter = 'l') ifTrue: [^RotateLeftCommand new.].
+	(aCommandCharacter = 'r') ifTrue: [^CommandRight new.].
+	^CommandNotRecognized new.! !
+
+!classRenamed: #CommandRight as: #RotateRightCommand stamp: 'LR 10/8/2023 20:07:38'!
+Smalltalk renameClassNamed: #CommandRight as: #RotateRightCommand!
+!MarsRoverCommand class methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 20:07:38' prior: 50651848!
+commandParse: aCommandCharacter
+	(aCommandCharacter = 'f') ifTrue: [^MoveForwardsCommand new.].
+	(aCommandCharacter = 'b') ifTrue: [^MoveBackwardsCommand new.].
+	(aCommandCharacter = 'l') ifTrue: [^RotateLeftCommand new.].
+	(aCommandCharacter = 'r') ifTrue: [^RotateRightCommand new.].
+	^CommandNotRecognized new.! !
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 20:07:59'!
+test02MarsRoverProcessMoveForwardsCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processCommand: 'f'.
+	
+	self assert: (marsRover isAt: 0@1 facing: north).! !
+
+!methodRemoval: TestMarsRover #test02MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 20:07:59'!
+test02MarsRoverProcessEmptyCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processCommand: 'f'.
+	
+	self assert: (marsRover isAt: 0@1 facing: north).!
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 20:08:06'!
+test03MarsRoverProcessMoveBackwardsCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processCommand: 'b'.
+	
+	self assert: (marsRover isAt: 0@-1 facing: north).! !
+
+!methodRemoval: TestMarsRover #test03MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 20:08:06'!
+test03MarsRoverProcessEmptyCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processCommand: 'b'.
+	
+	self assert: (marsRover isAt: 0@-1 facing: north).!
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 20:08:16'!
+test04MarsRoverProcessRotateLeftCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processCommand: 'l'.
+	
+	self assert: (marsRover isAt: 0@0 facing: west).! !
+
+!methodRemoval: TestMarsRover #test04MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 20:08:16'!
+test04MarsRoverProcessEmptyCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processCommand: 'l'.
+	
+	self assert: (marsRover isAt: 0@0 facing: west).!
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 20:08:31'!
+test05MarsRoverProcessRotateLeftCommandWhenFacingWest
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: west.
+	marsRover processCommand: 'l'.
+	
+	self assert: (marsRover isAt: 0@0 facing: south).! !
+
+!methodRemoval: TestMarsRover #test05MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 20:08:31'!
+test05MarsRoverProcessEmptyCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: west.
+	marsRover processCommand: 'l'.
+	
+	self assert: (marsRover isAt: 0@0 facing: south).!
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 20:08:37'!
+test04MarsRoverProcessRotateLeftCommandWhenFacingNorth
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processCommand: 'l'.
+	
+	self assert: (marsRover isAt: 0@0 facing: west).! !
+
+!methodRemoval: TestMarsRover #test04MarsRoverProcessRotateLeftCommand stamp: 'LR 10/8/2023 20:08:37'!
+test04MarsRoverProcessRotateLeftCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processCommand: 'l'.
+	
+	self assert: (marsRover isAt: 0@0 facing: west).!
