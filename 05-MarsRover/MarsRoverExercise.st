@@ -1,63 +1,69 @@
 !classDefinition: #TestMarsRover category: 'MarsRoverExercise'!
 TestCase subclass: #TestMarsRover
-	instanceVariableNames: ''
+	instanceVariableNames: 'north south west'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'MarsRoverExercise'!
 
-!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 00:47:41'!
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:56:54'!
+initialize
+	north := Orientation north.
+	south := Orientation south.
+	west := Orientation west.! !
+
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:57:04'!
 test01MarsRoverProcessEmptyCommand
 	|marsRover|
 	
-	marsRover := MarsRover deployAt: 0@0 facing: #North.
+	marsRover := MarsRover deployAt: 0@0 facing: north.
 	marsRover processCommand: ''.
 	
-	self assert: (marsRover isAt: 0@0 facing: #North).! !
+	self assert: (marsRover isAt: 0@0 facing: north).! !
 
-!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'BR 10/5/2023 21:42:05'!
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:57:16'!
 test02MarsRoverProcessEmptyCommand
 	|marsRover|
 	
-	marsRover := MarsRover deployAt: 0@0 facing: #North.
+	marsRover := MarsRover deployAt: 0@0 facing: north.
 	marsRover processCommand: 'f'.
 	
-	self assert: (marsRover isAt: 0@1 facing: #North).! !
+	self assert: (marsRover isAt: 0@1 facing: north).! !
 
-!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'BR 10/5/2023 21:46:39'!
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:57:25'!
 test03MarsRoverProcessEmptyCommand
 	|marsRover|
 	
-	marsRover := MarsRover deployAt: 0@0 facing: #North.
+	marsRover := MarsRover deployAt: 0@0 facing: north.
 	marsRover processCommand: 'b'.
 	
-	self assert: (marsRover isAt: 0@-1 facing: #North).! !
+	self assert: (marsRover isAt: 0@-1 facing: north).! !
 
-!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 00:50:08'!
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:57:32'!
 test04MarsRoverProcessEmptyCommand
 	|marsRover|
 	
-	marsRover := MarsRover deployAt: 0@0 facing: #North.
+	marsRover := MarsRover deployAt: 0@0 facing: north.
 	marsRover processCommand: 'l'.
 	
-	self assert: (marsRover isAt: 0@0 facing: #West).! !
+	self assert: (marsRover isAt: 0@0 facing: west).! !
 
-!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 00:52:06'!
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:57:42'!
 test05MarsRoverProcessEmptyCommand
 	|marsRover|
 	
-	marsRover := MarsRover deployAt: 0@0 facing: #West.
+	marsRover := MarsRover deployAt: 0@0 facing: west.
 	marsRover processCommand: 'l'.
 	
-	self assert: (marsRover isAt: 0@0 facing: #South).! !
+	self assert: (marsRover isAt: 0@0 facing: south).! !
 
-!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:00:16'!
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:57:53'!
 test06MarsRoverProcessErroneousCommand
 	|marsRover|
 	
-	marsRover := MarsRover deployAt: 0@0 facing: #North.
+	marsRover := MarsRover deployAt: 0@0 facing: north.
 	marsRover processCommand: 'x'.
 	
-	self assert: (marsRover isAt: 0@0 facing: #North).! !
+	self assert: (marsRover isAt: 0@0 facing: north).! !
 
 
 !classDefinition: #CommandBase category: 'MarsRoverExercise'!
@@ -187,10 +193,15 @@ moveBackwards
 moveForwards
 	position := position + (0@1).! !
 
-!MarsRover methodsFor: 'movement' stamp: 'BR 10/8/2023 02:17:49'!
+!MarsRover methodsFor: 'movement' stamp: 'LR 10/8/2023 19:44:46'!
 rotateLeft
-	(facing = #North) ifTrue: [facing := #West.].
-	(facing = #West) ifTrue: [facing := #South.].! !
+	(facing = #North) ifTrue: [
+		facing := #West
+	] ifFalse: [	
+		(facing = #West) ifTrue: [
+			facing := #South
+		]
+	]! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -201,3 +212,78 @@ MarsRover class
 !MarsRover class methodsFor: 'as yet unclassified' stamp: 'BR 10/5/2023 21:33:19'!
 deployAt: aPoint facing: aCardinalPoint
 	^MarsRover new with: aPoint facing: aCardinalPoint.! !
+
+
+!classDefinition: #Orientation category: 'MarsRoverExercise'!
+Object subclass: #Orientation
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!Orientation methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:46:56'!
+rotateLeft
+	^self subclassResponsibility ! !
+
+!Orientation methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:47:00'!
+rotateRight
+	^self subclassResponsibility ! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Orientation class' category: 'MarsRoverExercise'!
+Orientation class
+	instanceVariableNames: 'north west south'!
+
+!Orientation class methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:53:36'!
+initialize
+	north := North new.
+	south := South new.
+	west := West new.
+	! !
+
+!Orientation class methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:54:47'!
+north
+	^north! !
+
+!Orientation class methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:54:54'!
+south
+	^south! !
+
+!Orientation class methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:54:36'!
+west
+	^west! !
+
+
+!classDefinition: #North category: 'MarsRoverExercise'!
+Orientation subclass: #North
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!North methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:47:44'!
+rotateLeft
+	^Orientation west! !
+
+
+!classDefinition: #South category: 'MarsRoverExercise'!
+Orientation subclass: #South
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+
+!classDefinition: #West category: 'MarsRoverExercise'!
+Orientation subclass: #West
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!West methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:55:39'!
+rotateLeft
+	^Orientation south! !
+
+Orientation initialize!

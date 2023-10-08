@@ -843,3 +843,244 @@ PASSED!
 ----SNAPSHOT----(8 October 2023 02:18:48) CuisUniversity-5981.image priorSource: 10197292!
 
 ----QUIT----(8 October 2023 02:19:15) CuisUniversity-5981.image priorSource: 10217211!
+
+----STARTUP---- (8 October 2023 19:13:00) as /Users/lucas.rango/workspace/cuisUniversity/CuisUniversity-5981.image!
+
+
+----End fileIn of /Users/lucas.rango/workspace/fceyn/isw1/05-MarsRover/MarsRoverExercise.st----!
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 19:38:30'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 19:38:30'!
+PASSED!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 19:38:30'!
+PASSED!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 19:38:30'!
+FAILURE!
+
+!testRun: #TestMarsRover #test05MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 19:38:30'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessErroneousCommand stamp: 'LR 10/8/2023 19:38:30'!
+PASSED!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 19:38:30'!
+FAILURE!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 19:41:21'!
+FAILURE!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 19:41:21'!
+FAILURE!
+
+marsRover isAt: 0@0 facing: #West!
+
+marsRover isAt: 0@0 facing: #North!
+
+marsRover isAt: 0@0 facing: #South!
+!MarsRover methodsFor: 'movement' stamp: 'LR 10/8/2023 19:44:46' prior: 50651177!
+rotateLeft
+	(facing = #North) ifTrue: [
+		facing := #West
+	] ifFalse: [	
+		(facing = #West) ifTrue: [
+			facing := #South
+		]
+	]! !
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 19:44:50'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 19:44:50'!
+PASSED!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 19:44:50'!
+PASSED!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 19:44:50'!
+PASSED!
+
+!testRun: #TestMarsRover #test05MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 19:44:50'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessErroneousCommand stamp: 'LR 10/8/2023 19:44:50'!
+PASSED!
+
+Object subclass: #Orientation
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!classDefinition: #Orientation category: 'MarsRoverExercise' stamp: 'LR 10/8/2023 19:46:04'!
+Object subclass: #Orientation
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+Orientation subclass: #North
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!classDefinition: #North category: 'MarsRoverExercise' stamp: 'LR 10/8/2023 19:46:26'!
+Orientation subclass: #North
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+Orientation subclass: #West
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!classDefinition: #West category: 'MarsRoverExercise' stamp: 'LR 10/8/2023 19:46:29'!
+Orientation subclass: #West
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+Orientation subclass: #South
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!classDefinition: #South category: 'MarsRoverExercise' stamp: 'LR 10/8/2023 19:46:35'!
+Orientation subclass: #South
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+!Orientation methodsFor: 'no messages' stamp: 'LR 10/8/2023 19:46:56'!
+rotateLeft
+	^self subclassResponsibility ! !
+!Orientation methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:47:00'!
+rotateRight
+	^self subclassResponsibility ! !
+!North methodsFor: 'no messages' stamp: 'LR 10/8/2023 19:47:44' overrides: 50651303!
+rotateLeft
+	^Orientation west! !
+!Orientation class methodsFor: 'no messages' stamp: 'LR 10/8/2023 19:48:11'!
+west
+	! !
+
+Days!
+
+Days!
+
+Days!
+
+Orientation class
+	instanceVariableNames: 'north west south'!
+
+!classDefinition: 'Orientation class' category: 'MarsRoverExercise' stamp: 'LR 10/8/2023 19:52:33'!
+Orientation class
+	instanceVariableNames: 'north west south'!
+!Orientation class methodsFor: 'nil' stamp: 'LR 10/8/2023 19:53:36' overrides: 16904184!
+initialize
+	north := North new.
+	south := South new.
+	west := West new.
+	! !
+!Orientation class methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:54:36' prior: 50651316!
+west
+	^west! !
+!Orientation class methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:54:47'!
+north
+	^north! !
+!Orientation class methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:54:54'!
+south
+	^south! !
+!West methodsFor: 'nil' stamp: 'LR 10/8/2023 19:55:39' overrides: 50651303!
+rotateLeft
+	^Orientation south! !
+
+TestCase subclass: #TestMarsRover
+	instanceVariableNames: 'north south west'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!classDefinition: #TestMarsRover category: 'MarsRoverExercise' stamp: 'LR 10/8/2023 19:56:29'!
+TestCase subclass: #TestMarsRover
+	instanceVariableNames: 'north south west'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:56:54' overrides: 16920235!
+initialize
+	north := Orientation north.
+	south := Orientation south.
+	west := Orientation west.! !
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:57:04' prior: 50650960!
+test01MarsRoverProcessEmptyCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processCommand: ''.
+	
+	self assert: (marsRover isAt: 0@0 facing: north).! !
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 19:57:08'!
+PASSED!
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:57:16' prior: 50650969!
+test02MarsRoverProcessEmptyCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processCommand: 'f'.
+	
+	self assert: (marsRover isAt: 0@1 facing: north).! !
+
+!testRun: #TestMarsRover #test02MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 19:57:17'!
+PASSED!
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:57:25' prior: 50650978!
+test03MarsRoverProcessEmptyCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processCommand: 'b'.
+	
+	self assert: (marsRover isAt: 0@-1 facing: north).! !
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:57:32' prior: 50650987!
+test04MarsRoverProcessEmptyCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processCommand: 'l'.
+	
+	self assert: (marsRover isAt: 0@0 facing: west).! !
+
+!testRun: #TestMarsRover #test04MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 19:57:34'!
+PASSED!
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:57:42' prior: 50650996!
+test05MarsRoverProcessEmptyCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: west.
+	marsRover processCommand: 'l'.
+	
+	self assert: (marsRover isAt: 0@0 facing: south).! !
+
+!testRun: #TestMarsRover #test05MarsRoverProcessEmptyCommand stamp: 'LR 10/8/2023 19:57:43'!
+PASSED!
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/8/2023 19:57:53' prior: 50651005!
+test06MarsRoverProcessErroneousCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processCommand: 'x'.
+	
+	self assert: (marsRover isAt: 0@0 facing: north).! !
+
+!testRun: #TestMarsRover #test06MarsRoverProcessErroneousCommand stamp: 'LR 10/8/2023 19:57:54'!
+PASSED!
