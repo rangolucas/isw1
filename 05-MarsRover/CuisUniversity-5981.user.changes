@@ -409,3 +409,437 @@ processCommand: aCommand
 	(aCommand = 'f') ifTrue: [position := (position x + 0)@(position y + 1).].
 	(aCommand = 'b') ifTrue: [position := (position x + 0)@(position y - 1).].	
 	! !
+
+----STARTUP---- (8 October 2023 00:44:39) as /home/bruno/Downloads/linux64(2)/linux64/CuisUniversity-5981.image!
+
+
+----End fileIn of /home/bruno/Downloads/linux64(2)/linux64/MarsRoverExercise.st----!
+!MarsRover methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 00:46:48' prior: 50650384!
+currentPosition
+	^position.! !
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 00:47:41' prior: 50650334!
+test01MarsRoverProcessEmptyCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: #North.
+	marsRover processCommand: ''.
+	
+	self assert: (marsRover isAt: 0@0 facing: #North).! !
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 00:50:08' prior: 50650363!
+test04MarsRoverProcessEmptyCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: #North.
+	marsRover processCommand: 'l'.
+	
+	self assert: (marsRover isAt: 0@0 facing: #West).! !
+
+!testRun: #TestMarsRover #test04MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 00:50:11'!
+FAILURE!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 00:50:11'!
+FAILURE!
+!MarsRover methodsFor: 'processing' stamp: 'BR 10/8/2023 00:51:32' prior: 50650399!
+processCommand: aCommand
+	
+	(aCommand = 'f') ifTrue: [position := (position x + 0)@(position y + 1).].
+	(aCommand = 'b') ifTrue: [position := (position x + 0)@(position y - 1).].	
+	(aCommand = 'l') ifTrue: [
+			(facing = #North) ifTrue: facing = #West.
+		]
+	! !
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 00:51:49'!
+test05MarsRoverProcessEmptyCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: #North.
+	marsRover processCommand: 'l'.
+	
+	self assert: (marsRover isAt: 0@0 facing: #West).! !
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 00:52:06' prior: 50650466!
+test05MarsRoverProcessEmptyCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: #West.
+	marsRover processCommand: 'l'.
+	
+	self assert: (marsRover isAt: 0@0 facing: #South).! !
+
+!testRun: #TestMarsRover #test04MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 00:52:17'!
+FAILURE!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 00:52:17'!
+FAILURE!
+!MarsRover methodsFor: 'processing' stamp: 'BR 10/8/2023 00:53:10' prior: 50650455!
+processCommand: aCommand
+	
+	(aCommand = 'f') ifTrue: [position := (position x + 0)@(position y + 1).].
+	(aCommand = 'b') ifTrue: [position := (position x + 0)@(position y - 1).].	
+	(aCommand = 'l') ifTrue: [
+			(facing = #North) ifTrue: [facing := #West.].
+		]
+	! !
+
+!testRun: #TestMarsRover #test04MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 00:53:17'!
+PASSED!
+!MarsRover methodsFor: 'processing' stamp: 'BR 10/8/2023 00:56:42' prior: 50650492!
+processCommand: aCommand
+	
+	(aCommand = 'f') ifTrue: [position := (position x + 0)@(position y + 1).].
+	(aCommand = 'b') ifTrue: [position := (position x + 0)@(position y - 1).].	
+	(aCommand = 'l') ifTrue: [
+			(facing = #North) ifTrue: [facing := #West.].
+			(facing = #West) ifTrue: [facing := #South.].
+		]
+	! !
+
+!testRun: #TestMarsRover #test05MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 00:56:49'!
+PASSED!
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 00:59:23'!
+test06MarsRoverProcessEmptyCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: #West.
+	marsRover processCommand: 'l'.
+	
+	self assert: (marsRover isAt: 0@0 facing: #South).! !
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 00:59:38'!
+test06MarsRoverProcessErroneousCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: #West.
+	marsRover processCommand: 'l'.
+	
+	self assert: (marsRover isAt: 0@0 facing: #South).! !
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 00:59:48' prior: 50650532!
+test06MarsRoverProcessErroneousCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: #North.
+	marsRover processCommand: 'l'.
+	
+	self assert: (marsRover isAt: 0@0 facing: #South).! !
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:00:08' prior: 50650542!
+test06MarsRoverProcessErroneousCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: #North.
+	marsRover processCommand: 'x'.
+	
+	self assert: (marsRover isAt: 0@0 facing: #South).! !
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:00:16' prior: 50650552!
+test06MarsRoverProcessErroneousCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: #North.
+	marsRover processCommand: 'x'.
+	
+	self assert: (marsRover isAt: 0@0 facing: #North).! !
+
+!methodRemoval: TestMarsRover #test06MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 01:00:46'!
+test06MarsRoverProcessEmptyCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: #West.
+	marsRover processCommand: 'l'.
+	
+	self assert: (marsRover isAt: 0@0 facing: #South).!
+
+Object subclass: #Command
+	instanceVariableNames: 'position facing'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!classDefinition: #Command category: 'MarsRoverExercise' stamp: 'BR 10/8/2023 01:52:45'!
+Object subclass: #Command
+	instanceVariableNames: 'position facing'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+!MarsRover methodsFor: 'processing' stamp: 'BR 10/8/2023 01:54:01' prior: 50650507!
+processCommand: aCommand
+	
+	aCommand isSentTo: self.
+	! !
+!Command methodsFor: 'nil' stamp: 'BR 10/8/2023 01:54:33'!
+isSentTo: aMarsRover
+	(self = 'f') ifTrue: [position := (position x + 0)@(position y + 1).].
+	(self = 'b') ifTrue: [position := (position x + 0)@(position y - 1).].	
+	(self = 'l') ifTrue: [
+			(facing = #North) ifTrue: [facing := #West.].
+			(facing = #West) ifTrue: [facing := #South.].
+		]! !
+
+Command subclass: #ForwardCommand
+	instanceVariableNames: 'position facing'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!classRenamed: #Command as: #CommandBase stamp: 'BR 10/8/2023 01:55:40'!
+Smalltalk renameClassNamed: #Command as: #CommandBase!
+!Utilities class methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:55:40' prior: 16976779!
+garbageCollectAndReport
+	"Do a garbage collection, and report results to the user."
+	| cc reportString |
+	reportString _ String streamContents: [ :aStream |
+		aStream nextPutAll: Smalltalk bytesLeftString.
+		Smalltalk
+			at: #CommandBase
+			ifPresent: [ :cmdClass |
+				(cc _ cmdClass instanceCount) > 0 ifTrue: [
+					aStream
+						 newLine;
+						 nextPutAll: '(note: there are ' , cc printString , ' undo record(s) present in your
+system; purging them may free up more space.)' ]]].
+	self inform: reportString! !
+
+CommandBase subclass: #CommandForward
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!classDefinition: #CommandForward category: 'MarsRoverExercise' stamp: 'BR 10/8/2023 01:56:01'!
+CommandBase subclass: #CommandForward
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+Object subclass: #CommandBase
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!classDefinition: #CommandBase category: 'MarsRoverExercise' stamp: 'BR 10/8/2023 01:56:07'!
+Object subclass: #CommandBase
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+CommandBase subclass: #CommandBackward
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!classDefinition: #CommandBackward category: 'MarsRoverExercise' stamp: 'BR 10/8/2023 01:56:13'!
+CommandBase subclass: #CommandBackward
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+CommandBase subclass: #CommandLeft
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!classDefinition: #CommandLeft category: 'MarsRoverExercise' stamp: 'BR 10/8/2023 01:56:18'!
+CommandBase subclass: #CommandLeft
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+CommandBase subclass: #CommandRight
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!classDefinition: #CommandRight category: 'MarsRoverExercise' stamp: 'BR 10/8/2023 01:56:21'!
+CommandBase subclass: #CommandRight
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+!CommandForward methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:57:29' overrides: 50650596!
+isSentTo: aMarsRover
+	(self = 'f') ifTrue: [position := (position x + 0)@(position y + 1).].
+	(self = 'b') ifTrue: [position := (position x + 0)@(position y - 1).].	
+	(self = 'l') ifTrue: [
+			(facing = #North) ifTrue: [facing := #West.].
+			(facing = #West) ifTrue: [facing := #South.].
+		]! !
+!CommandBackward methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:57:29' overrides: 50650596!
+isSentTo: aMarsRover
+	(self = 'f') ifTrue: [position := (position x + 0)@(position y + 1).].
+	(self = 'b') ifTrue: [position := (position x + 0)@(position y - 1).].	
+	(self = 'l') ifTrue: [
+			(facing = #North) ifTrue: [facing := #West.].
+			(facing = #West) ifTrue: [facing := #South.].
+		]! !
+!CommandLeft methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:57:29' overrides: 50650596!
+isSentTo: aMarsRover
+	(self = 'f') ifTrue: [position := (position x + 0)@(position y + 1).].
+	(self = 'b') ifTrue: [position := (position x + 0)@(position y - 1).].	
+	(self = 'l') ifTrue: [
+			(facing = #North) ifTrue: [facing := #West.].
+			(facing = #West) ifTrue: [facing := #South.].
+		]! !
+!CommandRight methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:57:29' overrides: 50650596!
+isSentTo: aMarsRover
+	(self = 'f') ifTrue: [position := (position x + 0)@(position y + 1).].
+	(self = 'b') ifTrue: [position := (position x + 0)@(position y - 1).].	
+	(self = 'l') ifTrue: [
+			(facing = #North) ifTrue: [facing := #West.].
+			(facing = #West) ifTrue: [facing := #South.].
+		]! !
+!CommandBase methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:57:29' prior: 50650596!
+isSentTo: aMarsRover
+
+	self subclassResponsibility! !
+!CommandBackward methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:57:48' prior: 50650710 overrides: 50650749!
+isSentTo: aMarsRover
+	
+	aMarsRover moveBackwards.! !
+!CommandForward methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:58:05' prior: 50650697 overrides: 50650749!
+isSentTo: aMarsRover
+	
+	aMarsRover moveForwards.! !
+!CommandLeft methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:58:33' prior: 50650723 overrides: 50650749!
+isSentTo: aMarsRover
+	
+	aMarsRover rotateLeft.! !
+!CommandRight methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 01:58:53' prior: 50650736 overrides: 50650749!
+isSentTo: aMarsRover
+	
+	aMarsRover rotateRight.! !
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 01:59:45'!
+ERROR!
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 01:59:45'!
+ERROR!
+!CommandBase class methodsFor: 'nil' stamp: 'BR 10/8/2023 02:06:49'!
+commandParse: aCommandCharacter
+	(aCommandCharacter = 'f') ifTrue: [^CommandForward new.].
+	(aCommandCharacter = 'b') ifTrue: [^CommandBackward new.].
+	(aCommandCharacter = 'f') ifTrue: [^CommandLeft new.].
+	(aCommandCharacter = 'f') ifTrue: [^CommandRight new.].! !
+!CommandBase class methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 02:06:57' prior: 50650784!
+commandParse: aCommandCharacter
+	(aCommandCharacter = 'f') ifTrue: [^CommandForward new.].
+	(aCommandCharacter = 'b') ifTrue: [^CommandBackward new.].
+	(aCommandCharacter = 'l') ifTrue: [^CommandLeft new.].
+	(aCommandCharacter = 'r') ifTrue: [^CommandRight new.].! !
+!MarsRover methodsFor: 'processing' stamp: 'BR 10/8/2023 02:07:51' prior: 50650592!
+processCommand: aCommand
+	
+	(CommandBase commandParse: aCommand) isSentTo: self.
+	! !
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 02:07:56'!
+ERROR!
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 02:07:56'!
+ERROR!
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 02:09:38'!
+ERROR!
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 02:09:38'!
+ERROR!
+
+CommandBase subclass: #CommandNotRecognized
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!classDefinition: #CommandNotRecognized category: 'MarsRoverExercise' stamp: 'BR 10/8/2023 02:11:20'!
+CommandBase subclass: #CommandNotRecognized
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+!CommandNotRecognized methodsFor: 'nil' stamp: 'BR 10/8/2023 02:11:53' overrides: 50650749!
+isSentTo: aMarsRover
+	^self.! !
+!CommandBase class methodsFor: 'as yet unclassified' stamp: 'BR 10/8/2023 02:12:19' prior: 50650796!
+commandParse: aCommandCharacter
+	(aCommandCharacter = 'f') ifTrue: [^CommandForward new.].
+	(aCommandCharacter = 'b') ifTrue: [^CommandBackward new.].
+	(aCommandCharacter = 'l') ifTrue: [^CommandLeft new.].
+	(aCommandCharacter = 'r') ifTrue: [^CommandRight new.].
+	^CommandNotRecognized new.! !
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 02:12:31'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 02:12:36'!
+ERROR!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 02:12:36'!
+ERROR!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 02:13:32'!
+ERROR!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 02:13:32'!
+ERROR!
+!MarsRover methodsFor: 'movement' stamp: 'BR 10/8/2023 02:14:00'!
+moveForwards
+	self shouldBeImplemented.! !
+!MarsRover methodsFor: 'movement' stamp: 'BR 10/8/2023 02:14:44' prior: 50650871!
+moveForwards
+	position := position + (0@1).! !
+
+!testRun: #TestMarsRover #test02MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 02:14:49'!
+PASSED!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 02:14:54'!
+ERROR!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 02:14:54'!
+ERROR!
+!MarsRover methodsFor: 'movement' stamp: 'BR 10/8/2023 02:15:01'!
+moveBackwards
+	self shouldBeImplemented.! !
+!MarsRover methodsFor: 'movement' stamp: 'BR 10/8/2023 02:15:33' prior: 50650889!
+moveBackwards
+	position := position + (0@-1).! !
+
+!testRun: #TestMarsRover #test03MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 02:15:37'!
+PASSED!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 02:15:46'!
+ERROR!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 02:15:46'!
+ERROR!
+!MarsRover methodsFor: 'movement' stamp: 'BR 10/8/2023 02:15:52'!
+rotateLeft
+	self shouldBeImplemented.! !
+!MarsRover methodsFor: 'movement' stamp: 'BR 10/8/2023 02:16:52' prior: 50650907!
+rotateLeft
+	(facing = #North) ifTrue: [facing := #West.].! !
+
+!testRun: #TestMarsRover #test04MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 02:17:02'!
+PASSED!
+
+!testRun: #TestMarsRover #test05MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 02:17:05'!
+FAILURE!
+
+!testRun: #TestMarsRover #test05MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 02:17:05'!
+FAILURE!
+!MarsRover methodsFor: 'movement' stamp: 'BR 10/8/2023 02:17:49' prior: 50650911!
+rotateLeft
+	(facing = #North) ifTrue: [facing := #West.].
+	(facing = #West) ifTrue: [facing := #South.].! !
+
+!testRun: #TestMarsRover #test05MarsRoverProcessEmptyCommand stamp: 'BR 10/8/2023 02:17:53'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessErroneousCommand stamp: 'BR 10/8/2023 02:17:59'!
+PASSED!
+
+----SNAPSHOT----(8 October 2023 02:18:48) CuisUniversity-5981.image priorSource: 10197292!
+
+----QUIT----(8 October 2023 02:19:15) CuisUniversity-5981.image priorSource: 10217211!
