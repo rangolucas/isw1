@@ -3646,3 +3646,1290 @@ processStringOfCommands: aStringOfCommands
 PASSED!
 
 ----QUIT----(9 October 2023 01:26:35) CuisUniversity-5981.image priorSource: 10217303!
+
+----STARTUP---- (9 October 2023 08:48:58) as /Users/lucas.rango/workspace/cuisUniversity/CuisUniversity-5981.image!
+
+
+----End fileIn of /Users/lucas.rango/workspace/cuisUniversity/MarsRoverExercise.st----!
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 08:51:03' prior: 50662162!
+test12MarsRoverProcessManyValidCommands
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processCommand: 'rbl'.
+	
+	self assert: (marsRover isAt: -1@0 facing: north).! !
+!MarsRover methodsFor: 'processing' stamp: 'LR 10/9/2023 08:51:54' prior: 50662215!
+processCommand: aCommand
+	aCommand do: [ :command |
+		(MarsRoverCommand commandParse: command) isSentTo: self
+	]
+	! !
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'LR 10/9/2023 08:51:59'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 08:51:59'!
+FAILURE!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessMoveBackwardsCommand stamp: 'LR 10/9/2023 08:51:59'!
+FAILURE!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessRotateLeftCommandWhenFacingNorth stamp: 'LR 10/9/2023 08:51:59'!
+FAILURE!
+
+!testRun: #TestMarsRover #test05MarsRoverProcessRotateLeftCommandWhenFacingWest stamp: 'LR 10/9/2023 08:51:59'!
+FAILURE!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessErroneousCommand stamp: 'LR 10/9/2023 08:51:59'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessRotateLeftCommandWhenFacingSouth stamp: 'LR 10/9/2023 08:51:59'!
+FAILURE!
+
+!testRun: #TestMarsRover #test07MarsRoverProcessRotateLeftCommandWhenFacingEast stamp: 'LR 10/9/2023 08:51:59'!
+FAILURE!
+
+!testRun: #TestMarsRover #test08MarsRoverProcessRotateRightCommandWhenFacingNorth stamp: 'LR 10/9/2023 08:51:59'!
+FAILURE!
+
+!testRun: #TestMarsRover #test09MarsRoverProcessRotateRightCommandWhenFacingEast stamp: 'LR 10/9/2023 08:51:59'!
+FAILURE!
+
+!testRun: #TestMarsRover #test10MarsRoverProcessRotateRightCommandWhenFacingSouth stamp: 'LR 10/9/2023 08:51:59'!
+FAILURE!
+
+!testRun: #TestMarsRover #test11MarsRoverProcessRotateRightCommandWhenFacingWest stamp: 'LR 10/9/2023 08:51:59'!
+FAILURE!
+
+!testRun: #TestMarsRover #test12MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 08:51:59'!
+FAILURE!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 08:51:59'!
+ERROR!
+
+!testRun: #TestMarsRover #test14MarsRoverProcessManyValidCommandsWithAnInvalidOne stamp: 'LR 10/9/2023 08:51:59'!
+FAILURE!
+
+!testRun: #TestMarsRover #test12MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 08:52:07'!
+FAILURE!
+
+!testRun: #TestMarsRover #test12MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 08:52:07'!
+FAILURE!
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 08:52:31' prior: 50662632!
+test12MarsRoverProcessManyValidCommands
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processCommand: 'rb'.
+	
+	self assert: (marsRover isAt: -1@0 facing: east).! !
+
+marsRover isAt: 0@0 facing: Orientation north!
+
+marsRover isAt: 0@0 facing: Orientation east!
+
+command!
+!MarsRover methodsFor: 'processing' stamp: 'LR 10/9/2023 08:56:55' prior: 50662641!
+processCommand: aCommand
+	aCommand do: [ :command |
+		(MarsRoverCommand commandParse: command asString) isSentTo: self
+	]
+	! !
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'LR 10/9/2023 08:56:58'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 08:56:58'!
+PASSED!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessMoveBackwardsCommand stamp: 'LR 10/9/2023 08:56:58'!
+PASSED!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessRotateLeftCommandWhenFacingNorth stamp: 'LR 10/9/2023 08:56:58'!
+PASSED!
+
+!testRun: #TestMarsRover #test05MarsRoverProcessRotateLeftCommandWhenFacingWest stamp: 'LR 10/9/2023 08:56:58'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessErroneousCommand stamp: 'LR 10/9/2023 08:56:58'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessRotateLeftCommandWhenFacingSouth stamp: 'LR 10/9/2023 08:56:58'!
+PASSED!
+
+!testRun: #TestMarsRover #test07MarsRoverProcessRotateLeftCommandWhenFacingEast stamp: 'LR 10/9/2023 08:56:58'!
+PASSED!
+
+!testRun: #TestMarsRover #test08MarsRoverProcessRotateRightCommandWhenFacingNorth stamp: 'LR 10/9/2023 08:56:58'!
+PASSED!
+
+!testRun: #TestMarsRover #test09MarsRoverProcessRotateRightCommandWhenFacingEast stamp: 'LR 10/9/2023 08:56:58'!
+PASSED!
+
+!testRun: #TestMarsRover #test10MarsRoverProcessRotateRightCommandWhenFacingSouth stamp: 'LR 10/9/2023 08:56:58'!
+PASSED!
+
+!testRun: #TestMarsRover #test11MarsRoverProcessRotateRightCommandWhenFacingWest stamp: 'LR 10/9/2023 08:56:58'!
+PASSED!
+
+!testRun: #TestMarsRover #test12MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 08:56:58'!
+PASSED!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 08:56:58'!
+ERROR!
+
+!testRun: #TestMarsRover #test14MarsRoverProcessManyValidCommandsWithAnInvalidOne stamp: 'LR 10/9/2023 08:56:58'!
+PASSED!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 08:56:58'!
+ERROR!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 08:57:08'!
+ERROR!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 08:57:08'!
+ERROR!
+
+!methodRemoval: TestMarsRover #test13MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 08:57:20'!
+test13MarsRoverProcessManyValidCommands
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processStringOfCommands: 'rblbrrff'.
+	
+	self assert: (marsRover isAt: -1@-3 facing: south).!
+
+!methodRemoval: TestMarsRover #test14MarsRoverProcessManyValidCommandsWithAnInvalidOne stamp: 'LR 10/9/2023 08:57:23'!
+test14MarsRoverProcessManyValidCommandsWithAnInvalidOne
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processStringOfCommands: 'rblbxrrff'.
+	
+	self assert: (marsRover isAt: -1@-1 facing: north).!
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'LR 10/9/2023 08:58:22'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 08:58:22'!
+PASSED!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessMoveBackwardsCommand stamp: 'LR 10/9/2023 08:58:22'!
+PASSED!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessRotateLeftCommandWhenFacingNorth stamp: 'LR 10/9/2023 08:58:22'!
+PASSED!
+
+!testRun: #TestMarsRover #test05MarsRoverProcessRotateLeftCommandWhenFacingWest stamp: 'LR 10/9/2023 08:58:22'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessErroneousCommand stamp: 'LR 10/9/2023 08:58:22'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessRotateLeftCommandWhenFacingSouth stamp: 'LR 10/9/2023 08:58:22'!
+PASSED!
+
+!testRun: #TestMarsRover #test07MarsRoverProcessRotateLeftCommandWhenFacingEast stamp: 'LR 10/9/2023 08:58:22'!
+PASSED!
+
+!testRun: #TestMarsRover #test08MarsRoverProcessRotateRightCommandWhenFacingNorth stamp: 'LR 10/9/2023 08:58:22'!
+PASSED!
+
+!testRun: #TestMarsRover #test09MarsRoverProcessRotateRightCommandWhenFacingEast stamp: 'LR 10/9/2023 08:58:22'!
+PASSED!
+
+!testRun: #TestMarsRover #test10MarsRoverProcessRotateRightCommandWhenFacingSouth stamp: 'LR 10/9/2023 08:58:22'!
+PASSED!
+
+!testRun: #TestMarsRover #test11MarsRoverProcessRotateRightCommandWhenFacingWest stamp: 'LR 10/9/2023 08:58:22'!
+PASSED!
+
+!testRun: #TestMarsRover #test12MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 08:58:22'!
+PASSED!
+
+!methodRemoval: MarsRover #processStringOfCommands: stamp: 'LR 10/9/2023 08:58:29'!
+processStringOfCommands: aStringOfCommands
+	|index|
+	
+	index := 1.
+	
+	[#('f' 'b' 'l' 'r') includes: ((aStringOfCommands at: index) asString)] whileTrue:[
+							self processCommand: ((aStringOfCommands at: index) asString).
+							index := index + 1.
+							].
+	!
+!MarsRoverCommand class methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 08:58:58' prior: 50662326!
+commandParse: aCommandCharacter
+	(aCommandCharacter = $f) ifTrue: [^MoveForwardsCommand new.].
+	(aCommandCharacter = $b) ifTrue: [^MoveBackwardsCommand new.].
+	(aCommandCharacter = $l) ifTrue: [^RotateLeftCommand new.].
+	(aCommandCharacter = $r) ifTrue: [^RotateRightCommand new.].
+	^CommandNotRecognized new.! !
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'LR 10/9/2023 08:59:01'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 08:59:01'!
+FAILURE!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessMoveBackwardsCommand stamp: 'LR 10/9/2023 08:59:01'!
+FAILURE!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessRotateLeftCommandWhenFacingNorth stamp: 'LR 10/9/2023 08:59:01'!
+FAILURE!
+
+!testRun: #TestMarsRover #test05MarsRoverProcessRotateLeftCommandWhenFacingWest stamp: 'LR 10/9/2023 08:59:01'!
+FAILURE!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessErroneousCommand stamp: 'LR 10/9/2023 08:59:01'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessRotateLeftCommandWhenFacingSouth stamp: 'LR 10/9/2023 08:59:01'!
+FAILURE!
+
+!testRun: #TestMarsRover #test07MarsRoverProcessRotateLeftCommandWhenFacingEast stamp: 'LR 10/9/2023 08:59:01'!
+FAILURE!
+
+!testRun: #TestMarsRover #test08MarsRoverProcessRotateRightCommandWhenFacingNorth stamp: 'LR 10/9/2023 08:59:01'!
+FAILURE!
+
+!testRun: #TestMarsRover #test09MarsRoverProcessRotateRightCommandWhenFacingEast stamp: 'LR 10/9/2023 08:59:01'!
+FAILURE!
+
+!testRun: #TestMarsRover #test10MarsRoverProcessRotateRightCommandWhenFacingSouth stamp: 'LR 10/9/2023 08:59:01'!
+FAILURE!
+
+!testRun: #TestMarsRover #test11MarsRoverProcessRotateRightCommandWhenFacingWest stamp: 'LR 10/9/2023 08:59:01'!
+FAILURE!
+
+!testRun: #TestMarsRover #test12MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 08:59:01'!
+FAILURE!
+!MarsRover methodsFor: 'processing' stamp: 'LR 10/9/2023 08:59:16' prior: 50662723!
+processCommand: aCommand
+	aCommand do: [ :command |
+		(MarsRoverCommand commandParse: command) isSentTo: self
+	]
+	! !
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'LR 10/9/2023 08:59:18'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 08:59:18'!
+PASSED!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessMoveBackwardsCommand stamp: 'LR 10/9/2023 08:59:18'!
+PASSED!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessRotateLeftCommandWhenFacingNorth stamp: 'LR 10/9/2023 08:59:18'!
+PASSED!
+
+!testRun: #TestMarsRover #test05MarsRoverProcessRotateLeftCommandWhenFacingWest stamp: 'LR 10/9/2023 08:59:18'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessErroneousCommand stamp: 'LR 10/9/2023 08:59:18'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessRotateLeftCommandWhenFacingSouth stamp: 'LR 10/9/2023 08:59:18'!
+PASSED!
+
+!testRun: #TestMarsRover #test07MarsRoverProcessRotateLeftCommandWhenFacingEast stamp: 'LR 10/9/2023 08:59:18'!
+PASSED!
+
+!testRun: #TestMarsRover #test08MarsRoverProcessRotateRightCommandWhenFacingNorth stamp: 'LR 10/9/2023 08:59:18'!
+PASSED!
+
+!testRun: #TestMarsRover #test09MarsRoverProcessRotateRightCommandWhenFacingEast stamp: 'LR 10/9/2023 08:59:18'!
+PASSED!
+
+!testRun: #TestMarsRover #test10MarsRoverProcessRotateRightCommandWhenFacingSouth stamp: 'LR 10/9/2023 08:59:18'!
+PASSED!
+
+!testRun: #TestMarsRover #test11MarsRoverProcessRotateRightCommandWhenFacingWest stamp: 'LR 10/9/2023 08:59:18'!
+PASSED!
+
+!testRun: #TestMarsRover #test12MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 08:59:18'!
+PASSED!
+!MarsRover methodsFor: 'processing' stamp: 'LR 10/9/2023 08:59:28' prior: 50662934!
+processCommand: commands
+	commands do: [ :command |
+		(MarsRoverCommand commandParse: command) isSentTo: self
+	]
+	! !
+!MarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 08:59:48' prior: 50662988!
+processCommand: commands
+	commands do: [ :command |
+		(MarsRoverCommand commandParse: command) sendTo: self
+	]
+	! !
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'LR 10/9/2023 08:59:51'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 08:59:51'!
+ERROR!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessMoveBackwardsCommand stamp: 'LR 10/9/2023 08:59:51'!
+ERROR!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessRotateLeftCommandWhenFacingNorth stamp: 'LR 10/9/2023 08:59:51'!
+ERROR!
+
+!testRun: #TestMarsRover #test05MarsRoverProcessRotateLeftCommandWhenFacingWest stamp: 'LR 10/9/2023 08:59:51'!
+ERROR!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessErroneousCommand stamp: 'LR 10/9/2023 08:59:51'!
+ERROR!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessRotateLeftCommandWhenFacingSouth stamp: 'LR 10/9/2023 08:59:51'!
+ERROR!
+
+!testRun: #TestMarsRover #test07MarsRoverProcessRotateLeftCommandWhenFacingEast stamp: 'LR 10/9/2023 08:59:51'!
+ERROR!
+
+!testRun: #TestMarsRover #test08MarsRoverProcessRotateRightCommandWhenFacingNorth stamp: 'LR 10/9/2023 08:59:51'!
+ERROR!
+
+!testRun: #TestMarsRover #test09MarsRoverProcessRotateRightCommandWhenFacingEast stamp: 'LR 10/9/2023 08:59:51'!
+ERROR!
+
+!testRun: #TestMarsRover #test10MarsRoverProcessRotateRightCommandWhenFacingSouth stamp: 'LR 10/9/2023 08:59:51'!
+ERROR!
+
+!testRun: #TestMarsRover #test11MarsRoverProcessRotateRightCommandWhenFacingWest stamp: 'LR 10/9/2023 08:59:51'!
+ERROR!
+
+!testRun: #TestMarsRover #test12MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 08:59:51'!
+ERROR!
+!MarsRoverCommand methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:00:04'!
+sendTo: aMarsRover
+
+	self subclassResponsibility! !
+!CommandNotRecognized methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:00:04' overrides: 50663049!
+sendTo: aMarsRover
+	
+	self.! !
+!MoveBackwardsCommand methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:00:04' overrides: 50663049!
+sendTo: aMarsRover
+	
+	aMarsRover moveBackwards.! !
+!MoveForwardsCommand methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:00:04' overrides: 50663049!
+sendTo: aMarsRover
+	
+	aMarsRover moveForwards.! !
+!RotateLeftCommand methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:00:04' overrides: 50663049!
+sendTo: aMarsRover
+	
+	aMarsRover rotateLeft.! !
+!RotateRightCommand methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:00:04' overrides: 50663049!
+sendTo: aMarsRover
+	
+	aMarsRover rotateRight.! !
+
+!methodRemoval: MarsRoverCommand #isSentTo: stamp: 'LR 10/9/2023 09:00:04'!
+isSentTo: aMarsRover
+
+	self subclassResponsibility!
+
+!methodRemoval: CommandNotRecognized #isSentTo: stamp: 'LR 10/9/2023 09:00:04'!
+isSentTo: aMarsRover
+	
+	self.!
+
+!methodRemoval: MoveBackwardsCommand #isSentTo: stamp: 'LR 10/9/2023 09:00:04'!
+isSentTo: aMarsRover
+	
+	aMarsRover moveBackwards.!
+
+!methodRemoval: MoveForwardsCommand #isSentTo: stamp: 'LR 10/9/2023 09:00:04'!
+isSentTo: aMarsRover
+	
+	aMarsRover moveForwards.!
+
+!methodRemoval: RotateLeftCommand #isSentTo: stamp: 'LR 10/9/2023 09:00:04'!
+isSentTo: aMarsRover
+	
+	aMarsRover rotateLeft.!
+
+!methodRemoval: RotateRightCommand #isSentTo: stamp: 'LR 10/9/2023 09:00:04'!
+isSentTo: aMarsRover
+	
+	aMarsRover rotateRight.!
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'LR 10/9/2023 09:00:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 09:00:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessMoveBackwardsCommand stamp: 'LR 10/9/2023 09:00:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessRotateLeftCommandWhenFacingNorth stamp: 'LR 10/9/2023 09:00:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test05MarsRoverProcessRotateLeftCommandWhenFacingWest stamp: 'LR 10/9/2023 09:00:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessErroneousCommand stamp: 'LR 10/9/2023 09:00:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessRotateLeftCommandWhenFacingSouth stamp: 'LR 10/9/2023 09:00:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test07MarsRoverProcessRotateLeftCommandWhenFacingEast stamp: 'LR 10/9/2023 09:00:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test08MarsRoverProcessRotateRightCommandWhenFacingNorth stamp: 'LR 10/9/2023 09:00:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test09MarsRoverProcessRotateRightCommandWhenFacingEast stamp: 'LR 10/9/2023 09:00:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test10MarsRoverProcessRotateRightCommandWhenFacingSouth stamp: 'LR 10/9/2023 09:00:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test11MarsRoverProcessRotateRightCommandWhenFacingWest stamp: 'LR 10/9/2023 09:00:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test12MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 09:00:06'!
+PASSED!
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:00:55'!
+test12MarsRoverProcessInvalidCommandInTheMiddle
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processCommand: 'rb'.
+	
+	self assert: (marsRover isAt: -1@0 facing: east).! !
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:09:45'!
+test13MarsRoverProcessInvalidCommandInTheMiddle
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processCommand: 'rb'.
+	
+	self assert: (marsRover isAt: -1@0 facing: east).! !
+
+!methodRemoval: TestMarsRover #test12MarsRoverProcessInvalidCommandInTheMiddle stamp: 'LR 10/9/2023 09:09:45'!
+test12MarsRoverProcessInvalidCommandInTheMiddle
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processCommand: 'rb'.
+	
+	self assert: (marsRover isAt: -1@0 facing: east).!
+
+!classDefinition: #InvalidCommandError category: 'MarsRoverExercise' stamp: 'LR 10/9/2023 09:14:01'!
+Object subclass: #InvalidCommandError
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:13:54' prior: 50663158!
+test13MarsRoverProcessInvalidCommandInTheMiddle
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processCommand: 'rxb'.
+	
+	self 
+		should: [ marsRover processCommand: 'rxb' ]
+		raise: InvalidCommandError
+		description: MarsRover invalidCommandErrorDescription.
+	
+	self assert: (marsRover isAt: 0@0 facing: east).! !
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:14:22' prior: 50663185!
+test13MarsRoverProcessInvalidCommandInTheMiddle
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	
+	self 
+		should: [ marsRover processCommand: 'rxb' ]
+		raise: InvalidCommandError
+		description: MarsRover invalidCommandErrorDescription.
+	self assert: (marsRover isAt: 0@0 facing: east).! !
+!MarsRoverCommand class methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:15:04' prior: 50662874!
+commandParse: aCommandCharacter
+	(aCommandCharacter = $f) ifTrue: [^MoveForwardsCommand new.].
+	(aCommandCharacter = $b) ifTrue: [^MoveBackwardsCommand new.].
+	(aCommandCharacter = $l) ifTrue: [^RotateLeftCommand new.].
+	(aCommandCharacter = $r) ifTrue: [^RotateRightCommand new.].
+	self error: InvalidCommandError.! !
+
+Error subclass: #InvalidCommandError
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!classDefinition: #InvalidCommandError category: 'MarsRoverExercise' stamp: 'LR 10/9/2023 09:15:12'!
+Error subclass: #InvalidCommandError
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+!InvalidCommandError methodsFor: 'nil' stamp: 'LR 10/9/2023 09:20:05' overrides: 16849791!
+messageText
+	^self class invalidCommandErrorDescription! !
+!InvalidCommandError class methodsFor: 'nil' stamp: 'LR 10/9/2023 09:20:50'!
+invalidCommandErrorDescription
+	^'Invalid command'! !
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:21:08' prior: 50663199!
+test13MarsRoverProcessInvalidCommandInTheMiddle
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	
+	self 
+		should: [ marsRover processCommand: 'rxb' ]
+		raise: InvalidCommandError
+		description: InvalidCommandError invalidCommandErrorDescription.
+	self assert: (marsRover isAt: 0@0 facing: east).! !
+
+!testRun: #TestMarsRover #test13MarsRoverProcessInvalidCommandInTheMiddle stamp: 'LR 10/9/2023 09:21:10'!
+ERROR!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessInvalidCommandInTheMiddle stamp: 'LR 10/9/2023 09:21:10'!
+ERROR!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessInvalidCommandInTheMiddle stamp: 'LR 10/9/2023 09:21:10'!
+ERROR!
+!MarsRoverCommand class methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:21:46' prior: 50663212!
+commandParse: aCommandCharacter
+	(aCommandCharacter = $f) ifTrue: [^MoveForwardsCommand new.].
+	(aCommandCharacter = $b) ifTrue: [^MoveBackwardsCommand new.].
+	(aCommandCharacter = $l) ifTrue: [^RotateLeftCommand new.].
+	(aCommandCharacter = $r) ifTrue: [^RotateRightCommand new.].
+	self error: InvalidCommandError new.! !
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'LR 10/9/2023 09:21:56'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 09:21:56'!
+PASSED!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessMoveBackwardsCommand stamp: 'LR 10/9/2023 09:21:56'!
+PASSED!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessRotateLeftCommandWhenFacingNorth stamp: 'LR 10/9/2023 09:21:56'!
+PASSED!
+
+!testRun: #TestMarsRover #test05MarsRoverProcessRotateLeftCommandWhenFacingWest stamp: 'LR 10/9/2023 09:21:56'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessErroneousCommand stamp: 'LR 10/9/2023 09:21:56'!
+ERROR!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessRotateLeftCommandWhenFacingSouth stamp: 'LR 10/9/2023 09:21:56'!
+PASSED!
+
+!testRun: #TestMarsRover #test07MarsRoverProcessRotateLeftCommandWhenFacingEast stamp: 'LR 10/9/2023 09:21:56'!
+PASSED!
+
+!testRun: #TestMarsRover #test08MarsRoverProcessRotateRightCommandWhenFacingNorth stamp: 'LR 10/9/2023 09:21:56'!
+PASSED!
+
+!testRun: #TestMarsRover #test09MarsRoverProcessRotateRightCommandWhenFacingEast stamp: 'LR 10/9/2023 09:21:56'!
+PASSED!
+
+!testRun: #TestMarsRover #test10MarsRoverProcessRotateRightCommandWhenFacingSouth stamp: 'LR 10/9/2023 09:21:56'!
+PASSED!
+
+!testRun: #TestMarsRover #test11MarsRoverProcessRotateRightCommandWhenFacingWest stamp: 'LR 10/9/2023 09:21:56'!
+PASSED!
+
+!testRun: #TestMarsRover #test12MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 09:21:56'!
+PASSED!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessInvalidCommandInTheMiddle stamp: 'LR 10/9/2023 09:21:56'!
+ERROR!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessInvalidCommandInTheMiddle stamp: 'LR 10/9/2023 09:22:11'!
+ERROR!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessInvalidCommandInTheMiddle stamp: 'LR 10/9/2023 09:22:11'!
+ERROR!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessInvalidCommandInTheMiddle stamp: 'LR 10/9/2023 09:22:11'!
+ERROR!
+!InvalidCommandError methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:23:12' overrides: 50342575!
+description
+	^self class invalidCommandErrorDescription! !
+
+!methodRemoval: InvalidCommandError #messageText stamp: 'LR 10/9/2023 09:23:12'!
+messageText
+	^self class invalidCommandErrorDescription!
+!InvalidCommandError methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:23:54' overrides: 16849791!
+messageText
+	^self class invalidCommandErrorDescription! !
+
+!methodRemoval: InvalidCommandError #description stamp: 'LR 10/9/2023 09:23:54'!
+description
+	^self class invalidCommandErrorDescription!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessInvalidCommandInTheMiddle stamp: 'LR 10/9/2023 09:24:13'!
+ERROR!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessInvalidCommandInTheMiddle stamp: 'LR 10/9/2023 09:24:13'!
+ERROR!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessInvalidCommandInTheMiddle stamp: 'LR 10/9/2023 09:24:13'!
+ERROR!
+
+self messageText!
+
+self messageText!
+
+self messageText type!
+!MarsRoverCommand class methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:38:51' prior: 50663271!
+commandParse: aCommandCharacter
+	(aCommandCharacter = $f) ifTrue: [^MoveForwardsCommand new.].
+	(aCommandCharacter = $b) ifTrue: [^MoveBackwardsCommand new.].
+	(aCommandCharacter = $l) ifTrue: [^RotateLeftCommand new.].
+	(aCommandCharacter = $r) ifTrue: [^RotateRightCommand new.].
+	self error: 'Invalid command'! !
+!TestMarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:39:17' prior: 50663247!
+test13MarsRoverProcessInvalidCommandInTheMiddle
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	
+	self 
+		should: [ marsRover processCommand: 'rxb' ]
+		raise: Error
+		description: MarsRover invalidCommandErrorDescription.
+	self assert: (marsRover isAt: 0@0 facing: east).! !
+!MarsRover class methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:39:35'!
+invalidCommandErrorDescription
+	^'Invalid command'! !
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'LR 10/9/2023 09:39:37'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 09:39:37'!
+PASSED!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessMoveBackwardsCommand stamp: 'LR 10/9/2023 09:39:37'!
+PASSED!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessRotateLeftCommandWhenFacingNorth stamp: 'LR 10/9/2023 09:39:37'!
+PASSED!
+
+!testRun: #TestMarsRover #test05MarsRoverProcessRotateLeftCommandWhenFacingWest stamp: 'LR 10/9/2023 09:39:37'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessErroneousCommand stamp: 'LR 10/9/2023 09:39:37'!
+ERROR!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessRotateLeftCommandWhenFacingSouth stamp: 'LR 10/9/2023 09:39:37'!
+PASSED!
+
+!testRun: #TestMarsRover #test07MarsRoverProcessRotateLeftCommandWhenFacingEast stamp: 'LR 10/9/2023 09:39:37'!
+PASSED!
+
+!testRun: #TestMarsRover #test08MarsRoverProcessRotateRightCommandWhenFacingNorth stamp: 'LR 10/9/2023 09:39:37'!
+PASSED!
+
+!testRun: #TestMarsRover #test09MarsRoverProcessRotateRightCommandWhenFacingEast stamp: 'LR 10/9/2023 09:39:37'!
+PASSED!
+
+!testRun: #TestMarsRover #test10MarsRoverProcessRotateRightCommandWhenFacingSouth stamp: 'LR 10/9/2023 09:39:37'!
+PASSED!
+
+!testRun: #TestMarsRover #test11MarsRoverProcessRotateRightCommandWhenFacingWest stamp: 'LR 10/9/2023 09:39:37'!
+PASSED!
+
+!testRun: #TestMarsRover #test12MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 09:39:37'!
+PASSED!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessInvalidCommandInTheMiddle stamp: 'LR 10/9/2023 09:39:37'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessErroneousCommand stamp: 'LR 10/9/2023 09:39:37'!
+ERROR!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessInvalidCommandInTheMiddle stamp: 'LR 10/9/2023 09:39:47'!
+PASSED!
+
+!methodRemoval: TestMarsRover #test06MarsRoverProcessErroneousCommand stamp: 'LR 10/9/2023 09:39:51'!
+test06MarsRoverProcessErroneousCommand
+	|marsRover|
+	
+	marsRover := MarsRover deployAt: 0@0 facing: north.
+	marsRover processCommand: 'x'.
+	
+	self assert: (marsRover isAt: 0@0 facing: north).!
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'LR 10/9/2023 09:39:54'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 09:39:54'!
+PASSED!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessMoveBackwardsCommand stamp: 'LR 10/9/2023 09:39:54'!
+PASSED!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessRotateLeftCommandWhenFacingNorth stamp: 'LR 10/9/2023 09:39:54'!
+PASSED!
+
+!testRun: #TestMarsRover #test05MarsRoverProcessRotateLeftCommandWhenFacingWest stamp: 'LR 10/9/2023 09:39:54'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessRotateLeftCommandWhenFacingSouth stamp: 'LR 10/9/2023 09:39:54'!
+PASSED!
+
+!testRun: #TestMarsRover #test07MarsRoverProcessRotateLeftCommandWhenFacingEast stamp: 'LR 10/9/2023 09:39:54'!
+PASSED!
+
+!testRun: #TestMarsRover #test08MarsRoverProcessRotateRightCommandWhenFacingNorth stamp: 'LR 10/9/2023 09:39:54'!
+PASSED!
+
+!testRun: #TestMarsRover #test09MarsRoverProcessRotateRightCommandWhenFacingEast stamp: 'LR 10/9/2023 09:39:54'!
+PASSED!
+
+!testRun: #TestMarsRover #test10MarsRoverProcessRotateRightCommandWhenFacingSouth stamp: 'LR 10/9/2023 09:39:54'!
+PASSED!
+
+!testRun: #TestMarsRover #test11MarsRoverProcessRotateRightCommandWhenFacingWest stamp: 'LR 10/9/2023 09:39:54'!
+PASSED!
+
+!testRun: #TestMarsRover #test12MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 09:39:54'!
+PASSED!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessInvalidCommandInTheMiddle stamp: 'LR 10/9/2023 09:39:54'!
+PASSED!
+
+!classRemoval: #InvalidCommandError stamp: 'LR 10/9/2023 09:39:58'!
+Error subclass: #InvalidCommandError
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+
+!classRemoval: #CommandNotRecognized stamp: 'LR 10/9/2023 09:40:01'!
+MarsRoverCommand subclass: #CommandNotRecognized
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+!Orientation methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:43:50'!
+moveBackwards: aMarsRover
+
+	self subclassResponsibility! !
+!East methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:43:50' overrides: 50663537!
+moveBackwards: aMarsRover
+	^aMarsRover movesBackwardsWhileFacingEast.! !
+!North methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:43:50' overrides: 50663537!
+moveBackwards: aMarsRover
+	^aMarsRover movesBackwardsWhileFacingNorth.! !
+!South methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:43:50' overrides: 50663537!
+moveBackwards: aMarsRover
+	^aMarsRover movesBackwardsWhileFacingSouth.! !
+!West methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:43:50' overrides: 50663537!
+moveBackwards: aMarsRover
+	^aMarsRover movesBackwardsWhileFacingWest.! !
+
+!methodRemoval: Orientation #movesMarsRoverBackwards: stamp: 'LR 10/9/2023 09:43:50'!
+movesMarsRoverBackwards: aMarsRover
+
+	self subclassResponsibility!
+
+!methodRemoval: East #movesMarsRoverBackwards: stamp: 'LR 10/9/2023 09:43:50'!
+movesMarsRoverBackwards: aMarsRover
+	^aMarsRover movesBackwardsWhileFacingEast.!
+
+!methodRemoval: North #movesMarsRoverBackwards: stamp: 'LR 10/9/2023 09:43:50'!
+movesMarsRoverBackwards: aMarsRover
+	^aMarsRover movesBackwardsWhileFacingNorth.!
+
+!methodRemoval: South #movesMarsRoverBackwards: stamp: 'LR 10/9/2023 09:43:50'!
+movesMarsRoverBackwards: aMarsRover
+	^aMarsRover movesBackwardsWhileFacingSouth.!
+
+!methodRemoval: West #movesMarsRoverBackwards: stamp: 'LR 10/9/2023 09:43:50'!
+movesMarsRoverBackwards: aMarsRover
+	^aMarsRover movesBackwardsWhileFacingWest.!
+!Orientation methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:44:08'!
+moveForward: aMarsRover
+
+	self subclassResponsibility! !
+!East methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:44:08' overrides: 50663590!
+moveForward: aMarsRover
+	^aMarsRover movesForwardsWhileFacingEast.! !
+!North methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:44:08' overrides: 50663590!
+moveForward: aMarsRover
+	^aMarsRover movesForwardsWhileFacingNorth.! !
+!South methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:44:08' overrides: 50663590!
+moveForward: aMarsRover
+	^aMarsRover movesForwardsWhileFacingSouth.! !
+!West methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:44:08' overrides: 50663590!
+moveForward: aMarsRover
+	^aMarsRover movesForwardsWhileFacingWest.! !
+
+!methodRemoval: Orientation #movesMarsRoverForwards: stamp: 'LR 10/9/2023 09:44:08'!
+movesMarsRoverForwards: aMarsRover
+
+	self subclassResponsibility!
+
+!methodRemoval: East #movesMarsRoverForwards: stamp: 'LR 10/9/2023 09:44:08'!
+movesMarsRoverForwards: aMarsRover
+	^aMarsRover movesForwardsWhileFacingEast.!
+
+!methodRemoval: North #movesMarsRoverForwards: stamp: 'LR 10/9/2023 09:44:08'!
+movesMarsRoverForwards: aMarsRover
+	^aMarsRover movesForwardsWhileFacingNorth.!
+
+!methodRemoval: South #movesMarsRoverForwards: stamp: 'LR 10/9/2023 09:44:08'!
+movesMarsRoverForwards: aMarsRover
+	^aMarsRover movesForwardsWhileFacingSouth.!
+
+!methodRemoval: West #movesMarsRoverForwards: stamp: 'LR 10/9/2023 09:44:08'!
+movesMarsRoverForwards: aMarsRover
+	^aMarsRover movesForwardsWhileFacingWest.!
+!Orientation methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:44:14' prior: 50663590!
+moveForward: aPoint
+
+	self subclassResponsibility! !
+!Orientation methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:44:20' prior: 50663537!
+moveBackwards: aPoint
+
+	self subclassResponsibility! !
+!East methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:44:28' prior: 50663542 overrides: 50663648!
+moveBackwards: aPoint
+	^aPoint movesBackwardsWhileFacingEast.! !
+!East methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:45:00' prior: 50663654 overrides: 50663648!
+moveBackwards: aPoint
+	^aPoint + (-1 @ 0).! !
+!East methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:45:07' prior: 50663595 overrides: 50663643!
+moveForward: aPoitn
+	^aPoitn movesForwardsWhileFacingEast.! !
+!East methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:45:10' prior: 50663665 overrides: 50663643!
+moveForward: aPoint
+	^aPoint movesForwardsWhileFacingEast.! !
+!East methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:45:23' prior: 50663671 overrides: 50663643!
+moveForward: aPoint
+	^aPoint + (1 @ 0)! !
+!North methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:45:28' prior: 50663548 overrides: 50663648!
+moveBackwards: aPoitn
+	^aPoitn movesBackwardsWhileFacingNorth.! !
+!North methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:45:31' prior: 50663682 overrides: 50663648!
+moveBackwards: aPoint
+	^aPoint movesBackwardsWhileFacingNorth.! !
+!North methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:45:45' prior: 50663688 overrides: 50663648!
+moveBackwards: aPoint
+	^aPoint + (0 @ -1)! !
+!North methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:45:52' prior: 50663601 overrides: 50663643!
+moveForward: aPoint
+	^aPoint movesForwardsWhileFacingNorth.! !
+!North methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:46:07' prior: 50663699 overrides: 50663643!
+moveForward: aPoint
+	^aPoint + (0 @ 1).! !
+!North methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:46:11' prior: 50663705 overrides: 50663643!
+moveForward: aPoint
+	^aPoint + (0 @ 1)! !
+!South methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:46:18' prior: 50663554 overrides: 50663648!
+moveBackwards: aPoint
+	^aPoint movesBackwardsWhileFacingSouth.! !
+!South methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:46:35' prior: 50663715 overrides: 50663648!
+moveBackwards: aPoint
+	^aPoint + (0 @ 1)! !
+!South methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:46:40' prior: 50663607 overrides: 50663643!
+moveForward: aPoint
+	^aPoint movesForwardsWhileFacingSouth.! !
+!South methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:46:49' prior: 50663726 overrides: 50663643!
+moveForward: aPoint
+	^aPoint + (0 @ 1)! !
+!West methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:46:56' prior: 50663560 overrides: 50663648!
+moveBackwards: aPoint
+	^aPoint movesBackwardsWhileFacingWest.! !
+!West methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:47:19' prior: 50663737 overrides: 50663648!
+moveBackwards: aPoint
+	^aPoint + (-1 @ 0)! !
+!West methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:47:25' prior: 50663613 overrides: 50663643!
+moveForward: aPoint
+	^aPoint movesForwardsWhileFacingWest.! !
+!West methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:47:33' prior: 50663748 overrides: 50663643!
+moveForward: aPoint
+	^aPoint + (0 @ 1)! !
+!MarsRover methodsFor: 'movement' stamp: 'LR 10/9/2023 09:48:22' prior: 50662231!
+moveBackwards
+	^facing = facing moveBackwards: position.! !
+!MarsRover methodsFor: 'movement' stamp: 'LR 10/9/2023 09:48:33' prior: 50662235!
+moveForwards
+	^facing = facing moveForward: position.! !
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'LR 10/9/2023 09:48:34'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 09:48:34'!
+ERROR!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessMoveBackwardsCommand stamp: 'LR 10/9/2023 09:48:34'!
+ERROR!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessRotateLeftCommandWhenFacingNorth stamp: 'LR 10/9/2023 09:48:34'!
+PASSED!
+
+!testRun: #TestMarsRover #test05MarsRoverProcessRotateLeftCommandWhenFacingWest stamp: 'LR 10/9/2023 09:48:34'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessRotateLeftCommandWhenFacingSouth stamp: 'LR 10/9/2023 09:48:34'!
+PASSED!
+
+!testRun: #TestMarsRover #test07MarsRoverProcessRotateLeftCommandWhenFacingEast stamp: 'LR 10/9/2023 09:48:34'!
+PASSED!
+
+!testRun: #TestMarsRover #test08MarsRoverProcessRotateRightCommandWhenFacingNorth stamp: 'LR 10/9/2023 09:48:34'!
+PASSED!
+
+!testRun: #TestMarsRover #test09MarsRoverProcessRotateRightCommandWhenFacingEast stamp: 'LR 10/9/2023 09:48:34'!
+PASSED!
+
+!testRun: #TestMarsRover #test10MarsRoverProcessRotateRightCommandWhenFacingSouth stamp: 'LR 10/9/2023 09:48:34'!
+PASSED!
+
+!testRun: #TestMarsRover #test11MarsRoverProcessRotateRightCommandWhenFacingWest stamp: 'LR 10/9/2023 09:48:34'!
+PASSED!
+
+!testRun: #TestMarsRover #test12MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 09:48:34'!
+ERROR!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessInvalidCommandInTheMiddle stamp: 'LR 10/9/2023 09:48:34'!
+PASSED!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessMoveBackwardsCommand stamp: 'LR 10/9/2023 09:48:44'!
+ERROR!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessMoveBackwardsCommand stamp: 'LR 10/9/2023 09:48:44'!
+ERROR!
+!MarsRover methodsFor: 'movement' stamp: 'LR 10/9/2023 09:49:00' prior: 50663758!
+moveBackwards
+	^facing := facing moveBackwards: position.! !
+!MarsRover methodsFor: 'movement' stamp: 'LR 10/9/2023 09:49:04' prior: 50663763!
+moveForwards
+	^facing := facing moveForward: position.! !
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'LR 10/9/2023 09:49:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 09:49:06'!
+FAILURE!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessMoveBackwardsCommand stamp: 'LR 10/9/2023 09:49:06'!
+FAILURE!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessRotateLeftCommandWhenFacingNorth stamp: 'LR 10/9/2023 09:49:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test05MarsRoverProcessRotateLeftCommandWhenFacingWest stamp: 'LR 10/9/2023 09:49:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessRotateLeftCommandWhenFacingSouth stamp: 'LR 10/9/2023 09:49:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test07MarsRoverProcessRotateLeftCommandWhenFacingEast stamp: 'LR 10/9/2023 09:49:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test08MarsRoverProcessRotateRightCommandWhenFacingNorth stamp: 'LR 10/9/2023 09:49:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test09MarsRoverProcessRotateRightCommandWhenFacingEast stamp: 'LR 10/9/2023 09:49:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test10MarsRoverProcessRotateRightCommandWhenFacingSouth stamp: 'LR 10/9/2023 09:49:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test11MarsRoverProcessRotateRightCommandWhenFacingWest stamp: 'LR 10/9/2023 09:49:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test12MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 09:49:06'!
+FAILURE!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessInvalidCommandInTheMiddle stamp: 'LR 10/9/2023 09:49:06'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 09:49:11'!
+FAILURE!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 09:49:11'!
+FAILURE!
+
+facing!
+
+facing moveForward: position!
+!MarsRover methodsFor: 'movement' stamp: 'LR 10/9/2023 09:50:46' prior: 50663822!
+moveBackwards
+	^position := facing moveBackwards: position.! !
+!MarsRover methodsFor: 'movement' stamp: 'LR 10/9/2023 09:50:50' prior: 50663827!
+moveForwards
+	^position := facing moveForward: position.! !
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'LR 10/9/2023 09:50:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 09:50:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessMoveBackwardsCommand stamp: 'LR 10/9/2023 09:50:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessRotateLeftCommandWhenFacingNorth stamp: 'LR 10/9/2023 09:50:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test05MarsRoverProcessRotateLeftCommandWhenFacingWest stamp: 'LR 10/9/2023 09:50:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessRotateLeftCommandWhenFacingSouth stamp: 'LR 10/9/2023 09:50:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test07MarsRoverProcessRotateLeftCommandWhenFacingEast stamp: 'LR 10/9/2023 09:50:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test08MarsRoverProcessRotateRightCommandWhenFacingNorth stamp: 'LR 10/9/2023 09:50:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test09MarsRoverProcessRotateRightCommandWhenFacingEast stamp: 'LR 10/9/2023 09:50:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test10MarsRoverProcessRotateRightCommandWhenFacingSouth stamp: 'LR 10/9/2023 09:50:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test11MarsRoverProcessRotateRightCommandWhenFacingWest stamp: 'LR 10/9/2023 09:50:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test12MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 09:50:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessInvalidCommandInTheMiddle stamp: 'LR 10/9/2023 09:50:52'!
+PASSED!
+
+!classDefinition: #MarsRover category: 'MarsRoverExercise' stamp: 'LR 10/9/2023 09:50:59'!
+Object subclass: #MarsRover
+	instanceVariableNames: 'position orientation'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRoverExercise'!
+!MarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:50:59' prior: 50662210!
+with: aPoint facing: aCardinalPoint
+	position := aPoint.
+	orientation := aCardinalPoint.! !
+!MarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:50:59' prior: 50662279!
+rotateLeft
+	orientation := orientation rotateLeft! !
+!MarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:50:59' prior: 50663888!
+moveBackwards
+	^position := orientation moveBackwards: position.! !
+!MarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:50:59' prior: 50662283!
+rotateRight
+	orientation := orientation rotateRight! !
+!MarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:50:59' prior: 50662204!
+isAt: aPoint facing: aCardinalPoint
+	^(position = aPoint) and: (orientation = aCardinalPoint).! !
+!MarsRover methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:50:59' prior: 50663893!
+moveForwards
+	^position := orientation moveForward: position.! !
+!MarsRover methodsFor: 'movement' stamp: 'LR 10/9/2023 09:51:14'!
+moveForward
+	^position := orientation moveForward: position.! !
+
+!methodRemoval: MarsRover #moveForwards stamp: 'LR 10/9/2023 09:51:14'!
+moveForwards
+	^position := orientation moveForward: position.!
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'LR 10/9/2023 09:51:16'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 09:51:16'!
+ERROR!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessMoveBackwardsCommand stamp: 'LR 10/9/2023 09:51:16'!
+PASSED!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessRotateLeftCommandWhenFacingNorth stamp: 'LR 10/9/2023 09:51:16'!
+PASSED!
+
+!testRun: #TestMarsRover #test05MarsRoverProcessRotateLeftCommandWhenFacingWest stamp: 'LR 10/9/2023 09:51:16'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessRotateLeftCommandWhenFacingSouth stamp: 'LR 10/9/2023 09:51:16'!
+PASSED!
+
+!testRun: #TestMarsRover #test07MarsRoverProcessRotateLeftCommandWhenFacingEast stamp: 'LR 10/9/2023 09:51:16'!
+PASSED!
+
+!testRun: #TestMarsRover #test08MarsRoverProcessRotateRightCommandWhenFacingNorth stamp: 'LR 10/9/2023 09:51:16'!
+PASSED!
+
+!testRun: #TestMarsRover #test09MarsRoverProcessRotateRightCommandWhenFacingEast stamp: 'LR 10/9/2023 09:51:16'!
+PASSED!
+
+!testRun: #TestMarsRover #test10MarsRoverProcessRotateRightCommandWhenFacingSouth stamp: 'LR 10/9/2023 09:51:16'!
+PASSED!
+
+!testRun: #TestMarsRover #test11MarsRoverProcessRotateRightCommandWhenFacingWest stamp: 'LR 10/9/2023 09:51:16'!
+PASSED!
+
+!testRun: #TestMarsRover #test12MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 09:51:16'!
+PASSED!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessInvalidCommandInTheMiddle stamp: 'LR 10/9/2023 09:51:16'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 09:51:16'!
+ERROR!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 09:51:29'!
+ERROR!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 09:51:29'!
+ERROR!
+!MoveForwardsCommand methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:51:38' prior: 50663064 overrides: 50663049!
+sendTo: aMarsRover
+	
+	aMarsRover moveForward.! !
+
+!classRenamed: #MoveForwardsCommand as: #MoveForwardCommand stamp: 'LR 10/9/2023 09:51:44'!
+Smalltalk renameClassNamed: #MoveForwardsCommand as: #MoveForwardCommand!
+!MarsRoverCommand class methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:51:44' prior: 50663379!
+commandParse: aCommandCharacter
+	(aCommandCharacter = $f) ifTrue: [^MoveForwardCommand new.].
+	(aCommandCharacter = $b) ifTrue: [^MoveBackwardsCommand new.].
+	(aCommandCharacter = $l) ifTrue: [^RotateLeftCommand new.].
+	(aCommandCharacter = $r) ifTrue: [^RotateRightCommand new.].
+	self error: 'Invalid command'! !
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'LR 10/9/2023 09:51:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 09:51:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessMoveBackwardsCommand stamp: 'LR 10/9/2023 09:51:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessRotateLeftCommandWhenFacingNorth stamp: 'LR 10/9/2023 09:51:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test05MarsRoverProcessRotateLeftCommandWhenFacingWest stamp: 'LR 10/9/2023 09:51:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessRotateLeftCommandWhenFacingSouth stamp: 'LR 10/9/2023 09:51:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test07MarsRoverProcessRotateLeftCommandWhenFacingEast stamp: 'LR 10/9/2023 09:51:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test08MarsRoverProcessRotateRightCommandWhenFacingNorth stamp: 'LR 10/9/2023 09:51:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test09MarsRoverProcessRotateRightCommandWhenFacingEast stamp: 'LR 10/9/2023 09:51:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test10MarsRoverProcessRotateRightCommandWhenFacingSouth stamp: 'LR 10/9/2023 09:51:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test11MarsRoverProcessRotateRightCommandWhenFacingWest stamp: 'LR 10/9/2023 09:51:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test12MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 09:51:52'!
+PASSED!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessInvalidCommandInTheMiddle stamp: 'LR 10/9/2023 09:51:52'!
+PASSED!
+
+!methodRemoval: MarsRover #movesBackwardsWhileFacingEast stamp: 'LR 10/9/2023 09:51:57'!
+movesBackwardsWhileFacingEast
+	position := position + (-1@0).!
+
+!testRun: #TestMarsRover #test01MarsRoverProcessEmptyCommand stamp: 'LR 10/9/2023 09:52:00'!
+PASSED!
+
+!testRun: #TestMarsRover #test02MarsRoverProcessMoveForwardsCommand stamp: 'LR 10/9/2023 09:52:00'!
+PASSED!
+
+!testRun: #TestMarsRover #test03MarsRoverProcessMoveBackwardsCommand stamp: 'LR 10/9/2023 09:52:00'!
+PASSED!
+
+!testRun: #TestMarsRover #test04MarsRoverProcessRotateLeftCommandWhenFacingNorth stamp: 'LR 10/9/2023 09:52:00'!
+PASSED!
+
+!testRun: #TestMarsRover #test05MarsRoverProcessRotateLeftCommandWhenFacingWest stamp: 'LR 10/9/2023 09:52:00'!
+PASSED!
+
+!testRun: #TestMarsRover #test06MarsRoverProcessRotateLeftCommandWhenFacingSouth stamp: 'LR 10/9/2023 09:52:00'!
+PASSED!
+
+!testRun: #TestMarsRover #test07MarsRoverProcessRotateLeftCommandWhenFacingEast stamp: 'LR 10/9/2023 09:52:00'!
+PASSED!
+
+!testRun: #TestMarsRover #test08MarsRoverProcessRotateRightCommandWhenFacingNorth stamp: 'LR 10/9/2023 09:52:00'!
+PASSED!
+
+!testRun: #TestMarsRover #test09MarsRoverProcessRotateRightCommandWhenFacingEast stamp: 'LR 10/9/2023 09:52:00'!
+PASSED!
+
+!testRun: #TestMarsRover #test10MarsRoverProcessRotateRightCommandWhenFacingSouth stamp: 'LR 10/9/2023 09:52:00'!
+PASSED!
+
+!testRun: #TestMarsRover #test11MarsRoverProcessRotateRightCommandWhenFacingWest stamp: 'LR 10/9/2023 09:52:00'!
+PASSED!
+
+!testRun: #TestMarsRover #test12MarsRoverProcessManyValidCommands stamp: 'LR 10/9/2023 09:52:00'!
+PASSED!
+
+!testRun: #TestMarsRover #test13MarsRoverProcessInvalidCommandInTheMiddle stamp: 'LR 10/9/2023 09:52:00'!
+PASSED!
+
+!methodRemoval: MarsRover #movesBackwardsWhileFacingNorth stamp: 'LR 10/9/2023 09:52:03'!
+movesBackwardsWhileFacingNorth
+	position := position + (0@-1).!
+
+!methodRemoval: MarsRover #movesBackwardsWhileFacingSouth stamp: 'LR 10/9/2023 09:52:05'!
+movesBackwardsWhileFacingSouth
+	position := position + (0@1).!
+
+!methodRemoval: MarsRover #movesBackwardsWhileFacingWest stamp: 'LR 10/9/2023 09:52:06'!
+movesBackwardsWhileFacingWest
+	position := position + (1@0).!
+
+!methodRemoval: MarsRover #movesForwardsWhileFacingEast stamp: 'LR 10/9/2023 09:52:06'!
+movesForwardsWhileFacingEast
+	position := position + (1@0).!
+
+!methodRemoval: MarsRover #movesForwardsWhileFacingNorth stamp: 'LR 10/9/2023 09:52:07'!
+movesForwardsWhileFacingNorth
+	position := position + (0@1).!
+
+!methodRemoval: MarsRover #movesForwardsWhileFacingSouth stamp: 'LR 10/9/2023 09:52:08'!
+movesForwardsWhileFacingSouth
+	position := position + (0@-1).!
+
+!methodRemoval: MarsRover #movesForwardsWhileFacingWest stamp: 'LR 10/9/2023 09:52:10'!
+movesForwardsWhileFacingWest
+	position := position + (-1@0).!
+!North methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:52:29' prior: 50663694 overrides: 50663648!
+moveBackwards: aPosition
+	^aPosition + (0 @ -1)! !
+!North methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:52:37' prior: 50663710 overrides: 50663643!
+moveForward: aPosition
+	^aPosition + (0 @ 1)! !
+!East methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:52:46' prior: 50663660 overrides: 50663648!
+moveBackwards: aPosition
+	^aPosition + (-1 @ 0).! !
+!East methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:52:51' prior: 50663677 overrides: 50663643!
+moveForward: aPosition
+	^aPosition + (1 @ 0)! !
+!South methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:53:08' prior: 50663721 overrides: 50663648!
+moveBackwards: aPosition
+	^aPosition + (0 @ 1)! !
+!South methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:53:14' prior: 50663732 overrides: 50663643!
+moveForward: aPosition
+	^aPosition + (0 @ 1)! !
+!West methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:53:22' prior: 50663743 overrides: 50663648!
+moveBackwards: aPosition
+	^aPosition + (-1 @ 0)! !
+!West methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 09:53:27' prior: 50663754 overrides: 50663643!
+moveForward: aPosition
+	^aPosition + (0 @ 1)! !
