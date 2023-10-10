@@ -1,3 +1,34 @@
+!classDefinition: #PortfolioTest category: 'Portfolio-Ejercicio'!
+TestCase subclass: #PortfolioTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 21:27:49'!
+test01EmptyPortfolioHasZeroBalance
+	|portfolio|
+	
+	portfolio := Portfolio new.
+	
+	self assert: portfolio balance equals: 0.
+	! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'LR 10/9/2023 21:54:26'!
+test02PortfolioWithOnlyAccountsHasSameBalance
+	|portfolio anAccount|
+	
+	portfolio := Portfolio new.
+	anAccount := ReceptiveAccount new.
+	Deposit register: 100 on: anAccount.
+	
+	
+	portfolio registerAccount: anAccount.
+	
+	self assert: portfolio balance equals: 100.
+	! !
+
+
 !classDefinition: #ReceptiveAccountTest category: 'Portfolio-Ejercicio'!
 TestCase subclass: #ReceptiveAccountTest
 	instanceVariableNames: ''
@@ -191,6 +222,28 @@ Withdraw class
 for: aValue
 
 	^ self new initializeFor: aValue ! !
+
+
+!classDefinition: #Portfolio category: 'Portfolio-Ejercicio'!
+Object subclass: #Portfolio
+	instanceVariableNames: 'accounts'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+
+!Portfolio methodsFor: 'evaluating' stamp: 'LR 10/9/2023 21:57:39'!
+balance
+	^accounts sum: [:account | account balance] ifEmpty: [0].! !
+
+
+!Portfolio methodsFor: 'updating' stamp: 'LR 10/9/2023 21:56:10'!
+registerAccount: anAccount 
+	accounts add: anAccount.! !
+
+
+!Portfolio methodsFor: 'initialization' stamp: 'LR 10/9/2023 21:59:12'!
+initialize
+	accounts := OrderedCollection new.! !
 
 
 !classDefinition: #ReceptiveAccount category: 'Portfolio-Ejercicio'!
