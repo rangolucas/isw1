@@ -1,0 +1,1094 @@
+
+
+----QUIT----(13 August 2023 19:14:09) CuisUniversity-5981.image priorSource: 5713367!
+
+----STARTUP---- (13 August 2023 19:14:10) as /Users/hernan/Documents/Cuis/5.0-64Bits/Cuis-University-Installer/CuisUniversity-5981.image!
+
+
+----QUIT----(13 August 2023 19:14:10) CuisUniversity-5981.image priorSource: 10197065!
+
+----STARTUP---- (17 October 2023 20:01:46) as /home/bruno/Downloads/linux64(3)/linux64/CuisUniversity-5981.image!
+
+
+!testRun: #ReceptiveAccountTest #test01ReceptiveAccountHaveZeroAsBalanceWhenCreated stamp: 'BR 10/17/2023 20:03:42'!
+PASSED!
+
+!testRun: #ReceptiveAccountTest #test02DepositIncreasesBalanceOnTransactionValue stamp: 'BR 10/17/2023 20:03:42'!
+PASSED!
+
+!testRun: #ReceptiveAccountTest #test03WithdrawDecreasesBalanceOnTransactionValue stamp: 'BR 10/17/2023 20:03:42'!
+PASSED!
+
+!testRun: #ReceptiveAccountTest #test04WithdrawValueMustBePositive stamp: 'BR 10/17/2023 20:03:42'!
+PASSED!
+
+!testRun: #ReceptiveAccountTest #test05ReceptiveAccountKnowsRegisteredTransactions stamp: 'BR 10/17/2023 20:03:42'!
+PASSED!
+
+!testRun: #ReceptiveAccountTest #test06ReceptiveAccountDoNotKnowNotRegisteredTransactions stamp: 'BR 10/17/2023 20:03:42'!
+PASSED!
+
+!testRun: #ReceptiveAccountTest #test07AccountKnowsItsTransactions stamp: 'BR 10/17/2023 20:03:42'!
+PASSED!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 20:14:37' prior: 50650980!
+test02PortfolioWithOnlyAccountsHasSameBalance
+	|portfolio anAccount anotherAccount|
+	
+	portfolio := Portfolio new.
+	anAccount := ReceptiveAccount new.
+	anotherAccount := ReceptiveAccount new.
+	Deposit register: 100 on: anAccount.
+	Deposit register : 50 on: anotherAccount.
+	
+	
+	portfolio registerAccount: anAccount.
+	portfolio registerAccount: anotherAccount. 
+	self assert: portfolio balance equals: 100.
+	! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 20:14:41' prior: 50651144!
+test02PortfolioWithOnlyAccountsHasSameBalance
+	|portfolio anAccount anotherAccount|
+	
+	portfolio := Portfolio new.
+	anAccount := ReceptiveAccount new.
+	anotherAccount := ReceptiveAccount new.
+	Deposit register: 100 on: anAccount.
+	Deposit register : 50 on: anotherAccount.
+	
+	
+	portfolio registerAccount: anAccount.
+	portfolio registerAccount: anotherAccount. 
+	self assert: portfolio balance equals: 150.
+	! !
+
+!testRun: #PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:14:44'!
+ERROR!
+
+!testRun: #PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:14:44'!
+ERROR!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 20:14:56' prior: 50651160!
+test02PortfolioWithOnlyAccountsHasSameBalance
+	|portfolio anAccount anotherAccount|
+	
+	portfolio := Portfolio new.
+	anAccount := ReceptiveAccount new.
+	anotherAccount := ReceptiveAccount new.
+	Deposit register: 100 on: anAccount.
+	Deposit register: 50 on: anotherAccount.
+	
+	
+	portfolio registerAccount: anAccount.
+	portfolio registerAccount: anotherAccount. 
+	self assert: portfolio balance equals: 150.
+	! !
+
+!testRun: #PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:14:58'!
+PASSED!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 20:17:00'!
+test03PortfolioWithOnlyAccountsHasSameBalance
+	|portfolio anAccount anotherAccount|
+	
+	portfolio := Portfolio new.
+	anAccount := ReceptiveAccount new.
+	anotherAccount := ReceptiveAccount new.
+	Deposit register: 100 on: anAccount.
+	Deposit register: 50 on: anotherAccount.
+	
+	
+	portfolio registerAccount: anAccount.
+	portfolio registerAccount: anotherAccount. 
+	self assert: portfolio balance equals: 150.
+	! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 20:19:53' prior: 50651202!
+test03PortfolioWithOnlyAccountsHasSameBalance
+	|portfolio childAccount childPortfolio|
+	
+	portfolio := Portfolio new.
+	childAccount := ReceptiveAccount new.
+	childPortfolio := Portfolio new.
+	Deposit register: 100 on: childAccount.
+	
+	portfolio registerAccount: childAccount.
+	portfolio registerAccount: childPortfolio. 
+	self assert: portfolio balance equals: 100.
+	! !
+
+!testRun: #PortfolioTest #test03PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:19:56'!
+PASSED!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 20:21:04' prior: 50651218!
+test03PortfolioWithOnlyAccountsHasSameBalance
+	|portfolio childAccount childPortfolio|
+	
+	portfolio := Portfolio new.
+	childAccount := ReceptiveAccount new.
+	childPortfolio := Portfolio new.
+	Deposit register: 100 on: childAccount.
+	
+	portfolio registerAccount: childAccount.
+	portfolio registerPortfolio: childPortfolio. 
+	self assert: portfolio balance equals: 100.
+	! !
+
+!classDefinition: #Portfolio category: 'Portfolio-Ejercicio' stamp: 'BR 10/17/2023 20:21:44'!
+Object subclass: #Portfolio
+	instanceVariableNames: 'accounts portfolios'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/17/2023 20:21:40'!
+registerPortfolio: aPortfolio 
+	portfolios add: aPortfolio.! !
+
+!testRun: #PortfolioTest #test03PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:21:57'!
+ERROR!
+
+!testRun: #PortfolioTest #test03PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:21:57'!
+ERROR!
+!Portfolio methodsFor: 'initialization' stamp: 'BR 10/17/2023 20:22:25' prior: 50651099 overrides: 16920235!
+initialize
+	accounts := OrderedCollection new.
+	portfolios := OrderedCollection new.! !
+
+!testRun: #PortfolioTest #test01EmptyPortfolioHasZeroBalance stamp: 'BR 10/17/2023 20:22:30'!
+PASSED!
+
+!testRun: #PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:22:30'!
+PASSED!
+
+!testRun: #PortfolioTest #test03PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:22:30'!
+PASSED!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 20:24:35' prior: 50651237!
+test03PortfolioWithOnlyAccountsHasSameBalance
+	|portfolio childAccount childPortfolio grandchildAccount|
+	
+	portfolio := Portfolio new.
+	childAccount := ReceptiveAccount new.
+	childPortfolio := Portfolio new.
+	grandchildAccount := ReceptiveAccount new.
+	Deposit register: 100 on: childAccount.
+	Deposit register: 50 on: grandchildAccount.
+	childPortfolio registerAccount: grandchildAccount .
+	
+	
+	portfolio registerAccount: childAccount.
+	portfolio registerPortfolio: childPortfolio. 
+	self assert: portfolio balance equals: 150.
+	! !
+
+!testRun: #PortfolioTest #test03PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:24:38'!
+FAILURE!
+
+!testRun: #PortfolioTest #test03PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:24:38'!
+FAILURE!
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/17/2023 20:26:38' prior: 50651057!
+balance
+	^self accountsBalance + self portfoliosBalance.
+	! !
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/17/2023 20:27:18'!
+accountsBalance
+	^accounts sum: [:account | account balance] ifEmpty: [0].
+	! !
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/17/2023 20:27:30'!
+portfoliosBalance
+	^accounts sum: [:account | account balance] ifEmpty: [0].
+	! !
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/17/2023 20:28:03' prior: 50651326!
+portfoliosBalance
+	^portfolios sum: [:portfolio | portfolios balance] ifEmpty: [0].
+	! !
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/17/2023 20:28:08' prior: 50651332!
+portfoliosBalance
+	^portfolios sum: [:portfolio | portfolio balance] ifEmpty: [0].
+	! !
+
+!testRun: #PortfolioTest #test01EmptyPortfolioHasZeroBalance stamp: 'BR 10/17/2023 20:28:16'!
+PASSED!
+
+!testRun: #PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:28:16'!
+PASSED!
+
+!testRun: #PortfolioTest #test03PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:28:16'!
+PASSED!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 20:28:55'!
+anAccount
+	|portfolio childAccount childPortfolio grandchildAccount|
+	
+	portfolio := Portfolio new.
+	childAccount := ReceptiveAccount new.
+	childPortfolio := Portfolio new.
+	grandchildAccount := ReceptiveAccount new.
+	Deposit register: 100 on: childAccount.
+	Deposit register: 50 on: grandchildAccount.
+	childPortfolio registerAccount: grandchildAccount .
+	
+	
+	portfolio registerAccount: childAccount.
+	portfolio registerPortfolio: childPortfolio. 
+	self assert: portfolio balance equals: 150.
+	! !
+
+!methodRemoval: PortfolioTest #anAccount stamp: 'BR 10/17/2023 20:29:16'!
+anAccount
+	|portfolio childAccount childPortfolio grandchildAccount|
+	
+	portfolio := Portfolio new.
+	childAccount := ReceptiveAccount new.
+	childPortfolio := Portfolio new.
+	grandchildAccount := ReceptiveAccount new.
+	Deposit register: 100 on: childAccount.
+	Deposit register: 50 on: grandchildAccount.
+	childPortfolio registerAccount: grandchildAccount .
+	
+	
+	portfolio registerAccount: childAccount.
+	portfolio registerPortfolio: childPortfolio. 
+	self assert: portfolio balance equals: 150.
+	!
+!PortfolioTest class methodsFor: 'no messages' stamp: 'BR 10/17/2023 20:42:04'!
+createPortfolioWithAccount: anAccount
+	||! !
+!PortfolioTest class methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 20:42:15' prior: 50651390!
+createPortfolioWithAccount: anAccount
+	|aPortfolio|! !
+!PortfolioTest class methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 20:42:47' prior: 50651395!
+createPortfolioWithAccount: anAccount
+	|aPortfolio|
+	
+	aPortfolio := Portfolio new.
+	
+	aPortfolio registerAccount: anAccount.
+	
+	^aPortfolio.! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 20:46:13' prior: 50651289!
+test03PortfolioWithOnlyAccountsHasSameBalance
+	|portfolio childAccount childPortfolio grandchildAccount|
+	
+	childAccount := ReceptiveAccount new.
+	childPortfolio := Portfolio new.
+	portfolio := PortfolioTest createPortfolioWithAccount: childAccount.
+	grandchildAccount := ReceptiveAccount new.
+	Deposit register: 100 on: childAccount.
+	Deposit register: 50 on: grandchildAccount.
+	childPortfolio registerAccount: grandchildAccount .
+	
+	
+	portfolio registerAccount: childAccount.
+	portfolio registerPortfolio: childPortfolio. 
+	self assert: portfolio balance equals: 150.
+	! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 20:47:02' prior: 50651408!
+test03PortfolioWithOnlyAccountsHasSameBalance
+	|portfolio childAccount childPortfolio grandchildAccount|
+	
+	childAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithAccount: childAccount.
+	grandchildAccount := ReceptiveAccount new.
+	childPortfolio := PortfolioTest createPortfolioWithAccount: grandchildAccount.
+	
+	Deposit register: 100 on: childAccount.
+	Deposit register: 50 on: grandchildAccount.
+	childPortfolio registerAccount: grandchildAccount .
+	
+	
+	portfolio registerAccount: childAccount.
+	portfolio registerPortfolio: childPortfolio. 
+	self assert: portfolio balance equals: 150.
+	! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 20:48:07' prior: 50651430!
+test03PortfolioWithOnlyAccountsHasSameBalance
+	|portfolio childAccount childPortfolio grandchildAccount|
+	
+	childAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithAccount: childAccount.
+	grandchildAccount := ReceptiveAccount new.
+	childPortfolio := PortfolioTest createPortfolioWithAccount: grandchildAccount.
+	
+	Deposit register: 100 on: childAccount.
+	Deposit register: 50 on: grandchildAccount.
+	
+	portfolio registerPortfolio: childPortfolio. 
+	self assert: portfolio balance equals: 150.
+	! !
+
+!testRun: #PortfolioTest #test03PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:48:08'!
+PASSED!
+
+!testRun: #PortfolioTest #test01EmptyPortfolioHasZeroBalance stamp: 'BR 10/17/2023 20:48:15'!
+PASSED!
+
+!testRun: #PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:48:15'!
+PASSED!
+
+!testRun: #PortfolioTest #test03PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:48:15'!
+PASSED!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 20:49:18' prior: 50651183!
+test02PortfolioWithOnlyAccountsHasSameBalance
+	|portfolio anAccount anotherAccount|
+	
+	portfolio := Portfolio new.
+	anAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithAccount: anAccount.
+	anotherAccount := ReceptiveAccount new.
+	portfolio registerAccount: anotherAccount.
+	
+	Deposit register: 100 on: anAccount.
+	Deposit register: 50 on: anotherAccount.
+	
+	
+	portfolio registerAccount: anAccount.
+	portfolio registerAccount: anotherAccount. 
+	self assert: portfolio balance equals: 150.
+	! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 20:49:26' prior: 50651487!
+test02PortfolioWithOnlyAccountsHasSameBalance
+	|portfolio anAccount anotherAccount|
+	
+	anAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithAccount: anAccount.
+	anotherAccount := ReceptiveAccount new.
+	portfolio registerAccount: anotherAccount.
+	
+	Deposit register: 100 on: anAccount.
+	Deposit register: 50 on: anotherAccount.
+	
+	
+	portfolio registerAccount: anAccount.
+	portfolio registerAccount: anotherAccount. 
+	self assert: portfolio balance equals: 150.
+	! !
+
+!testRun: #PortfolioTest #test01EmptyPortfolioHasZeroBalance stamp: 'BR 10/17/2023 20:49:33'!
+PASSED!
+
+!testRun: #PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:49:33'!
+FAILURE!
+
+!testRun: #PortfolioTest #test03PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:49:33'!
+PASSED!
+
+!testRun: #PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:49:33'!
+FAILURE!
+
+!testRun: #PortfolioTest #test01EmptyPortfolioHasZeroBalance stamp: 'BR 10/17/2023 20:49:38'!
+PASSED!
+
+!testRun: #PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:49:38'!
+FAILURE!
+
+!testRun: #PortfolioTest #test03PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:49:38'!
+PASSED!
+
+!testRun: #PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:49:38'!
+FAILURE!
+
+!testRun: #PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:50:06'!
+FAILURE!
+
+!testRun: #PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:50:06'!
+FAILURE!
+
+!testRun: #PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:51:40'!
+FAILURE!
+
+!testRun: #PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:51:40'!
+FAILURE!
+
+!testRun: #PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:52:03'!
+FAILURE!
+
+!testRun: #PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:52:03'!
+FAILURE!
+
+!testRun: #PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:52:13'!
+FAILURE!
+
+!testRun: #PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:52:13'!
+FAILURE!
+
+PortfolioTest createPortfolioWithAccount: anAccount!
+
+portfolio registerAccount: anotherAccount.!
+
+	portfolio registerAccount: anotherAccount.
+!
+
+PortfolioTest createPortfolioWithAccount: anAccount!
+
+anAccount := ReceptiveAccount new!
+
+portfolio := PortfolioTest createPortfolioWithAccount: anAccount!
+
+anotherAccount := ReceptiveAccount new!
+
+portfolio registerAccount: anotherAccount.!
+
+portfolio!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 20:57:44' prior: 50651507!
+test02PortfolioWithOnlyAccountsHasSameBalance
+	|portfolio anAccount anotherAccount|
+	
+	anAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithAccount: anAccount.
+	anotherAccount := ReceptiveAccount new.
+	portfolio registerAccount: anotherAccount.
+	
+	Deposit register: 100 on: anAccount.
+	Deposit register: 50 on: anotherAccount.
+	
+	self assert: portfolio balance equals: 150.
+	! !
+
+!testRun: #PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 20:57:46'!
+PASSED!
+
+Object subclass: #FinancialEntity
+	instanceVariableNames: 'accounts portfolios'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+
+!classDefinition: #FinancialEntity category: 'Portfolio-Ejercicio' stamp: 'BR 10/17/2023 21:04:26'!
+Object subclass: #FinancialEntity
+	instanceVariableNames: 'accounts portfolios'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+
+FinancialEntity subclass: #Portfolio
+	instanceVariableNames: 'accounts portfolios'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+
+Object subclass: #FinancialEntity
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+
+!classDefinition: #FinancialEntity category: 'Portfolio-Ejercicio' stamp: 'BR 10/17/2023 21:05:04'!
+Object subclass: #FinancialEntity
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+
+FinancialEntity subclass: #Portfolio
+	instanceVariableNames: 'accounts portfolios'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+
+!classDefinition: #Portfolio category: 'Portfolio-Ejercicio' stamp: 'BR 10/17/2023 21:05:17'!
+FinancialEntity subclass: #Portfolio
+	instanceVariableNames: 'accounts portfolios'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+
+FinancialEntity subclass: #ReceptiveAccount
+	instanceVariableNames: 'transactions'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+
+!classDefinition: #ReceptiveAccount category: 'Portfolio-Ejercicio' stamp: 'BR 10/17/2023 21:05:46'!
+FinancialEntity subclass: #ReceptiveAccount
+	instanceVariableNames: 'transactions'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+!FinancialEntity methodsFor: 'nil' stamp: 'BR 10/17/2023 21:06:41'!
+balance
+	self subclassResponsibility ! !
+!FinancialEntity methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:07:01'!
+register: aFinancialEntity
+	self subclassResponsibility ! !
+
+!methodRemoval: FinancialEntity #register: stamp: 'BR 10/17/2023 21:09:20'!
+register: aFinancialEntity
+	self subclassResponsibility !
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/17/2023 21:12:51' prior: 50651316 overrides: 50651671!
+balance
+	^accounts sum: [:financialEntity | financialEntity balance] ifEmpty: [0].
+	! !
+
+!classDefinition: #Portfolio category: 'Portfolio-Ejercicio' stamp: 'BR 10/17/2023 21:13:43'!
+FinancialEntity subclass: #Portfolio
+	instanceVariableNames: 'accounts portfolios financialEntities'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/17/2023 21:13:38' prior: 50651685 overrides: 50651671!
+balance
+	^financialEntities sum: [:financialEntity | financialEntity balance] ifEmpty: [0].
+	! !
+
+FinancialEntity subclass: #Portfolio
+	instanceVariableNames: 'financialEntities'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+
+!classDefinition: #Portfolio category: 'Portfolio-Ejercicio' stamp: 'BR 10/17/2023 21:13:55'!
+FinancialEntity subclass: #Portfolio
+	instanceVariableNames: 'financialEntities'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+
+!methodRemoval: Portfolio #accountsBalance stamp: 'BR 10/17/2023 21:14:15'!
+accountsBalance
+	^accounts sum: [:account | account balance] ifEmpty: [0].
+	!
+
+!methodRemoval: Portfolio #portfoliosBalance stamp: 'BR 10/17/2023 21:14:17'!
+portfoliosBalance
+	^portfolios sum: [:portfolio | portfolio balance] ifEmpty: [0].
+	!
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/17/2023 21:14:43'!
+register: aFinancialEntity 
+	financialEntities add: aFinancialEntity.! !
+
+!methodRemoval: Portfolio #registerAccount: stamp: 'BR 10/17/2023 21:14:47'!
+registerAccount: anAccount 
+	accounts add: anAccount.!
+
+!methodRemoval: Portfolio #registerPortfolio: stamp: 'BR 10/17/2023 21:14:49'!
+registerPortfolio: aPortfolio 
+	portfolios add: aPortfolio.!
+!Portfolio methodsFor: 'initialization' stamp: 'BR 10/17/2023 21:15:01' prior: 50651272 overrides: 16920235!
+initialize
+	financialEntities := OrderedCollection new.! !
+!PortfolioTest class methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:15:33' prior: 50651400!
+createPortfolioWithAccount: anAccount
+	|aPortfolio|
+	
+	aPortfolio := Portfolio new.
+	
+	aPortfolio register: anAccount.
+	
+	^aPortfolio.! !
+!PortfolioTest class methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:15:59'!
+createPortfolioWithFinancialEntity: aFinancialEntity
+	|aPortfolio|
+	
+	aPortfolio := Portfolio new.
+	
+	aPortfolio register: aFinancialEntity.
+	
+	^aPortfolio.! !
+
+!methodRemoval: PortfolioTest class #createPortfolioWithAccount: stamp: 'BR 10/17/2023 21:16:04'!
+createPortfolioWithAccount: anAccount
+	|aPortfolio|
+	
+	aPortfolio := Portfolio new.
+	
+	aPortfolio register: anAccount.
+	
+	^aPortfolio.!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:16:33' prior: 50651595!
+test02PortfolioWithOnlyAccountsHasSameBalance
+	|portfolio anAccount anotherAccount|
+	
+	anAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithFinancialEntity: anAccount.
+	anotherAccount := ReceptiveAccount new.
+	portfolio register: anotherAccount.
+	
+	Deposit register: 100 on: anAccount.
+	Deposit register: 50 on: anotherAccount.
+	
+	self assert: portfolio balance equals: 150.
+	! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:16:58' prior: 50651453!
+test03PortfolioWithOnlyAccountsHasSameBalance
+	|portfolio childAccount childPortfolio grandchildAccount|
+	
+	childAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithFinancialEntity: childAccount.
+	grandchildAccount := ReceptiveAccount new.
+	childPortfolio := PortfolioTest createPortfolioWithFinancialEntity: grandchildAccount.
+	
+	Deposit register: 100 on: childAccount.
+	Deposit register: 50 on: grandchildAccount.
+	
+	portfolio register: childPortfolio. 
+	self assert: portfolio balance equals: 150.
+	! !
+
+!testRun: #PortfolioTest #test01EmptyPortfolioHasZeroBalance stamp: 'BR 10/17/2023 21:17:01'!
+PASSED!
+
+!testRun: #PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 21:17:01'!
+PASSED!
+
+!testRun: #PortfolioTest #test03PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 21:17:01'!
+PASSED!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:21:58'!
+test03BalanceOfPortfolioWithChildPortfolio
+	|portfolio childAccount childPortfolio grandchildAccount|
+	
+	childAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithFinancialEntity: childAccount.
+	grandchildAccount := ReceptiveAccount new.
+	childPortfolio := PortfolioTest createPortfolioWithFinancialEntity: grandchildAccount.
+	
+	Deposit register: 100 on: childAccount.
+	Deposit register: 50 on: grandchildAccount.
+	
+	portfolio register: childPortfolio. 
+	self assert: portfolio balance equals: 150.
+	! !
+
+!methodRemoval: PortfolioTest #test03PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 21:22:04'!
+test03PortfolioWithOnlyAccountsHasSameBalance
+	|portfolio childAccount childPortfolio grandchildAccount|
+	
+	childAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithFinancialEntity: childAccount.
+	grandchildAccount := ReceptiveAccount new.
+	childPortfolio := PortfolioTest createPortfolioWithFinancialEntity: grandchildAccount.
+	
+	Deposit register: 100 on: childAccount.
+	Deposit register: 50 on: grandchildAccount.
+	
+	portfolio register: childPortfolio. 
+	self assert: portfolio balance equals: 150.
+	!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:22:43'!
+test02BalanceOfPortfolioWithChildAccounts
+	|portfolio anAccount anotherAccount|
+	
+	anAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithFinancialEntity: anAccount.
+	anotherAccount := ReceptiveAccount new.
+	portfolio register: anotherAccount.
+	
+	Deposit register: 100 on: anAccount.
+	Deposit register: 50 on: anotherAccount.
+	
+	self assert: portfolio balance equals: 150.
+	! !
+
+!methodRemoval: PortfolioTest #test02PortfolioWithOnlyAccountsHasSameBalance stamp: 'BR 10/17/2023 21:22:55'!
+test02PortfolioWithOnlyAccountsHasSameBalance
+	|portfolio anAccount anotherAccount|
+	
+	anAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithFinancialEntity: anAccount.
+	anotherAccount := ReceptiveAccount new.
+	portfolio register: anotherAccount.
+	
+	Deposit register: 100 on: anAccount.
+	Deposit register: 50 on: anotherAccount.
+	
+	self assert: portfolio balance equals: 150.
+	!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:25:18'!
+test04CannotAddSameAccountTwice
+	|portfolio childAccount|
+	
+	childAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithFinancialEntity: childAccount.
+	portfolio register: childAccount.
+	
+	self assert: portfolio balance equals: 150.
+	! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:25:28' prior: 50651892!
+test04CannotAddSameAccountTwice
+	|portfolio childAccount|
+	
+	childAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithFinancialEntity: childAccount.
+	portfolio register: childAccount.
+	
+	! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:28:03' prior: 50651904!
+test04CannotAddSameAccountTwice
+	|portfolio childAccount|
+	
+	childAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithFinancialEntity: childAccount.
+	
+	
+	self should: [portfolio register: childAccount] raise: Error description: 'Cannot'
+	
+	! !
+!Portfolio class methodsFor: 'no messages' stamp: 'BR 10/17/2023 21:28:40'!
+portfolioCannotHaveSameAccountTwiceError
+	^self! !
+!Portfolio class methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:28:47'!
+portfolioCannotHaveSameAccountTwiceErrorDescription
+	^self! !
+!Portfolio class methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:29:02' prior: 50651930!
+portfolioCannotHaveSameAccountTwiceErrorDescription
+	^'Portfolio cannot have repeated account'! !
+!Portfolio class methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:29:10'!
+portfolioCannotHaveRepeatedAccountErrorDescription
+	^'Portfolio cannot have repeated account'! !
+
+!methodRemoval: Portfolio class #portfolioCannotHaveSameAccountTwiceError stamp: 'BR 10/17/2023 21:29:16'!
+portfolioCannotHaveSameAccountTwiceError
+	^self!
+
+!methodRemoval: Portfolio class #portfolioCannotHaveSameAccountTwiceErrorDescription stamp: 'BR 10/17/2023 21:29:21'!
+portfolioCannotHaveSameAccountTwiceErrorDescription
+	^'Portfolio cannot have repeated account'!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:30:06' prior: 50651914!
+test04CannotAddSameAccountTwice
+	|portfolio childAccount|
+	
+	childAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithFinancialEntity: childAccount.
+	
+	
+	self should: [portfolio register: childAccount] raise: Error description: Portfolio portfolioCannotHaveRepeatedAccountErrorDescription. 
+	
+	! !
+
+!testRun: #PortfolioTest #test04CannotAddSameAccountTwice stamp: 'BR 10/17/2023 21:30:10'!
+FAILURE!
+
+!testRun: #PortfolioTest #test04CannotAddSameAccountTwice stamp: 'BR 10/17/2023 21:30:10'!
+FAILURE!
+
+----End fileIn of /home/bruno/Downloads/linux64(3)/linux64/Packages/TerseGuide.pck.st----!
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/17/2023 21:37:30' prior: 50651729!
+register: aFinancialEntity 
+	(financialEntities includes: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedAccountErrorDescription ].
+	financialEntities add: aFinancialEntity.! !
+
+!testRun: #PortfolioTest #test01EmptyPortfolioHasZeroBalance stamp: 'BR 10/17/2023 21:37:46'!
+PASSED!
+
+!testRun: #PortfolioTest #test02BalanceOfPortfolioWithChildAccounts stamp: 'BR 10/17/2023 21:37:46'!
+PASSED!
+
+!testRun: #PortfolioTest #test03BalanceOfPortfolioWithChildPortfolio stamp: 'BR 10/17/2023 21:37:46'!
+PASSED!
+
+!testRun: #PortfolioTest #test04CannotAddSameAccountTwice stamp: 'BR 10/17/2023 21:37:46'!
+PASSED!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:48:27'!
+test04CannotAddSameFinancialEntityTwice
+	|portfolio childAccount|
+	
+	childAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithFinancialEntity: childAccount.
+	
+	
+	self should: [portfolio register: childAccount] raise: Error description: Portfolio portfolioCannotHaveRepeatedAccountErrorDescription. 
+	
+	! !
+
+!methodRemoval: PortfolioTest #test04CannotAddSameAccountTwice stamp: 'BR 10/17/2023 21:48:29'!
+test04CannotAddSameAccountTwice
+	|portfolio childAccount|
+	
+	childAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithFinancialEntity: childAccount.
+	
+	
+	self should: [portfolio register: childAccount] raise: Error description: Portfolio portfolioCannotHaveRepeatedAccountErrorDescription. 
+	
+	!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:49:06' prior: 50654922!
+test04CannotAddSameFinancialEntityTwice
+	|portfolio childFinancialEntity|
+	
+	childFinancialEntity := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithFinancialEntity: childFinancialEntity.
+	
+	
+	self should: [portfolio register: childFinancialEntity] raise: Error description: Portfolio portfolioCannotHaveRepeatedAccountErrorDescription. 
+	
+	! !
+!Portfolio class methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:49:24'!
+portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription
+	^'Portfolio cannot have repeated account'! !
+
+!methodRemoval: Portfolio class #portfolioCannotHaveRepeatedAccountErrorDescription stamp: 'BR 10/17/2023 21:49:28'!
+portfolioCannotHaveRepeatedAccountErrorDescription
+	^'Portfolio cannot have repeated account'!
+!Portfolio class methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:49:37' prior: 50654964!
+portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription
+	^'Portfolio cannot have repeated financial entities'! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:49:54' prior: 50654949!
+test04CannotAddSameFinancialEntityTwice
+	|portfolio childFinancialEntity|
+	
+	childFinancialEntity := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithFinancialEntity: childFinancialEntity.
+	
+	
+	self should: [portfolio register: childFinancialEntity] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
+	
+	! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:54:25'!
+test05CannotAddSameFinancialEntityTwice
+	|portfolio childFinancialEntity|
+	
+	childFinancialEntity := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithFinancialEntity: childFinancialEntity.
+	
+	
+	self should: [portfolio register: childFinancialEntity] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
+	
+	! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:56:31' prior: 50655000!
+test05CannotAddSameFinancialEntityTwice
+	|portfolio childPortfolio grandchildPortfolio|
+	
+	portfolio := Portfolio new.
+	childPortfolio := Portfolio new.
+	grandchildPortfolio := Portfolio new.
+	
+	portfolio register: childPortfolio.
+	childPortfolio register: grandchildPortfolio.
+	
+	
+	self should: [grandchildPortfolio register: portfolio.] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
+	
+	! !
+!Portfolio class methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:56:57'!
+portfolioHierarchyCannotContainCycles
+	^'Portfolio hierarchy cannot contain cycles'! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:57:17' prior: 50655015!
+test05CannotAddSameFinancialEntityTwice
+	|portfolio childPortfolio grandchildPortfolio|
+	
+	portfolio := Portfolio new.
+	childPortfolio := Portfolio new.
+	grandchildPortfolio := Portfolio new.
+	
+	portfolio register: childPortfolio.
+	childPortfolio register: grandchildPortfolio.
+	
+	self should: [grandchildPortfolio register: portfolio.] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
+	
+	! !
+
+!testRun: #PortfolioTest #test05CannotAddSameFinancialEntityTwice stamp: 'BR 10/17/2023 21:57:19'!
+FAILURE!
+
+!testRun: #PortfolioTest #test05CannotAddSameFinancialEntityTwice stamp: 'BR 10/17/2023 21:57:19'!
+FAILURE!
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/17/2023 22:03:39' prior: 50654899!
+register: aFinancialEntity 
+	(financialEntities includes: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription ].
+	financialEntities add: aFinancialEntity.! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/17/2023 22:39:52' prior: 50655062!
+register: aFinancialEntity 
+	(financialEntities includes: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription ].
+	(self = aFinancialEntity) ifTrue: [^self class portfolioHierarchyCannotContainCycles].
+	financialEntities add: aFinancialEntity.! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 22:40:01'!
+test06CannotAddSameFinancialEntityTwice
+	|portfolio childPortfolio grandchildPortfolio|
+	
+	portfolio := Portfolio new.
+	childPortfolio := Portfolio new.
+	grandchildPortfolio := Portfolio new.
+	
+	portfolio register: childPortfolio.
+	childPortfolio register: grandchildPortfolio.
+	
+	self should: [grandchildPortfolio register: portfolio.] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
+	
+	! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 22:41:04'!
+test05CannotAddPortfolioToItself
+	|portfolio|
+	
+	portfolio := Portfolio new.
+	
+	
+	self should: [portfolio register: portfolio.] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
+	
+	! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 22:41:08' prior: 50655102!
+test05CannotAddPortfolioToItself
+	|portfolio|
+	
+	portfolio := Portfolio new.
+
+	self should: [portfolio register: portfolio.] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
+	
+	! !
+
+!testRun: #PortfolioTest #test05CannotAddPortfolioToItself stamp: 'BR 10/17/2023 22:41:10'!
+FAILURE!
+
+!testRun: #PortfolioTest #test05CannotAddPortfolioToItself stamp: 'BR 10/17/2023 22:41:10'!
+FAILURE!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 22:41:29' prior: 50655113!
+test05CannotAddPortfolioToItself
+	|portfolio|
+	
+	portfolio := Portfolio new.
+
+	self should: [portfolio register: portfolio.] raise: Error description: Portfolio portfolioHierarchyCannotContainCycles . 
+	
+	! !
+
+!testRun: #PortfolioTest #test05CannotAddPortfolioToItself stamp: 'BR 10/17/2023 22:41:31'!
+FAILURE!
+
+!testRun: #PortfolioTest #test05CannotAddPortfolioToItself stamp: 'BR 10/17/2023 22:41:31'!
+FAILURE!
+
+!methodRemoval: PortfolioTest #test05CannotAddSameFinancialEntityTwice stamp: 'BR 10/17/2023 22:41:46'!
+test05CannotAddSameFinancialEntityTwice
+	|portfolio childPortfolio grandchildPortfolio|
+	
+	portfolio := Portfolio new.
+	childPortfolio := Portfolio new.
+	grandchildPortfolio := Portfolio new.
+	
+	portfolio register: childPortfolio.
+	childPortfolio register: grandchildPortfolio.
+	
+	self should: [grandchildPortfolio register: portfolio.] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
+	
+	!
+
+!testRun: #PortfolioTest #test05CannotAddPortfolioToItself stamp: 'BR 10/17/2023 22:42:24'!
+FAILURE!
+
+!testRun: #PortfolioTest #test05CannotAddPortfolioToItself stamp: 'BR 10/17/2023 22:42:24'!
+FAILURE!
+
+Portfolio portfolioHierarchyCannotContainCycles!
+
+self = aFinancialEntity!
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/17/2023 22:45:23' prior: 50655072!
+register: aFinancialEntity 
+	(financialEntities includes: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription ].
+	(self = aFinancialEntity) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	financialEntities add: aFinancialEntity.! !
+
+!testRun: #PortfolioTest #test01EmptyPortfolioHasZeroBalance stamp: 'BR 10/17/2023 22:45:26'!
+PASSED!
+
+!testRun: #PortfolioTest #test02BalanceOfPortfolioWithChildAccounts stamp: 'BR 10/17/2023 22:45:26'!
+PASSED!
+
+!testRun: #PortfolioTest #test03BalanceOfPortfolioWithChildPortfolio stamp: 'BR 10/17/2023 22:45:26'!
+PASSED!
+
+!testRun: #PortfolioTest #test04CannotAddSameFinancialEntityTwice stamp: 'BR 10/17/2023 22:45:26'!
+PASSED!
+
+!testRun: #PortfolioTest #test05CannotAddPortfolioToItself stamp: 'BR 10/17/2023 22:45:26'!
+PASSED!
+
+!testRun: #PortfolioTest #test06CannotAddSameFinancialEntityTwice stamp: 'BR 10/17/2023 22:45:26'!
+FAILURE!
+
+!testRun: #PortfolioTest #test06CannotAddSameFinancialEntityTwice stamp: 'BR 10/17/2023 22:45:26'!
+FAILURE!
+
+!testRun: #PortfolioTest #test05CannotAddPortfolioToItself stamp: 'BR 10/17/2023 22:45:31'!
+PASSED!
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/17/2023 22:47:36' prior: 50655172!
+register: aFinancialEntity 
+	(financialEntities includes: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription ].
+	(self = aFinancialEntity) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	(self financialEntities includes: aFinancialEntity) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	financialEntities add: aFinancialEntity.! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/17/2023 22:54:02' prior: 50655212!
+register: aFinancialEntity 
+	(financialEntities includes: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription ].
+	(self = aFinancialEntity) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	(aFinancialEntity includesEntity: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	financialEntities add: aFinancialEntity.! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/17/2023 22:54:14' prior: 50655229!
+register: aFinancialEntity 
+	(financialEntities includes: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription ].
+	(self = aFinancialEntity) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	(aFinancialEntity hasRegisteredEntity: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	financialEntities add: aFinancialEntity.! !
+!Portfolio methodsFor: 'initialization' stamp: 'BR 10/17/2023 22:55:01'!
+hasRegisteredEntity: aFinancialEntity
+	^financialEntities includes: aFinancialEntity.! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 22:57:47'!
+test06CannotAddFatherToPortfolio
+	|portfolio childPortfolio grandchildPortfolio|
+	
+	portfolio := Portfolio new.
+	childPortfolio := Portfolio new.
+	grandchildPortfolio := Portfolio new.
+	
+	portfolio register: childPortfolio.
+	childPortfolio register: grandchildPortfolio.
+	
+	self should: [grandchildPortfolio register: portfolio.] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
+	
+	! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 22:58:11' prior: 50655268!
+test06CannotAddFatherToPortfolio
+	|portfolio childPortfolio|
+	
+	portfolio := Portfolio new.
+	childPortfolio := Portfolio new.
+	
+	self should: [childPortfolio register: portfolio.] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
+	
+	! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 22:58:17'!
+test07CannotAddSameFinancialEntityTwice
+	|portfolio childPortfolio grandchildPortfolio|
+	
+	portfolio := Portfolio new.
+	childPortfolio := Portfolio new.
+	grandchildPortfolio := Portfolio new.
+	
+	portfolio register: childPortfolio.
+	childPortfolio register: grandchildPortfolio.
+	
+	self should: [grandchildPortfolio register: portfolio.] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
+	
+	! !
+
+!methodRemoval: PortfolioTest #test06CannotAddSameFinancialEntityTwice stamp: 'BR 10/17/2023 22:58:31'!
+test06CannotAddSameFinancialEntityTwice
+	|portfolio childPortfolio grandchildPortfolio|
+	
+	portfolio := Portfolio new.
+	childPortfolio := Portfolio new.
+	grandchildPortfolio := Portfolio new.
+	
+	portfolio register: childPortfolio.
+	childPortfolio register: grandchildPortfolio.
+	
+	self should: [grandchildPortfolio register: portfolio.] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
+	
+	!
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/17/2023 22:58:35'!
+FAILURE!
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/17/2023 22:58:35'!
+FAILURE!
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/17/2023 22:59:28'!
+FAILURE!
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/17/2023 22:59:28'!
+FAILURE!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 23:02:34' prior: 50655285!
+test06CannotAddFatherToPortfolio
+	|portfolio childPortfolio|
+	
+	portfolio := Portfolio new.
+	childPortfolio := Portfolio new.
+	portfolio register: childPortfolio.
+	
+	self should: [childPortfolio register: portfolio.] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
+	
+	! !
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/17/2023 23:02:36'!
+PASSED!
