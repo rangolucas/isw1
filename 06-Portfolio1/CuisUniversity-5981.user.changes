@@ -1092,3 +1092,5 @@ test06CannotAddFatherToPortfolio
 
 !testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/17/2023 23:02:36'!
 PASSED!
+
+----QUIT----(17 October 2023 23:38:17) CuisUniversity-5981.image priorSource: 10222696!
