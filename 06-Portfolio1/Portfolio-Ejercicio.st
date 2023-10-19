@@ -123,6 +123,41 @@ test09CannotAddAnotherFatherToFatherOfAccount
 	
 	! !
 
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'LR 10/19/2023 03:18:31'!
+test10CannotAddPortfolioWhoseGrandparentIsMyParent
+	|portfolio grandchildPortfolio parentPortfolio grandparentPortfolio|
+	
+	grandparentPortfolio := Portfolio new.
+	grandchildPortfolio := Portfolio new.
+	parentPortfolio := Portfolio new.
+	portfolio := Portfolio new.
+	
+	grandparentPortfolio registerPortfolio: parentPortfolio.
+	parentPortfolio registerPortfolio: grandchildPortfolio.
+	grandparentPortfolio registerPortfolio: portfolio.
+	
+	self should: [portfolio registerPortfolio: grandchildPortfolio] raise: Error withExceptionDo: [:error | error messageText = (Portfolio portfolioHierarchyCannotContainCycles).]
+	
+	! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 11:37:49'!
+test11TransactionsOfPortfolioReturnsTransactionsOfAccounts
+	|portfolio anAccount anotherAccount aDeposit anotherDeposit|
+	
+	anAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithReceptiveAccount: anAccount.
+	anotherAccount := ReceptiveAccount new.
+	portfolio registerReceptiveAccount: anotherAccount.
+	
+	aDeposit := Deposit for: 100.
+	anotherDeposit := Deposit for: 50.
+	
+	anAccount register: aDeposit.
+	anotherAccount register: anotherDeposit.
+	
+	self assert: (portfolio transactions) equals: (OrderedCollection with: aDeposit with: anotherDeposit).
+	! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'PortfolioTest class' category: 'Portfolio-Ejercicio'!
@@ -352,17 +387,29 @@ Object subclass: #FinancialEntity
 	poolDictionaries: ''
 	category: 'Portfolio-Ejercicio'!
 
+!FinancialEntity methodsFor: 'as yet unclassified' stamp: 'LR 10/19/2023 03:35:55'!
+ancestors
+	|ancestors|
+	ancestors := OrderedCollection new.
+	ancestors addAll: parents.
+	parents do: [:parent | ancestors addAll: parent ancestors].
+	^ancestors! !
+
 !FinancialEntity methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 21:06:41'!
 balance
 	self subclassResponsibility ! !
 
-!FinancialEntity methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 02:58:27'!
-parents
-	^parents! !
+!FinancialEntity methodsFor: 'as yet unclassified' stamp: 'LR 10/19/2023 03:25:45'!
+hasAnyAncestorOf: potentialAncestors
+	^self ancestors anySatisfy: [:ancestor | potentialAncestors includes: ancestor ]! !
 
 !FinancialEntity methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 02:55:51'!
 registerParent: aFinancialEntity
 	parents add: aFinancialEntity.! !
+
+!FinancialEntity methodsFor: 'as yet unclassified' stamp: 'LR 10/19/2023 03:21:28'!
+sharesAncestorsWith: aPotentialSiblingEntity
+	^aPotentialSiblingEntity hasAnyAncestorOf: self ancestors! !
 
 
 
@@ -377,11 +424,6 @@ FinancialEntity subclass: #Portfolio
 balance
 	^(portfolios sum: [:portfolio | portfolio balance] ifEmpty: [0])+ (receptiveAccounts sum: [:receptiveAccount | receptiveAccount balance] ifEmpty: [0])
  	! !
-
-!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/19/2023 01:05:46'!
-hasChildWithRegisteredEntity: aFinancialEntity
-	^portfolios anySatisfy: [:portfolio | portfolio hasRegisteredEntity: aFinancialEntity].
-	! !
 
 !Portfolio methodsFor: 'evaluating' stamp: 'BR 10/19/2023 02:43:17'!
 hierarchy
@@ -414,17 +456,17 @@ registerPortfolio: aPortfolio
 	aPortfolio registerParent: self.
 	portfolios add: aPortfolio.! !
 
-!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 02:56:35'!
+!Portfolio methodsFor: 'updating' stamp: 'LR 10/19/2023 03:19:53'!
 registerReceptiveAccount: aReceptiveAccount 
+	(self sharesAncestorsWith: aReceptiveAccount) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription].
 	self validateReceptiveAccountRegistration: aReceptiveAccount.
 	aReceptiveAccount registerParent: self.
 	receptiveAccounts add: aReceptiveAccount.! !
 
-!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 02:42:54'!
+!Portfolio methodsFor: 'updating' stamp: 'LR 10/19/2023 03:40:08'!
 validatePortfolioRegistration: aPortfolio 
-	(self hasRegisteredEntity: aPortfolio) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription].
-	(aPortfolio hasChild: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
-	(aPortfolio descendantsContainsAnyOf: self hierarchy) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].! !
+	(aPortfolio descendantsContainsAnyOf: self hierarchy) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	(self sharesAncestorsWith: aPortfolio) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription].! !
 
 !Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 03:03:03'!
 validateReceptiveAccountRegistration: aReceptiveAccount 
@@ -434,14 +476,27 @@ validateReceptiveAccountRegistration: aReceptiveAccount
 	! !
 
 
+!Portfolio methodsFor: 'initialization' stamp: 'BR 10/19/2023 11:26:15'!
+hasRegistered: aTransaction
+	^(self transactions) includes: aTransaction.
+	! !
+
 !Portfolio methodsFor: 'initialization' stamp: 'BR 10/18/2023 23:42:03'!
 hasRegisteredEntity: aFinancialEntity
 	^(portfolios includes: aFinancialEntity) or: [receptiveAccounts includes: aFinancialEntity].! !
 
-!Portfolio methodsFor: 'initialization' stamp: 'BR 10/18/2023 23:39:06'!
+!Portfolio methodsFor: 'initialization' stamp: 'LR 10/19/2023 03:13:48'!
 initialize
 	portfolios := OrderedCollection new.
-	receptiveAccounts := OrderedCollection new.! !
+	receptiveAccounts := OrderedCollection new.
+	parents := OrderedCollection new.! !
+
+!Portfolio methodsFor: 'initialization' stamp: 'BR 10/19/2023 11:25:10'!
+transactions
+	|transactions|
+	transactions := OrderedCollection new.
+	receptiveAccounts do: [:account | transactions addAll: (account transactions)].
+	^transactions! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -465,16 +520,23 @@ FinancialEntity subclass: #ReceptiveAccount
 	poolDictionaries: ''
 	category: 'Portfolio-Ejercicio'!
 
-!ReceptiveAccount methodsFor: 'initialization' stamp: 'NR 10/17/2019 15:06:56'!
+!ReceptiveAccount methodsFor: 'initialization' stamp: 'LR 10/19/2023 03:13:54'!
 initialize
 
-	transactions := OrderedCollection new.! !
+	transactions := OrderedCollection new.
+	parents := OrderedCollection new.! !
 
 
 !ReceptiveAccount methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:37'!
 register: aTransaction
 
 	transactions add: aTransaction 
+! !
+
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'BR 10/19/2023 11:20:46'!
+registeredTransaction: aTransaction
+
+	transactions includes: aTransaction 
 ! !
 
 !ReceptiveAccount methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:37'!
