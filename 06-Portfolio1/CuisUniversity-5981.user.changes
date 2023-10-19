@@ -1094,3 +1094,681 @@ test06CannotAddFatherToPortfolio
 PASSED!
 
 ----QUIT----(17 October 2023 23:38:17) CuisUniversity-5981.image priorSource: 10222696!
+
+----STARTUP---- (18 October 2023 22:57:32) as /home/bruno/Downloads/linux64(3)/linux64/CuisUniversity-5981.image!
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/18/2023 22:59:36'!
+test07CannotAddGrandchildToPortfolio
+	|portfolio childPortfolio grandchildPortfolio|
+	
+	portfolio := Portfolio new.
+	childPortfolio := Portfolio new.
+	grandchildPortfolio := Portfolio new.
+	
+	portfolio register: childPortfolio.
+	childPortfolio register: grandchildPortfolio.
+	
+	self should: [grandchildPortfolio register: portfolio.] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
+	
+	! !
+
+!methodRemoval: PortfolioTest #test07CannotAddSameFinancialEntityTwice stamp: 'BR 10/18/2023 22:59:39'!
+test07CannotAddSameFinancialEntityTwice
+	|portfolio childPortfolio grandchildPortfolio|
+	
+	portfolio := Portfolio new.
+	childPortfolio := Portfolio new.
+	grandchildPortfolio := Portfolio new.
+	
+	portfolio register: childPortfolio.
+	childPortfolio register: grandchildPortfolio.
+	
+	self should: [grandchildPortfolio register: portfolio.] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
+	
+	!
+
+!testRun: #PortfolioTest #test07CannotAddGrandchildToPortfolio stamp: 'BR 10/18/2023 22:59:43'!
+FAILURE!
+
+!testRun: #PortfolioTest #test07CannotAddGrandchildToPortfolio stamp: 'BR 10/18/2023 22:59:43'!
+FAILURE!
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/18/2023 23:01:06' prior: 50655246!
+register: aFinancialEntity 
+	(financialEntities includes: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription ].
+	(self = aFinancialEntity) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	(aFinancialEntity hasRegisteredEntity: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	(aFinancialEntity isDescendentOf: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	financialEntities add: aFinancialEntity.! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/18/2023 23:02:27' prior: 50655408!
+register: aFinancialEntity 
+	(financialEntities includes: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription ].
+	(self = aFinancialEntity) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	(aFinancialEntity hasRegisteredEntity: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	(aFinancialEntity isDescendentOf: self) ifFalse: [^self error: self class portfolioHierarchyCannotContainCycles].
+	financialEntities add: aFinancialEntity.! !
+
+!testRun: #PortfolioTest #test07CannotAddGrandchildToPortfolio stamp: 'BR 10/18/2023 23:03:46'!
+ERROR!
+
+!testRun: #PortfolioTest #test07CannotAddGrandchildToPortfolio stamp: 'BR 10/18/2023 23:03:46'!
+ERROR!
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/18/2023 23:03:57' prior: 50655428!
+register: aFinancialEntity 
+	(financialEntities includes: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription ].
+	(self = aFinancialEntity) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	(aFinancialEntity hasRegisteredEntity: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	
+	financialEntities add: aFinancialEntity.! !
+
+!testRun: #PortfolioTest #test07CannotAddGrandchildToPortfolio stamp: 'BR 10/18/2023 23:04:02'!
+FAILURE!
+
+!testRun: #PortfolioTest #test07CannotAddGrandchildToPortfolio stamp: 'BR 10/18/2023 23:04:02'!
+FAILURE!
+
+!testRun: #PortfolioTest #test07CannotAddGrandchildToPortfolio stamp: 'BR 10/18/2023 23:04:37'!
+FAILURE!
+
+!testRun: #PortfolioTest #test07CannotAddGrandchildToPortfolio stamp: 'BR 10/18/2023 23:04:37'!
+FAILURE!
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/18/2023 23:05:51' prior: 50655455!
+register: aFinancialEntity 
+	(financialEntities includes: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription ].
+	(self = aFinancialEntity) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	(aFinancialEntity hasRegisteredEntity: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	(aFinancialEntity isDescendentOf: self) ifFalse: [^self error: self class portfolioHierarchyCannotContainCycles].
+	financialEntities add: aFinancialEntity.! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/18/2023 23:06:06' prior: 50655485!
+register: aFinancialEntity 
+	(financialEntities includes: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription ].
+	(self = aFinancialEntity) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	(aFinancialEntity hasRegisteredEntity: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	(aFinancialEntity isDescendentOf: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	financialEntities add: aFinancialEntity.! !
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/18/2023 23:07:14'!
+isDescendentOf: aFinancialEntity
+	
+	! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/18/2023 23:09:44' prior: 50655505!
+register: aFinancialEntity 
+	(aFinancialEntity isDescendentOf: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	financialEntities add: aFinancialEntity.! !
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/18/2023 23:10:01' prior: 50655525!
+isDescendentOf: aFinancialEntity
+	(financialEntities includes: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription ].
+	(self = aFinancialEntity) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	(aFinancialEntity hasRegisteredEntity: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	! !
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/18/2023 23:12:16' prior: 50655538!
+isDescendentOf: aFinancialEntity
+	(self = aFinancialEntity) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	(aFinancialEntity hasRegisteredEntity: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/18/2023 23:13:04' prior: 50655529!
+register: aFinancialEntity 
+	(financialEntities includes: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription ].
+	(aFinancialEntity isDescendentOf: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	financialEntities add: aFinancialEntity.! !
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/18/2023 23:18:57' prior: 50655554!
+isDescendentOf: aFinancialEntity
+	(self = aFinancialEntity) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	(aFinancialEntity hasRegisteredEntity: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	(aFinancialEntity hasChildWithRegisteredEntity: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	! !
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/18/2023 23:20:20'!
+hasChildWithRegisteredEntity: aFinancialEntity
+	financialEntities anySatisfy: [:financialEntity | financialEntity hasRegisteredEntity: self].! !
+
+!testRun: #PortfolioTest #test01EmptyPortfolioHasZeroBalance stamp: 'BR 10/18/2023 23:20:48'!
+PASSED!
+
+!testRun: #PortfolioTest #test02BalanceOfPortfolioWithChildAccounts stamp: 'BR 10/18/2023 23:20:48'!
+ERROR!
+
+!testRun: #PortfolioTest #test03BalanceOfPortfolioWithChildPortfolio stamp: 'BR 10/18/2023 23:20:48'!
+ERROR!
+
+!testRun: #PortfolioTest #test04CannotAddSameFinancialEntityTwice stamp: 'BR 10/18/2023 23:20:48'!
+ERROR!
+
+!testRun: #PortfolioTest #test05CannotAddPortfolioToItself stamp: 'BR 10/18/2023 23:20:48'!
+PASSED!
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/18/2023 23:20:48'!
+ERROR!
+
+!testRun: #PortfolioTest #test07CannotAddGrandchildToPortfolio stamp: 'BR 10/18/2023 23:20:48'!
+ERROR!
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/18/2023 23:21:08' prior: 50655594!
+hasChildWithRegisteredEntity: aFinancialEntity
+	^financialEntities anySatisfy: [:financialEntity | financialEntity hasRegisteredEntity: self].! !
+
+!testRun: #PortfolioTest #test01EmptyPortfolioHasZeroBalance stamp: 'BR 10/18/2023 23:21:12'!
+PASSED!
+
+!testRun: #PortfolioTest #test02BalanceOfPortfolioWithChildAccounts stamp: 'BR 10/18/2023 23:21:12'!
+ERROR!
+
+!testRun: #PortfolioTest #test03BalanceOfPortfolioWithChildPortfolio stamp: 'BR 10/18/2023 23:21:12'!
+ERROR!
+
+!testRun: #PortfolioTest #test04CannotAddSameFinancialEntityTwice stamp: 'BR 10/18/2023 23:21:12'!
+ERROR!
+
+!testRun: #PortfolioTest #test05CannotAddPortfolioToItself stamp: 'BR 10/18/2023 23:21:12'!
+PASSED!
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/18/2023 23:21:12'!
+ERROR!
+
+!testRun: #PortfolioTest #test07CannotAddGrandchildToPortfolio stamp: 'BR 10/18/2023 23:21:12'!
+ERROR!
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/18/2023 23:23:04' prior: 50655579!
+isDescendentOf: aFinancialEntity
+	^(self = aFinancialEntity) or: [(aFinancialEntity hasRegisteredEntity: self) or: [(aFinancialEntity hasChildWithRegisteredEntity: self)]]  
+	! !
+
+!testRun: #PortfolioTest #test01EmptyPortfolioHasZeroBalance stamp: 'BR 10/18/2023 23:23:07'!
+PASSED!
+
+!testRun: #PortfolioTest #test02BalanceOfPortfolioWithChildAccounts stamp: 'BR 10/18/2023 23:23:07'!
+ERROR!
+
+!testRun: #PortfolioTest #test03BalanceOfPortfolioWithChildPortfolio stamp: 'BR 10/18/2023 23:23:07'!
+ERROR!
+
+!testRun: #PortfolioTest #test04CannotAddSameFinancialEntityTwice stamp: 'BR 10/18/2023 23:23:07'!
+ERROR!
+
+!testRun: #PortfolioTest #test05CannotAddPortfolioToItself stamp: 'BR 10/18/2023 23:23:07'!
+PASSED!
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/18/2023 23:23:07'!
+FAILURE!
+
+!testRun: #PortfolioTest #test07CannotAddGrandchildToPortfolio stamp: 'BR 10/18/2023 23:23:07'!
+FAILURE!
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/18/2023 23:24:12' prior: 50655656!
+isDescendentOf: aFinancialEntity
+	^(self = aFinancialEntity) or: [
+		(aFinancialEntity hasRegisteredEntity: self) or: [
+			(aFinancialEntity hasChildWithRegisteredEntity: self)
+		]
+	]  
+	! !
+
+!testRun: #PortfolioTest #test01EmptyPortfolioHasZeroBalance stamp: 'BR 10/18/2023 23:24:30'!
+PASSED!
+
+!testRun: #PortfolioTest #test02BalanceOfPortfolioWithChildAccounts stamp: 'BR 10/18/2023 23:24:30'!
+ERROR!
+
+!testRun: #PortfolioTest #test03BalanceOfPortfolioWithChildPortfolio stamp: 'BR 10/18/2023 23:24:30'!
+ERROR!
+
+!testRun: #PortfolioTest #test04CannotAddSameFinancialEntityTwice stamp: 'BR 10/18/2023 23:24:30'!
+ERROR!
+
+!testRun: #PortfolioTest #test05CannotAddPortfolioToItself stamp: 'BR 10/18/2023 23:24:30'!
+PASSED!
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/18/2023 23:24:30'!
+FAILURE!
+
+!testRun: #PortfolioTest #test07CannotAddGrandchildToPortfolio stamp: 'BR 10/18/2023 23:24:30'!
+FAILURE!
+
+!testRun: #PortfolioTest #test02BalanceOfPortfolioWithChildAccounts stamp: 'BR 10/18/2023 23:24:45'!
+ERROR!
+
+!testRun: #PortfolioTest #test02BalanceOfPortfolioWithChildAccounts stamp: 'BR 10/18/2023 23:24:55'!
+ERROR!
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/18/2023 23:28:15' prior: 50655688!
+isDescendentOf: aPortfolio
+	^(self = aPortfolio) or: [
+		(aPortfolio hasRegisteredEntity: self) or: [
+			(aPortfolio hasChildWithRegisteredEntity: self)
+		]
+	]  
+	! !
+!ReceptiveAccount methodsFor: 'testing' stamp: 'BR 10/18/2023 23:31:49'!
+hasRegisteredEntity: aFinancialEntity
+	^False.! !
+!ReceptiveAccount methodsFor: 'testing' stamp: 'BR 10/18/2023 23:31:54' prior: 50655735!
+hasRegisteredEntity: aFinancialEntity
+	^false.! !
+
+!classDefinition: #Portfolio category: 'Portfolio-Ejercicio' stamp: 'BR 10/18/2023 23:37:55'!
+FinancialEntity subclass: #Portfolio
+	instanceVariableNames: 'financialEntities portfolios'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+
+!classDefinition: #Portfolio category: 'Portfolio-Ejercicio' stamp: 'BR 10/18/2023 23:37:58'!
+FinancialEntity subclass: #Portfolio
+	instanceVariableNames: 'financialEntities portfolios receptiveAccounts'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/18/2023 23:37:45' prior: 50651700 overrides: 50651671!
+balance
+	^(portfolios sum: [:portfolio | portfolio balance] ifEmpty: [0])+ (receptiveAccounts sum: [:receptiveAccount | receptiveAccount balance] ifEmpty: [0])
+ 	! !
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/18/2023 23:38:21' prior: 50655625!
+hasChildWithRegisteredEntity: aFinancialEntity
+	^portfolios anySatisfy: [:financialEntity | financialEntity hasRegisteredEntity: self].! !
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/18/2023 23:38:31' prior: 50655771!
+hasChildWithRegisteredEntity: aFinancialEntity
+	^portfolios anySatisfy: [:portfolio | portfolio hasRegisteredEntity: self].! !
+!Portfolio methodsFor: 'initialization' stamp: 'BR 10/18/2023 23:39:06' prior: 50651744 overrides: 16920235!
+initialize
+	portfolios := OrderedCollection new.
+	receptiveAccounts := OrderedCollection new.! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/18/2023 23:39:42' prior: 50655565!
+register: aFinancialEntity 
+	(portfolios includes: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription ].
+	(aFinancialEntity isDescendentOf: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	financialEntities add: aFinancialEntity.! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/18/2023 23:41:10' prior: 50655792!
+register: aFinancialEntity 
+	((portfolios includes: aFinancialEntity) or: [receptiveAccounts includes: aFinancialEntity]) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription ].
+	(aFinancialEntity isDescendentOf: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	financialEntities add: aFinancialEntity.! !
+!Portfolio methodsFor: 'initialization' stamp: 'BR 10/18/2023 23:42:03' prior: 50655262!
+hasRegisteredEntity: aFinancialEntity
+	^(portfolios includes: aFinancialEntity) or: [receptiveAccounts includes: aFinancialEntity].! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/18/2023 23:42:31' prior: 50655805!
+register: aFinancialEntity 
+	(self hasRegisteredEntity: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription ].
+	(aFinancialEntity isDescendentOf: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	financialEntities add: aFinancialEntity.! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/18/2023 23:46:59'!
+registerPortfolio: aFinancialEntity 
+	(self hasRegisteredEntity: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription ].
+	(aFinancialEntity isDescendentOf: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	financialEntities add: aFinancialEntity.! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/18/2023 23:51:07' prior: 50655840!
+registerPortfolio: aPortfolio 
+	(self hasRegisteredEntity: aPortfolio) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription ].
+	(aPortfolio isDescendentOf: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	financialEntities add: aPortfolio.! !
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/18/2023 23:58:42' prior: 50655778!
+hasChildWithRegisteredEntity: aFinancialEntity
+	^portfolios anySatisfy: [:portfolio | portfolio hasRegisteredEntity: self].
+	! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 00:00:19' prior: 50655827!
+register: aFinancialEntity 
+	^(self hasRegisteredEntity: aFinancialEntity) or: [(aFinancialEntity isDescendentOf: self)]! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 00:01:43' prior: 50655874!
+register: aFinancialEntity 
+	(self hasRegisteredEntity: aFinancialEntity) ifTrue: [].
+	(aFinancialEntity isDescendentOf: self) ifTrue: []! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 00:01:57' prior: 50655881!
+register: aFinancialEntity 
+	(self hasRegisteredEntity: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription].
+	(aFinancialEntity isDescendentOf: self) ifTrue: []! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 00:02:15' prior: 50655888!
+register: aFinancialEntity 
+	(self hasRegisteredEntity: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription].
+	(aFinancialEntity isDescendentOf: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 00:02:44'!
+validateRegistration: aFinancialEntity 
+	(self hasRegisteredEntity: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription].
+	(aFinancialEntity isDescendentOf: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].! !
+
+!methodRemoval: Portfolio #validateRegistration: stamp: 'BR 10/19/2023 00:03:25'!
+validateRegistration: aFinancialEntity 
+	(self hasRegisteredEntity: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription].
+	(aFinancialEntity isDescendentOf: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].!
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 00:03:48'!
+validateRegistration: aFinancialEntity 
+	(self hasRegisteredEntity: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription].
+	(aFinancialEntity isDescendentOf: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].! !
+
+!methodRemoval: Portfolio #register: stamp: 'BR 10/19/2023 00:03:48'!
+register: aFinancialEntity 
+	(self hasRegisteredEntity: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription].
+	(aFinancialEntity isDescendentOf: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].!
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 00:04:13' prior: 50655854!
+registerPortfolio: aPortfolio 
+	self validateRegistration: aPortfolio.
+	financialEntities add: aPortfolio.! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 00:04:20' prior: 50655958!
+registerPortfolio: aPortfolio 
+	self validateRegistration: aPortfolio.
+	portfolios add: aPortfolio.! !
+
+FinancialEntity subclass: #Portfolio
+	instanceVariableNames: 'portfolios receptiveAccounts'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+
+!classDefinition: #Portfolio category: 'Portfolio-Ejercicio' stamp: 'BR 10/19/2023 00:04:32'!
+FinancialEntity subclass: #Portfolio
+	instanceVariableNames: 'portfolios receptiveAccounts'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Ejercicio'!
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 00:04:54'!
+registerReceptiveAccount: aPortfolio 
+	self validateRegistration: aPortfolio.
+	portfolios add: aPortfolio.! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 00:05:58' prior: 50655985!
+registerReceptiveAccount: aReceptiveAccount 
+	(aReceptiveAccount isDescendentOf: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	portfolios add: aReceptiveAccount.! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 00:06:04' prior: 50655992!
+registerReceptiveAccount: aReceptiveAccount 
+	(aReceptiveAccount isDescendentOf: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	receptiveAccounts add: aReceptiveAccount.! !
+
+!methodRemoval: ReceptiveAccount #hasRegisteredEntity: stamp: 'BR 10/19/2023 00:06:56'!
+hasRegisteredEntity: aFinancialEntity
+	^false.!
+
+!testRun: #PortfolioTest #test01EmptyPortfolioHasZeroBalance stamp: 'BR 10/19/2023 00:07:05'!
+PASSED!
+
+!testRun: #PortfolioTest #test02BalanceOfPortfolioWithChildAccounts stamp: 'BR 10/19/2023 00:07:05'!
+ERROR!
+
+!testRun: #PortfolioTest #test03BalanceOfPortfolioWithChildPortfolio stamp: 'BR 10/19/2023 00:07:05'!
+ERROR!
+
+!testRun: #PortfolioTest #test04CannotAddSameFinancialEntityTwice stamp: 'BR 10/19/2023 00:07:05'!
+ERROR!
+
+!testRun: #PortfolioTest #test05CannotAddPortfolioToItself stamp: 'BR 10/19/2023 00:07:05'!
+PASSED!
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/19/2023 00:07:05'!
+ERROR!
+
+!testRun: #PortfolioTest #test07CannotAddGrandchildToPortfolio stamp: 'BR 10/19/2023 00:07:05'!
+ERROR!
+
+!testRun: #PortfolioTest #test01EmptyPortfolioHasZeroBalance stamp: 'BR 10/19/2023 00:07:16'!
+PASSED!
+
+!testRun: #PortfolioTest #test02BalanceOfPortfolioWithChildAccounts stamp: 'BR 10/19/2023 00:07:18'!
+ERROR!
+
+!testRun: #PortfolioTest #test02BalanceOfPortfolioWithChildAccounts stamp: 'BR 10/19/2023 00:07:18'!
+ERROR!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 00:07:37' prior: 50651860!
+test02BalanceOfPortfolioWithChildAccounts
+	|portfolio anAccount anotherAccount|
+	
+	anAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithFinancialEntity: anAccount.
+	anotherAccount := ReceptiveAccount new.
+	portfolio registerReceptiveAccount: anotherAccount.
+	
+	Deposit register: 100 on: anAccount.
+	Deposit register: 50 on: anotherAccount.
+	
+	self assert: portfolio balance equals: 150.
+	! !
+!PortfolioTest class methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 00:08:47'!
+createPortfolioWithReceptiveAccount: aReceptiveAccount
+	|aPortfolio|
+	
+	aPortfolio := Portfolio new.
+	
+	aPortfolio registerReceptiveAccount: aReceptiveAccount.
+	
+	^aPortfolio.! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 00:09:08' prior: 50656048!
+test02BalanceOfPortfolioWithChildAccounts
+	|portfolio anAccount anotherAccount|
+	
+	anAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithReceptiveAccount: anAccount.
+	anotherAccount := ReceptiveAccount new.
+	portfolio registerReceptiveAccount: anotherAccount.
+	
+	Deposit register: 100 on: anAccount.
+	Deposit register: 50 on: anotherAccount.
+	
+	self assert: portfolio balance equals: 150.
+	! !
+
+!testRun: #PortfolioTest #test02BalanceOfPortfolioWithChildAccounts stamp: 'BR 10/19/2023 00:09:10'!
+ERROR!
+
+!testRun: #PortfolioTest #test02BalanceOfPortfolioWithChildAccounts stamp: 'BR 10/19/2023 00:09:10'!
+ERROR!
+!ReceptiveAccount methodsFor: 'testing' stamp: 'BR 10/19/2023 00:11:26'!
+isDescendentOf: aFinancialEntity
+	^(self = aFinancialEntity) or: [
+		(aFinancialEntity hasRegisteredEntity: self) or: [
+			(aFinancialEntity hasChildWithRegisteredEntity: self)
+		]
+	]  ! !
+!FinancialEntity methodsFor: 'testing' stamp: 'BR 10/19/2023 00:11:39'!
+isDescendentOf: aFinancialEntity
+	^(self = aFinancialEntity) or: [
+		(aFinancialEntity hasRegisteredEntity: self) or: [
+			(aFinancialEntity hasChildWithRegisteredEntity: self)
+		]
+	]  ! !
+
+!methodRemoval: ReceptiveAccount #isDescendentOf: stamp: 'BR 10/19/2023 00:11:40'!
+isDescendentOf: aFinancialEntity
+	^(self = aFinancialEntity) or: [
+		(aFinancialEntity hasRegisteredEntity: self) or: [
+			(aFinancialEntity hasChildWithRegisteredEntity: self)
+		]
+	]  !
+
+!methodRemoval: Portfolio #isDescendentOf: stamp: 'BR 10/19/2023 00:11:40'!
+isDescendentOf: aPortfolio
+	^(self = aPortfolio) or: [
+		(aPortfolio hasRegisteredEntity: self) or: [
+			(aPortfolio hasChildWithRegisteredEntity: self)
+		]
+	]  
+	!
+
+!testRun: #PortfolioTest #test02BalanceOfPortfolioWithChildAccounts stamp: 'BR 10/19/2023 00:11:56'!
+PASSED!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 00:12:13' prior: 50651820!
+test03BalanceOfPortfolioWithChildPortfolio
+	|portfolio childAccount childPortfolio grandchildAccount|
+	
+	childAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithReceptiveAccount: childAccount.
+	grandchildAccount := ReceptiveAccount new.
+	childPortfolio := PortfolioTest createPortfolioWithFinancialEntity: grandchildAccount.
+	
+	Deposit register: 100 on: childAccount.
+	Deposit register: 50 on: grandchildAccount.
+	
+	portfolio register: childPortfolio. 
+	self assert: portfolio balance equals: 150.
+	! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 00:12:19' prior: 50656134!
+test03BalanceOfPortfolioWithChildPortfolio
+	|portfolio childAccount childPortfolio grandchildAccount|
+	
+	childAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithReceptiveAccount: childAccount.
+	grandchildAccount := ReceptiveAccount new.
+	childPortfolio := PortfolioTest createPortfolioWithReceptiveAccount: grandchildAccount.
+	
+	Deposit register: 100 on: childAccount.
+	Deposit register: 50 on: grandchildAccount.
+	
+	portfolio register: childPortfolio. 
+	self assert: portfolio balance equals: 150.
+	! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 00:12:28' prior: 50656154!
+test03BalanceOfPortfolioWithChildPortfolio
+	|portfolio childAccount childPortfolio grandchildAccount|
+	
+	childAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithReceptiveAccount: childAccount.
+	grandchildAccount := ReceptiveAccount new.
+	childPortfolio := PortfolioTest createPortfolioWithReceptiveAccount: grandchildAccount.
+	
+	Deposit register: 100 on: childAccount.
+	Deposit register: 50 on: grandchildAccount.
+	
+	portfolio registerPortfolio: childPortfolio. 
+	self assert: portfolio balance equals: 150.
+	! !
+
+!testRun: #PortfolioTest #test03BalanceOfPortfolioWithChildPortfolio stamp: 'BR 10/19/2023 00:12:34'!
+PASSED!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 00:12:53' prior: 50654985!
+test04CannotAddSameFinancialEntityTwice
+	|portfolio childFinancialEntity|
+	
+	childFinancialEntity := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithReceptiveAccount: childFinancialEntity.
+	
+	
+	self should: [portfolio register: childFinancialEntity] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
+	
+	! !
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 00:13:25' prior: 50656198!
+test04CannotAddSameFinancialEntityTwice
+	|portfolio childReceptiveAccount|
+	
+	childReceptiveAccount := ReceptiveAccount new.
+	portfolio := PortfolioTest createPortfolioWithReceptiveAccount: childReceptiveAccount.
+	
+	
+	self should: [portfolio register: childReceptiveAccount] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
+	
+	! !
+
+!testRun: #PortfolioTest #test04CannotAddSameFinancialEntityTwice stamp: 'BR 10/19/2023 00:13:27'!
+PASSED!
+
+!testRun: #PortfolioTest #test05CannotAddPortfolioToItself stamp: 'BR 10/19/2023 00:13:37'!
+PASSED!
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/19/2023 00:13:43'!
+ERROR!
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/19/2023 00:13:43'!
+ERROR!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 00:13:50' prior: 50655344!
+test06CannotAddFatherToPortfolio
+	|portfolio childPortfolio|
+	
+	portfolio := Portfolio new.
+	childPortfolio := Portfolio new.
+	portfolio register: childPortfolio.
+	
+	self should: [childPortfolio registerPortfolio: portfolio.] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
+	
+	! !
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/19/2023 00:13:52'!
+ERROR!
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/19/2023 00:13:52'!
+ERROR!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 00:14:00' prior: 50656241!
+test06CannotAddFatherToPortfolio
+	|portfolio childPortfolio|
+	
+	portfolio := Portfolio new.
+	childPortfolio := Portfolio new.
+	portfolio registerPortfolio: childPortfolio.
+	
+	self should: [childPortfolio registerPortfolio: portfolio.] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
+	
+	! !
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/19/2023 00:14:02'!
+FAILURE!
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/19/2023 00:14:02'!
+FAILURE!
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/19/2023 00:14:12'!
+FAILURE!
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/19/2023 00:14:12'!
+FAILURE!
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/19/2023 00:15:35'!
+FAILURE!
+
+self!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 00:17:59' prior: 50656261!
+test06CannotAddFatherToPortfolio
+	|portfolio childPortfolio|
+	
+	portfolio := Portfolio new.
+	childPortfolio := Portfolio new.
+	portfolio registerPortfolio: childPortfolio.
+	
+	self should: [childPortfolio registerPortfolio: portfolio.] raise: Error description: Portfolio portfolioHierarchyCannotContainCycles. 
+	
+	! !
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/19/2023 00:18:00'!
+FAILURE!
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/19/2023 00:18:00'!
+FAILURE!
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/19/2023 00:18:55'!
+FAILURE!
+
+!testRun: #PortfolioTest #test06CannotAddFatherToPortfolio stamp: 'BR 10/19/2023 00:18:55'!
+FAILURE!
+
+childPortfolio registerPortfolio: portfolio!
+
+portfolio!
+
+childPortfolio!
+
+aFinancialEntity!
+
+aFinancialEntity hasRegisteredEntity: self!
+
+portfolios includes: aFinancialEntity!
+
+portfolios!
+
+self!
+
+portfolio := Portfolio new.
+childPortfolio := Portfolio new.
+portfolio registerPortfolio: childPortfolio.!
+
+portfolio!
+
+childPortfolio registerPortfolio: portfolio!
+
+childPortfolio!
+
+childPortfolio isDescendentOf: portfolio!
+
+portfolio := Portfolio new.
+childPortfolio := Portfolio new.
+portfolio registerPortfolio: childPortfolio.!
+
+portfolio := Portfolio new.
+childPortfolio := Portfolio new.
+portfolio registerPortfolio: childPortfolio.!
+
+portfolio!
+
+childPortfolio!
+
+childPortfolio isDescendentOf: portfolio!
+
+childPortfolio validateRegistration: portfolio!
+
+----SNAPSHOT----(19 October 2023 00:36:22) CuisUniversity-5981.image priorSource: 10358695!
+
+----SNAPSHOT----(19 October 2023 00:36:35) CuisUniversity-5981.image priorSource: 10390063!
