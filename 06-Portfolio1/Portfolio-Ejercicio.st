@@ -45,7 +45,7 @@ test03BalanceOfPortfolioWithChildPortfolio
 	self assert: portfolio balance equals: 150.
 	! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 00:13:25'!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 01:10:40'!
 test04CannotAddSameFinancialEntityTwice
 	|portfolio childReceptiveAccount|
 	
@@ -53,21 +53,20 @@ test04CannotAddSameFinancialEntityTwice
 	portfolio := PortfolioTest createPortfolioWithReceptiveAccount: childReceptiveAccount.
 	
 	
-	self should: [portfolio register: childReceptiveAccount] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
-	
-	! !
+	self should: [portfolio register: childReceptiveAccount] raise: Error withExceptionDo: [:error | 
+			error messageText = (Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription).]! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/17/2023 22:41:29'!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 01:12:00'!
 test05CannotAddPortfolioToItself
 	|portfolio|
 	
 	portfolio := Portfolio new.
 
-	self should: [portfolio register: portfolio.] raise: Error description: Portfolio portfolioHierarchyCannotContainCycles . 
+	self should: [portfolio register: portfolio.] raise: Error withExceptionDo: [:error | error messageText = (Portfolio portfolioHierarchyCannotContainCycles).]
 	
 	! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 00:17:59'!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 01:12:13'!
 test06CannotAddFatherToPortfolio
 	|portfolio childPortfolio|
 	
@@ -75,11 +74,11 @@ test06CannotAddFatherToPortfolio
 	childPortfolio := Portfolio new.
 	portfolio registerPortfolio: childPortfolio.
 	
-	self should: [childPortfolio registerPortfolio: portfolio.] raise: Error description: Portfolio portfolioHierarchyCannotContainCycles. 
+	self should: [childPortfolio registerPortfolio: portfolio.] raise: Error withExceptionDo: [:error | error messageText = (Portfolio portfolioHierarchyCannotContainCycles).]
 	
 	! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/18/2023 22:59:36'!
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 02:34:10'!
 test07CannotAddGrandchildToPortfolio
 	|portfolio childPortfolio grandchildPortfolio|
 	
@@ -87,10 +86,40 @@ test07CannotAddGrandchildToPortfolio
 	childPortfolio := Portfolio new.
 	grandchildPortfolio := Portfolio new.
 	
-	portfolio register: childPortfolio.
-	childPortfolio register: grandchildPortfolio.
+	portfolio registerPortfolio: childPortfolio.
+	childPortfolio registerPortfolio: grandchildPortfolio.
 	
-	self should: [grandchildPortfolio register: portfolio.] raise: Error description: Portfolio portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription. 
+	self should: [grandchildPortfolio registerPortfolio: portfolio] raise: Error withExceptionDo: [:error | error messageText = (Portfolio portfolioHierarchyCannotContainCycles).]
+	
+	! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 01:42:27'!
+test08CannotAddFatherToAnotherFather
+	|parentPortfolio childPortfolio portfolio|
+	
+	parentPortfolio := Portfolio new.
+	childPortfolio := Portfolio new.
+	portfolio := Portfolio new.
+	
+	portfolio registerPortfolio: childPortfolio.
+	parentPortfolio registerPortfolio: childPortfolio.
+	
+	self should: [parentPortfolio registerPortfolio: portfolio] raise: Error withExceptionDo: [:error | error messageText = (Portfolio portfolioHierarchyCannotContainCycles).]
+	
+	! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 02:27:18'!
+test09CannotAddAnotherFatherToFatherOfAccount
+	|parentPortfolio childPortfolio childAccount|
+	
+	parentPortfolio := Portfolio new.
+	childPortfolio := Portfolio new.
+	childAccount := ReceptiveAccount new.
+	
+	parentPortfolio registerPortfolio: childPortfolio.
+	parentPortfolio registerReceptiveAccount: childAccount.
+	
+	self should: [childPortfolio registerReceptiveAccount: childAccount] raise: Error withExceptionDo: [:error | error messageText = (Portfolio portfolioHierarchyCannotContainCycles).]
 	
 	! !
 
@@ -318,7 +347,7 @@ for: aValue
 
 !classDefinition: #FinancialEntity category: 'Portfolio-Ejercicio'!
 Object subclass: #FinancialEntity
-	instanceVariableNames: ''
+	instanceVariableNames: 'parents'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio-Ejercicio'!
@@ -327,14 +356,14 @@ Object subclass: #FinancialEntity
 balance
 	self subclassResponsibility ! !
 
+!FinancialEntity methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 02:58:27'!
+parents
+	^parents! !
 
-!FinancialEntity methodsFor: 'testing' stamp: 'BR 10/19/2023 00:11:39'!
-isDescendentOf: aFinancialEntity
-	^(self = aFinancialEntity) or: [
-		(aFinancialEntity hasRegisteredEntity: self) or: [
-			(aFinancialEntity hasChildWithRegisteredEntity: self)
-		]
-	]  ! !
+!FinancialEntity methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 02:55:51'!
+registerParent: aFinancialEntity
+	parents add: aFinancialEntity.! !
+
 
 
 !classDefinition: #Portfolio category: 'Portfolio-Ejercicio'!
@@ -349,26 +378,60 @@ balance
 	^(portfolios sum: [:portfolio | portfolio balance] ifEmpty: [0])+ (receptiveAccounts sum: [:receptiveAccount | receptiveAccount balance] ifEmpty: [0])
  	! !
 
-!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/18/2023 23:58:42'!
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/19/2023 01:05:46'!
 hasChildWithRegisteredEntity: aFinancialEntity
-	^portfolios anySatisfy: [:portfolio | portfolio hasRegisteredEntity: self].
+	^portfolios anySatisfy: [:portfolio | portfolio hasRegisteredEntity: aFinancialEntity].
 	! !
 
+!Portfolio methodsFor: 'evaluating' stamp: 'BR 10/19/2023 02:43:17'!
+hierarchy
+	|children|
+	
+	children := OrderedCollection new.
+	
+	children add: self.
+	children addAll: portfolios.
+	children addAll: receptiveAccounts.
+	
+	portfolios do: [:portfolio | children addAll: portfolio hierarchy].
+	^children.
+ 	! !
 
-!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 00:04:20'!
+
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 02:19:09'!
+descendantsContainsAnyOf: aListOfFinancialEntities
+	^aListOfFinancialEntities anySatisfy: [:financialEntity | self hasChild: financialEntity]! !
+
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 01:17:26'!
+hasChild: aFinancialEntity
+	^(self hasRegisteredEntity: aFinancialEntity) or: [
+		portfolios anySatisfy: [:portfolio | portfolio hasChild: aFinancialEntity].
+	]! !
+
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 02:56:15'!
 registerPortfolio: aPortfolio 
-	self validateRegistration: aPortfolio.
+	self validatePortfolioRegistration: aPortfolio.
+	aPortfolio registerParent: self.
 	portfolios add: aPortfolio.! !
 
-!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 00:06:04'!
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 02:56:35'!
 registerReceptiveAccount: aReceptiveAccount 
-	(aReceptiveAccount isDescendentOf: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	self validateReceptiveAccountRegistration: aReceptiveAccount.
+	aReceptiveAccount registerParent: self.
 	receptiveAccounts add: aReceptiveAccount.! !
 
-!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 00:03:48'!
-validateRegistration: aFinancialEntity 
-	(self hasRegisteredEntity: aFinancialEntity) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription].
-	(aFinancialEntity isDescendentOf: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].! !
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 02:42:54'!
+validatePortfolioRegistration: aPortfolio 
+	(self hasRegisteredEntity: aPortfolio) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription].
+	(aPortfolio hasChild: self) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	(aPortfolio descendantsContainsAnyOf: self hierarchy) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].! !
+
+!Portfolio methodsFor: 'updating' stamp: 'BR 10/19/2023 03:03:03'!
+validateReceptiveAccountRegistration: aReceptiveAccount 
+	(self hasRegisteredEntity: aReceptiveAccount) ifTrue: [^self error: self class portfolioCannotHaveRepeatedFinancialEntitiesErrorDescription].
+	(self hasChild: aReceptiveAccount) ifTrue: [^self error: self class portfolioHierarchyCannotContainCycles].
+	
+	! !
 
 
 !Portfolio methodsFor: 'initialization' stamp: 'BR 10/18/2023 23:42:03'!
