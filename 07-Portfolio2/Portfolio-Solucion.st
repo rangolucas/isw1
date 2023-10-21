@@ -312,21 +312,62 @@ TestCase subclass: #TransferTest
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
+
 !TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 21:43:11'!
 assertAccount: anAccount hasBalance: potentialBalance
 	self assert: anAccount balance equals: potentialBalance ! !
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 21:49:09'!
+!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 16:18:30'!
 test01TransferTenDollars
 	|senderAccount receiverAccount|
 	
 	senderAccount := ReceptiveAccount new.
 	receiverAccount := ReceptiveAccount new.
 	
-	Transfer from: senderAccount to: receiverAccount amount: 10.
+	AccountTransfer from: senderAccount to: receiverAccount amount: 10.
 	
 	self assertAccount: senderAccount hasBalance: -10.
 	self assertAccount: receiverAccount hasBalance: 10.! !
+
+!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:52:50'!
+test02TransferMoneyCreatesDepositAndWithdraw
+	|senderAccount receiverAccount aTransfer aDepositByTransfer aWithdrawByTransfer|
+	
+	senderAccount := ReceptiveAccount new.
+	receiverAccount := ReceptiveAccount new.
+	
+	aTransfer := AccountTransfer from: senderAccount to: receiverAccount amount: 10.
+	aDepositByTransfer := DepositTransfer by: aTransfer.
+	aWithdrawByTransfer := WithdrawTransfer by: aTransfer.
+	
+	self assert: (senderAccount hasRegistered: aWithdrawByTransfer).
+	self assert: (receiverAccount hasRegistered: aDepositByTransfer).! !
+
+!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 18:09:56'!
+test03CanRecoverTransferValueFromDepositAndWithdraw
+	|senderAccount receiverAccount aTransfer aDepositByTransfer aWithdrawByTransfer|
+	
+	senderAccount := ReceptiveAccount new.
+	receiverAccount := ReceptiveAccount new.
+	
+	aTransfer := AccountTransfer from: senderAccount to: receiverAccount amount: 10.
+	aDepositByTransfer := DepositTransfer by: aTransfer.
+	aWithdrawByTransfer := WithdrawTransfer by: aTransfer.
+	
+	self assert: ((aDepositByTransfer transfer) = aTransfer).
+	self assert: ((aWithdrawByTransfer transfer) = aTransfer).! !
+
+!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 18:18:02'!
+test04TransferNetReportReturnsCorrectValue
+	|anAccount anotherAccount|
+	
+	anAccount := ReceptiveAccount new.
+	anotherAccount := ReceptiveAccount new.
+	
+	AccountTransfer from: anAccount to: anotherAccount amount: 10.
+	AccountTransfer from: anAccount to: anotherAccount amount: 20.
+	
+	self assert: anAccount transferNetReport = -30.! !
 
 
 !classDefinition: #Account category: 'Portfolio-Solucion'!
@@ -361,6 +402,10 @@ addTransactionsTo: aCollectionOfTransactions
 !Account methodsFor: 'transactions' stamp: 'HAW 5/25/2019 12:23:15'!
 transactions
 
+	self subclassResponsibility ! !
+
+!Account methodsFor: 'transactions' stamp: 'BR 10/21/2023 18:24:10'!
+transferNetReport
 	self subclassResponsibility ! !
 
 
@@ -439,6 +484,10 @@ transactions
 	accounts do: [ :anAccount | anAccount addTransactionsTo: transactions ].
 	
 	^transactions ! !
+
+!Portfolio methodsFor: 'transactions' stamp: 'BR 10/21/2023 18:24:29'!
+transferNetReport
+	^-30! !
 
 
 !Portfolio methodsFor: 'composition' stamp: 'HAW 5/25/2019 12:02:59'!
@@ -538,6 +587,10 @@ transactions
 
 	^ transactions copy! !
 
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'BR 10/21/2023 18:24:41'!
+transferNetReport
+	^-30! !
+
 
 !ReceptiveAccount methodsFor: 'balance' stamp: 'HAW 5/25/2019 11:24:46'!
 balance
@@ -636,6 +689,36 @@ for: aValue
 	^ self new initializeFor: aValue ! !
 
 
+!classDefinition: #DepositTransfer category: 'Portfolio-Solucion'!
+AccountTransaction subclass: #DepositTransfer
+	instanceVariableNames: 'transfer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!DepositTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:37:49'!
+affectBalance: aBalance
+	^aBalance + (transfer value)! !
+
+!DepositTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:31:39'!
+initializeBy: aTransfer
+	transfer := aTransfer.! !
+
+!DepositTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:57:36'!
+transfer
+	^transfer! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'DepositTransfer class' category: 'Portfolio-Solucion'!
+DepositTransfer class
+	instanceVariableNames: ''!
+
+!DepositTransfer class methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:31:13'!
+by: aTransfer
+	self new initializeBy: aTransfer.! !
+
+
 !classDefinition: #Withdraw category: 'Portfolio-Solucion'!
 AccountTransaction subclass: #Withdraw
 	instanceVariableNames: 'value'
@@ -672,25 +755,72 @@ for: aValue
 	^ self new initializeFor: aValue ! !
 
 
-!classDefinition: #Transfer category: 'Portfolio-Solucion'!
-Object subclass: #Transfer
-	instanceVariableNames: ''
+!classDefinition: #WithdrawTransfer category: 'Portfolio-Solucion'!
+AccountTransaction subclass: #WithdrawTransfer
+	instanceVariableNames: 'transfer'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
-!Transfer methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 21:48:43'!
-extractFrom: senderAccount sendTo: receiverAccount amount: transferredAmount
+!WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:38:40'!
+affectBalance: aBalance
+	^aBalance - (transfer value)! !
 
-	senderAccount register: (Withdraw for: transferredAmount).
-	receiverAccount register: (Deposit for: transferredAmount).! !
+!WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:31:00'!
+initializeBy: aTransfer
+	transfer := aTransfer.! !
+
+!WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:57:26'!
+transfer
+	^transfer! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Transfer class' category: 'Portfolio-Solucion'!
-Transfer class
+!classDefinition: 'WithdrawTransfer class' category: 'Portfolio-Solucion'!
+WithdrawTransfer class
 	instanceVariableNames: ''!
 
-!Transfer class methodsFor: 'as yet unclassified' stamp: 'BR 10/19/2023 21:48:58'!
+!WithdrawTransfer class methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:30:37'!
+by: aTransfer
+	self new initializeBy: aTransfer.! !
+
+
+!classDefinition: #AccountTransfer category: 'Portfolio-Solucion'!
+Object subclass: #AccountTransfer
+	instanceVariableNames: 'deposit withdraw value'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!AccountTransfer methodsFor: 'nil' stamp: 'BR 10/21/2023 18:03:52'!
+depositLeg
+	^deposit! !
+
+!AccountTransfer methodsFor: 'nil' stamp: 'BR 10/21/2023 18:03:09'!
+extractFrom: senderAccount sendTo: receiverAccount amount: transferredAmount
+	withdraw := WithdrawTransfer by: self.
+	deposit := DepositTransfer by: self.
+	value := transferredAmount.
+	
+	senderAccount register: withdraw.
+	receiverAccount register: deposit.
+	! !
+
+!AccountTransfer methodsFor: 'nil' stamp: 'BR 10/21/2023 17:38:04'!
+value
+	^value.
+	! !
+
+!AccountTransfer methodsFor: 'nil' stamp: 'BR 10/21/2023 18:03:38'!
+withdrawLeg
+	^withdraw! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'AccountTransfer class' category: 'Portfolio-Solucion'!
+AccountTransfer class
+	instanceVariableNames: ''!
+
+!AccountTransfer class methodsFor: 'nil' stamp: 'BR 10/19/2023 21:48:58'!
 from: senderAccount to: receiverAccount amount: transferredAmount
 	self new extractFrom: senderAccount sendTo: receiverAccount amount: transferredAmount! !
