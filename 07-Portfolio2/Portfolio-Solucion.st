@@ -369,6 +369,31 @@ test04TransferNetReportReturnsCorrectValue
 	
 	self assert: anAccount transferNetReport = -30.! !
 
+!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/22/2023 23:37:15'!
+test05AccountSummaryReportReturnsCorrectValue
+	|anAccount anotherAccount|
+	
+	anAccount := ReceptiveAccount new.
+	anotherAccount := ReceptiveAccount new.
+	
+	AccountTransfer from: anAccount to: anotherAccount amount: 10.
+	AccountTransfer from: anAccount to: anotherAccount amount: 20.
+	
+	self assert: anAccount accountSummaryReport = 'Salida por transferencia de 10. Salida por transferencia de 20. '.! !
+
+!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/22/2023 23:38:08'!
+test06AccountSummaryReportReturnsCorrectValue
+	|anAccount anotherAccount|
+	
+	anAccount := ReceptiveAccount new.
+	anotherAccount := ReceptiveAccount new.
+	
+	AccountTransfer from: anAccount to: anotherAccount amount: 10.
+	AccountTransfer from: anAccount to: anotherAccount amount: 20.
+	anAccount register: (Deposit for: 50).
+	
+	self assert: anAccount accountSummaryReport = 'Salida por transferencia de 10. Salida por transferencia de 20. Depósito por 50. '.! !
+
 
 !classDefinition: #Account category: 'Portfolio-Solucion'!
 Object subclass: #Account
@@ -393,6 +418,10 @@ balance
 
 	self subclassResponsibility ! !
 
+
+!Account methodsFor: 'transactions' stamp: 'BR 10/22/2023 21:23:04'!
+accountSummaryReport
+	self subclassResponsibility ! !
 
 !Account methodsFor: 'transactions' stamp: 'HAW 5/25/2019 12:23:27'!
 addTransactionsTo: aCollectionOfTransactions
@@ -469,6 +498,10 @@ balance
 	
 	^accounts sum: [ :anAccount | anAccount balance ] ifEmpty: [ 0 ]! !
 
+
+!Portfolio methodsFor: 'transactions' stamp: 'BR 10/22/2023 21:10:07'!
+accountSummaryReport
+	^-30! !
 
 !Portfolio methodsFor: 'transactions' stamp: 'HAW 5/25/2019 11:42:55'!
 addTransactionsTo: aCollectionOfTransactions
@@ -559,37 +592,51 @@ with: anAccount with: anotherAccount
 
 !classDefinition: #ReceptiveAccount category: 'Portfolio-Solucion'!
 Account subclass: #ReceptiveAccount
-	instanceVariableNames: 'transactions'
+	instanceVariableNames: 'transactions accountSummary transferNet'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
-!ReceptiveAccount methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 18:35'!
+!ReceptiveAccount methodsFor: 'initialization' stamp: 'BR 10/22/2023 23:23:22'!
 initialize
 
 	super initialize.
-	transactions := OrderedCollection new.! !
+	transactions := OrderedCollection new.
+	accountSummary := ''. 
+	transferNet := 0.! !
 
+
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'BR 10/22/2023 22:55:09'!
+accountSummaryReport
+	^accountSummary ! !
 
 !ReceptiveAccount methodsFor: 'transactions' stamp: 'HAW 5/25/2019 11:38:52'!
 addTransactionsTo: aCollectionOfTransactions
 
 	aCollectionOfTransactions addAll: transactions ! !
 
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:37'!
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'BR 10/22/2023 23:36:59'!
 register: aTransaction
 
-	transactions add: aTransaction 
-! !
+	transactions add: aTransaction.
+	
+	(aTransaction isKindOf: DepositTransfer) ifTrue: [
+			accountSummary := accountSummary , 'Entrada por transferencia de ', (aTransaction transfer value) asString, '. '. transferNet := transferNet + aTransaction transfer value].
+	(aTransaction isKindOf: WithdrawTransfer) ifTrue: [
+			accountSummary := accountSummary , 'Salida por transferencia de ', (aTransaction transfer value) asString, '. '. transferNet := transferNet - aTransaction transfer value].
+	(aTransaction isKindOf: Deposit) ifTrue: [
+			accountSummary := accountSummary , 'Depósito por ', (aTransaction value) asString, '. '.].
+	(aTransaction isKindOf: Withdraw) ifTrue: [
+			accountSummary := accountSummary , 'Extracción por ', (aTransaction value) asString, '. '.].! !
 
 !ReceptiveAccount methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:37'!
 transactions 
 
 	^ transactions copy! !
 
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'BR 10/21/2023 18:24:41'!
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'BR 10/22/2023 22:55:16'!
 transferNetReport
-	^-30! !
+	^transferNet ! !
 
 
 !ReceptiveAccount methodsFor: 'balance' stamp: 'HAW 5/25/2019 11:24:46'!
@@ -714,9 +761,9 @@ transfer
 DepositTransfer class
 	instanceVariableNames: ''!
 
-!DepositTransfer class methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:31:13'!
+!DepositTransfer class methodsFor: 'as yet unclassified' stamp: 'BR 10/22/2023 23:33:31'!
 by: aTransfer
-	self new initializeBy: aTransfer.! !
+	^self new initializeBy: aTransfer.! !
 
 
 !classDefinition: #Withdraw category: 'Portfolio-Solucion'!
@@ -780,9 +827,9 @@ transfer
 WithdrawTransfer class
 	instanceVariableNames: ''!
 
-!WithdrawTransfer class methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:30:37'!
+!WithdrawTransfer class methodsFor: 'as yet unclassified' stamp: 'BR 10/22/2023 23:33:24'!
 by: aTransfer
-	self new initializeBy: aTransfer.! !
+	^self new initializeBy: aTransfer.! !
 
 
 !classDefinition: #AccountTransfer category: 'Portfolio-Solucion'!
@@ -821,6 +868,6 @@ withdrawLeg
 AccountTransfer class
 	instanceVariableNames: ''!
 
-!AccountTransfer class methodsFor: 'nil' stamp: 'BR 10/19/2023 21:48:58'!
+!AccountTransfer class methodsFor: 'nil' stamp: 'BR 10/22/2023 23:32:30'!
 from: senderAccount to: receiverAccount amount: transferredAmount
-	self new extractFrom: senderAccount sendTo: receiverAccount amount: transferredAmount! !
+	^self new extractFrom: senderAccount sendTo: receiverAccount amount: transferredAmount! !
