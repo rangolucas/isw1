@@ -329,20 +329,6 @@ test01TransferTenDollars
 	self assertAccount: senderAccount hasBalance: -10.
 	self assertAccount: receiverAccount hasBalance: 10.! !
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:52:50'!
-test02TransferMoneyCreatesDepositAndWithdraw
-	|senderAccount receiverAccount aTransfer aDepositByTransfer aWithdrawByTransfer|
-	
-	senderAccount := ReceptiveAccount new.
-	receiverAccount := ReceptiveAccount new.
-	
-	aTransfer := AccountTransfer from: senderAccount to: receiverAccount amount: 10.
-	aDepositByTransfer := DepositTransfer by: aTransfer.
-	aWithdrawByTransfer := WithdrawTransfer by: aTransfer.
-	
-	self assert: (senderAccount hasRegistered: aWithdrawByTransfer).
-	self assert: (receiverAccount hasRegistered: aDepositByTransfer).! !
-
 !TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 18:09:56'!
 test03CanRecoverTransferValueFromDepositAndWithdraw
 	|senderAccount receiverAccount aTransfer aDepositByTransfer aWithdrawByTransfer|
@@ -592,51 +578,44 @@ with: anAccount with: anotherAccount
 
 !classDefinition: #ReceptiveAccount category: 'Portfolio-Solucion'!
 Account subclass: #ReceptiveAccount
-	instanceVariableNames: 'transactions accountSummary transferNet'
+	instanceVariableNames: 'transactions'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
-!ReceptiveAccount methodsFor: 'initialization' stamp: 'BR 10/22/2023 23:23:22'!
+!ReceptiveAccount methodsFor: 'initialization' stamp: 'BR 10/23/2023 20:23:55'!
 initialize
 
 	super initialize.
 	transactions := OrderedCollection new.
-	accountSummary := ''. 
-	transferNet := 0.! !
+	! !
 
 
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'BR 10/22/2023 22:55:09'!
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'BR 10/23/2023 21:53:13'!
 accountSummaryReport
-	^accountSummary ! !
+	
+	^transactions inject: '' into: [:accum :transfer| accum, transfer doAccountSummary].
+	! !
 
 !ReceptiveAccount methodsFor: 'transactions' stamp: 'HAW 5/25/2019 11:38:52'!
 addTransactionsTo: aCollectionOfTransactions
 
 	aCollectionOfTransactions addAll: transactions ! !
 
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'BR 10/22/2023 23:36:59'!
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'BR 10/23/2023 20:21:02'!
 register: aTransaction
 
-	transactions add: aTransaction.
-	
-	(aTransaction isKindOf: DepositTransfer) ifTrue: [
-			accountSummary := accountSummary , 'Entrada por transferencia de ', (aTransaction transfer value) asString, '. '. transferNet := transferNet + aTransaction transfer value].
-	(aTransaction isKindOf: WithdrawTransfer) ifTrue: [
-			accountSummary := accountSummary , 'Salida por transferencia de ', (aTransaction transfer value) asString, '. '. transferNet := transferNet - aTransaction transfer value].
-	(aTransaction isKindOf: Deposit) ifTrue: [
-			accountSummary := accountSummary , 'Depósito por ', (aTransaction value) asString, '. '.].
-	(aTransaction isKindOf: Withdraw) ifTrue: [
-			accountSummary := accountSummary , 'Extracción por ', (aTransaction value) asString, '. '.].! !
+	transactions add: aTransaction.! !
 
 !ReceptiveAccount methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:37'!
 transactions 
 
 	^ transactions copy! !
 
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'BR 10/22/2023 22:55:16'!
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'BR 10/23/2023 21:58:24'!
 transferNetReport
-	^transferNet ! !
+
+	^transactions inject: 0 into: [:accum :transfer| accum + transfer doTransferNet].! !
 
 
 !ReceptiveAccount methodsFor: 'balance' stamp: 'HAW 5/25/2019 11:24:46'!
@@ -713,6 +692,18 @@ initializeFor: aValue
 	value := aValue ! !
 
 
+!Deposit methodsFor: 'value' stamp: 'BR 10/23/2023 21:39:07'!
+doAccountSummary
+	^'Depósito por ', (value) asString, '. '! !
+
+!Deposit methodsFor: 'value' stamp: 'BR 10/23/2023 21:56:13'!
+doTransferNet
+	^0! !
+
+!Deposit methodsFor: 'value' stamp: 'BR 10/23/2023 21:54:07'!
+doTransferReport
+	^'Depósito por ', (value) asString, '. '! !
+
 !Deposit methodsFor: 'value' stamp: 'HernanWilkinson 7/13/2011 18:38'!
 value
 
@@ -747,6 +738,14 @@ AccountTransaction subclass: #DepositTransfer
 affectBalance: aBalance
 	^aBalance + (transfer value)! !
 
+!DepositTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/23/2023 21:37:07'!
+doAccountSummary
+	^'Entrada por transferencia de ', (transfer value) asString, '. '! !
+
+!DepositTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/23/2023 21:56:01'!
+doTransferNet
+	transfer value! !
+
 !DepositTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:31:39'!
 initializeBy: aTransfer
 	transfer := aTransfer.! !
@@ -778,6 +777,14 @@ initializeFor: aValue
 
 	value := aValue ! !
 
+
+!Withdraw methodsFor: 'value' stamp: 'BR 10/23/2023 21:38:38'!
+doAccountSummary
+	^'Extracción por ', (value) asString, '. '! !
+
+!Withdraw methodsFor: 'value' stamp: 'BR 10/23/2023 21:56:34'!
+doTransferNet
+	^0! !
 
 !Withdraw methodsFor: 'value' stamp: 'HernanWilkinson 7/13/2011 18:33'!
 value
@@ -812,6 +819,14 @@ AccountTransaction subclass: #WithdrawTransfer
 !WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:38:40'!
 affectBalance: aBalance
 	^aBalance - (transfer value)! !
+
+!WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/23/2023 21:37:46'!
+doAccountSummary
+	^'Salida por transferencia de ', (transfer value) asString, '. '! !
+
+!WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/23/2023 21:57:25'!
+doTransferNet
+	^(transfer value)*-1! !
 
 !WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:31:00'!
 initializeBy: aTransfer
