@@ -5,7 +5,7 @@ TestCase subclass: #ExtensiveReportTest
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
-!ExtensiveReportTest methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:05:03'!
+!ExtensiveReportTest methodsFor: 'nil' stamp: 'LR 10/26/2023 00:05:03'!
 test01EmptyReport
 	| report |
 	report := (Portfolio named: 'mi portfolio') extensiveReport.
@@ -358,7 +358,7 @@ test03CanRecoverTransferValueFromDepositAndWithdraw
 	self assert: ((aDepositByTransfer transfer) = aTransfer).
 	self assert: ((aWithdrawByTransfer transfer) = aTransfer).! !
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 18:18:02'!
+!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 02:01:14'!
 test04TransferNetReportReturnsCorrectValue
 	|anAccount anotherAccount|
 	
@@ -368,9 +368,9 @@ test04TransferNetReportReturnsCorrectValue
 	AccountTransfer from: anAccount to: anotherAccount amount: 10.
 	AccountTransfer from: anAccount to: anotherAccount amount: 20.
 	
-	self assert: anAccount transferNetReport = -30.! !
+	self assert: (TransferNet runOn: anAccount) equals: -30.! !
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/22/2023 23:37:15'!
+!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 03:24:27'!
 test05AccountSummaryReportReturnsCorrectValue
 	|anAccount anotherAccount|
 	
@@ -380,9 +380,9 @@ test05AccountSummaryReportReturnsCorrectValue
 	AccountTransfer from: anAccount to: anotherAccount amount: 10.
 	AccountTransfer from: anAccount to: anotherAccount amount: 20.
 	
-	self assert: anAccount accountSummaryReport = 'Salida por transferencia de 10. Salida por transferencia de 20. '.! !
+	self assert: (AccountSummary runOn: anAccount) = 'Salida por transferencia de 10. \nSalida por transferencia de 20. \nBalance = -30'.! !
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/22/2023 23:38:08'!
+!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 03:24:04'!
 test06AccountSummaryReportReturnsCorrectValue
 	|anAccount anotherAccount|
 	
@@ -393,9 +393,9 @@ test06AccountSummaryReportReturnsCorrectValue
 	AccountTransfer from: anAccount to: anotherAccount amount: 20.
 	anAccount register: (Deposit for: 50).
 	
-	self assert: anAccount accountSummaryReport = 'Salida por transferencia de 10. Salida por transferencia de 20. Depósito por 50. '.! !
+	self assert: (AccountSummary runOn: anAccount) equals: 'Salida por transferencia de 10. \nSalida por transferencia de 20. \nDepósito por 50.\nBalance = 20'.! !
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/25/2023 13:04:39'!
+!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 03:23:39'!
 test07PortfolioSummaryReportReturnsCorrectValue
 
 	| account portfolio deposit |
@@ -404,9 +404,9 @@ test07PortfolioSummaryReportReturnsCorrectValue
 	deposit := Deposit register: 100 on: account.
 	portfolio := Portfolio with: account.
 	
-	self assert: (portfolio accountSummaryReport = 'Depósito por 100. ')! !
+	self assert: (AccountSummary runOn: portfolio) equals: 'Depósito por 100.\nBalance = 100'! !
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/25/2023 13:07:24'!
+!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 02:08:00'!
 test08PortfolioTransferNetReportReturnsCorrectValue
 
 	| account portfolio anotherAccount|
@@ -418,9 +418,9 @@ test08PortfolioTransferNetReportReturnsCorrectValue
 	anotherAccount := ReceptiveAccount new.
 	AccountTransfer from: account to: anotherAccount amount: 10.
 	
-	self assert: (portfolio transferNetReport = -10)! !
+	self assert: (TransferNet runOn: portfolio) equals: -10! !
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/25/2023 18:35:05'!
+!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 03:12:40'!
 test09DepthTwoPortfolioTreeStructureReportReturnsCorrectValue
 
 	| account portfolio anotherPortfolio|
@@ -431,9 +431,9 @@ test09DepthTwoPortfolioTreeStructureReportReturnsCorrectValue
 	portfolio := Portfolio named: 'unportafolio' with: anotherPortfolio.
 	
 	
-	self assert: ((portfolio treeStructureReport) = 'unportafolio\n\thijoportafolio\n\t\tunacuenta\n')! !
+	self assert: (TreeStructureReport runOn: portfolio) equals: 'unportafolio\n\thijoportafolio\n\t\tunacuenta\n'! !
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/25/2023 18:36:07'!
+!TransferTest methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 03:12:40'!
 test10DepthThreePortfolioTreeStructureReportReturnsCorrectValue
 
 	| account portfolio anotherPortfolio grandchildPortfolio|
@@ -444,7 +444,7 @@ test10DepthThreePortfolioTreeStructureReportReturnsCorrectValue
 	portfolio := Portfolio named: 'unportafolio' with: anotherPortfolio.
 	
 	
-	self assert: ((portfolio treeStructureReport) = 'unportafolio\n\thijoportafolio\n\t\tnietoportfolio\n\t\t\tunacuenta\n')! !
+	self assert: (TreeStructureReport runOn: portfolio) equals: 'unportafolio\n\thijoportafolio\n\t\tnietoportfolio\n\t\t\tunacuenta\n'! !
 
 
 !classDefinition: #Account category: 'Portfolio-Solucion'!
@@ -495,6 +495,17 @@ addedTo: aPortfolio
 
 	self subclassResponsibility ! !
 
+
+!Account methodsFor: 'reports' stamp: 'BR 10/26/2023 03:12:07'!
+doReport: aReport
+
+	self subclassResponsibility! !
+
+!Account methodsFor: 'reports' stamp: 'BR 10/26/2023 02:39:20'!
+doTreeStructureReport: aReport
+
+	self subclassResponsibility! !
+
 
 !classDefinition: #Portfolio category: 'Portfolio-Solucion'!
 Account subclass: #Portfolio
@@ -502,11 +513,6 @@ Account subclass: #Portfolio
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
-
-!Portfolio methodsFor: 'accounts management' stamp: 'BR 10/25/2023 12:58:01'!
-accountSummaryReport
-	
-	^self doReport: (AccountSummary constructOn: self).! !
 
 !Portfolio methodsFor: 'accounts management' stamp: 'HAW 5/25/2019 11:49:20'!
 accountsIncludes: anAccount
@@ -532,41 +538,6 @@ add: accountToAdd
 	accountToAdd addedTo: self 
 	! !
 
-!Portfolio methodsFor: 'accounts management' stamp: 'BR 10/25/2023 18:16:17'!
-doReport: aReport
-
-	^self doReport: aReport initializedWith: (aReport initializerOn)
-! !
-
-!Portfolio methodsFor: 'accounts management' stamp: 'BR 10/25/2023 12:46:53'!
-doReport: aReport appliedTo: accum
-
-	^aReport aggregate: (self doReport: aReport) to: accum.
-! !
-
-!Portfolio methodsFor: 'accounts management' stamp: 'BR 10/25/2023 18:20:59'!
-doReport: aReport initializedWith: aString
-
-	(aReport isKindOf: TreeStructure) ifTrue: [
-		^self indentWithAppend: ''.
-		].
-	
-	^accounts inject: (aString) into: 
-			[
-			:accum :account| 
-				account doReport: aReport appliedTo: accum
-			].
-! !
-
-!Portfolio methodsFor: 'accounts management' stamp: 'BR 10/25/2023 18:39:42'!
-indentWithAppend: aString
-	 
-	^accounts inject: (aString, name, '\n') into: 
-			[
-				:accum :account| 
-					accum, (account indentWithAppend: (aString , '\t'))
-			].! !
-
 !Portfolio methodsFor: 'accounts management' stamp: 'BR 10/25/2023 14:09:06'!
 name
 	^name
@@ -581,16 +552,6 @@ rootParents
 	self addRootParentsTo: rootParents.
 	
 	^ rootParents! !
-
-!Portfolio methodsFor: 'accounts management' stamp: 'BR 10/25/2023 12:58:23'!
-transferNetReport
-	
-	^self doReport: (TransferNet constructOn: self).! !
-
-!Portfolio methodsFor: 'accounts management' stamp: 'BR 10/25/2023 18:45:20'!
-treeStructureReport
-	
-	^self doReport: (TreeStructure constructOn: self).! !
 
 
 !Portfolio methodsFor: 'initialization' stamp: 'BR 10/25/2023 13:50:29'!
@@ -670,6 +631,20 @@ signalCanNotAddAccount
 	
 	self error: self class canNotAddAccountErrorMessage! !
 
+
+!Portfolio methodsFor: 'reports' stamp: 'BR 10/26/2023 02:05:40'!
+doReport: aReport
+
+	accounts do: [
+			:account| 
+				account doReport: aReport
+			].
+! !
+
+!Portfolio methodsFor: 'reports' stamp: 'BR 10/26/2023 02:45:56'!
+doTreeStructureReport: aReport 
+	aReport processPortfolio: name withAccounts: accounts.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Portfolio class' category: 'Portfolio-Solucion'!
@@ -736,33 +711,10 @@ initializeWithName: aName
 	! !
 
 
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'BR 10/25/2023 00:34:15'!
-accountSummaryReport
-	
-	^self doReport: (AccountSummary constructOn: self).
-	! !
-
 !ReceptiveAccount methodsFor: 'transactions' stamp: 'HAW 5/25/2019 11:38:52'!
 addTransactionsTo: aCollectionOfTransactions
 
 	aCollectionOfTransactions addAll: transactions ! !
-
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'BR 10/25/2023 18:24:22'!
-doReport: aReport
-	(aReport isKindOf: TreeStructure) ifTrue: [^name].
-	
-	^transactions inject: (aReport initializerOn) into: 
-			[
-			:accum :transaction| 
-				transaction parseReport: aReport appliedTo: accum
-			].
-	! !
-
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'BR 10/25/2023 01:48:20'!
-doReport: aReport appliedTo: accum
-
-	^aReport aggregate: (self doReport: aReport) to: accum.
-	! !
 
 !ReceptiveAccount methodsFor: 'transactions' stamp: 'BR 10/23/2023 20:21:02'!
 register: aTransaction
@@ -773,11 +725,6 @@ register: aTransaction
 transactions 
 
 	^ transactions copy! !
-
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'BR 10/25/2023 00:34:40'!
-transferNetReport
-
-	^self doReport: (TransferNet constructOn: self).! !
 
 
 !ReceptiveAccount methodsFor: 'balance' stamp: 'HAW 5/25/2019 11:24:46'!
@@ -809,11 +756,25 @@ addedTo: aPortfolio
 	
 	! !
 
-!ReceptiveAccount methodsFor: 'composition' stamp: 'BR 10/25/2023 17:34:32'!
-indentWithAppend: aString
-	 
-	^aString, name, '\n'.
+
+!ReceptiveAccount methodsFor: 'reports' stamp: 'BR 10/26/2023 01:38:02'!
+doReport: aReport
+	
+	transactions do: [
+			:transaction| 
+				transaction acceptReport: aReport
+			].
+		
+	
+		
+	
+	
+	
 	! !
+
+!ReceptiveAccount methodsFor: 'reports' stamp: 'BR 10/26/2023 02:43:09'!
+doTreeStructureReport: aReport 
+	aReport processReceptiveAccount: name! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -918,9 +879,9 @@ parseReport: aReport appliedTo: accum
 	^aReport useAsInput: self appliedTo: accum.! !
 
 
-!Deposit methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:49:17'!
+!Deposit methodsFor: 'nil' stamp: 'BR 10/26/2023 01:47:41'!
 acceptReport: report
-	report processDeposit: self value! !
+	report processDeposit: (self value)! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -940,10 +901,6 @@ AccountTransaction subclass: #DepositTransfer
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
-
-!DepositTransfer methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:44:50'!
-acceptReport: report
-	report processDepositTransfer: self! !
 
 !DepositTransfer methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:27:34'!
 affectBalance: aBalance
@@ -965,14 +922,19 @@ initializeBy: aTransfer
 transfer
 	^transfer! !
 
-!DepositTransfer methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:29:05'!
-value
-	^transfer value! !
-
 
 !DepositTransfer methodsFor: 'balance' stamp: 'BR 10/25/2023 01:06:47'!
 parseReport: aReport appliedTo: accum
 	^aReport useAsInput: self appliedTo: accum.! !
+
+
+!DepositTransfer methodsFor: 'nil' stamp: 'BR 10/26/2023 01:47:53'!
+acceptReport: report
+	report processDepositTransfer: self value! !
+
+!DepositTransfer methodsFor: 'nil' stamp: 'LR 10/26/2023 00:29:05'!
+value
+	^transfer value! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -1022,9 +984,9 @@ parseReport: aReport appliedTo: accum
 	^aReport useAsInput: self appliedTo: accum.! !
 
 
-!Withdraw methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:45:07'!
+!Withdraw methodsFor: 'nil' stamp: 'BR 10/26/2023 01:47:57'!
 acceptReport: report
-	report processWithdraw: self! !
+	report processWithdraw: self value! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -1044,10 +1006,6 @@ AccountTransaction subclass: #WithdrawTransfer
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
-
-!WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:45:35'!
-acceptReport: report
-	report processWithdrawTransfer: self! !
 
 !WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:28:24'!
 affectBalance: aBalance
@@ -1077,6 +1035,11 @@ value
 !WithdrawTransfer methodsFor: 'balance' stamp: 'BR 10/25/2023 01:07:05'!
 parseReport: aReport appliedTo: accum
 	^aReport useAsInput: self appliedTo: accum.! !
+
+
+!WithdrawTransfer methodsFor: 'nil' stamp: 'BR 10/26/2023 01:48:02'!
+acceptReport: report
+	report processWithdrawTransfer: self value! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -1132,17 +1095,28 @@ from: senderAccount to: receiverAccount amount: transferredAmount
 
 !classDefinition: #Report category: 'Portfolio-Solucion'!
 Object subclass: #Report
-	instanceVariableNames: 'account'
+	instanceVariableNames: 'account lines'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
-!Report methodsFor: 'as yet unclassified' stamp: 'BR 10/25/2023 00:19:30'!
-initializeOn: anAccount
-	account := anAccount.! !
+!Report methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 01:54:23'!
+processDeposit: depositValue
 
-!Report methodsFor: 'as yet unclassified' stamp: 'BR 10/25/2023 00:46:57'!
-useAsInput: aTransaction
+	self subclassResponsibility! !
+
+!Report methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 01:56:43'!
+processDepositTransfer: depositTransferValue
+
+	self subclassResponsibility! !
+
+!Report methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 01:54:40'!
+processWithdraw: withdrawValue
+
+	self subclassResponsibility! !
+
+!Report methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 01:54:45'!
+processWithdrawTransfer: withdrawTransferValue
 
 	self subclassResponsibility! !
 
@@ -1152,9 +1126,10 @@ useAsInput: aTransaction
 Report class
 	instanceVariableNames: ''!
 
-!Report class methodsFor: 'as yet unclassified' stamp: 'BR 10/25/2023 00:18:49'!
+!Report class methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 01:35:59'!
 constructOn: anAccount
-	^self new initializeOn: anAccount.! !
+
+	self subclassResponsibility! !
 
 
 !classDefinition: #AccountSummary category: 'Portfolio-Solucion'!
@@ -1164,33 +1139,43 @@ Report subclass: #AccountSummary
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
-!AccountSummary methodsFor: 'as yet unclassified' stamp: 'BR 10/25/2023 01:49:29'!
-aggregate: aReportOutput to: accum
-	^accum, aReportOutput.! !
+!AccountSummary methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 01:43:02'!
+initialize
+	lines := ''! !
 
-!AccountSummary methodsFor: 'as yet unclassified' stamp: 'BR 10/25/2023 01:05:43'!
-initializerOn
-	^''! !
-
-!AccountSummary methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:54:58'!
+!AccountSummary methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 01:54:23'!
 processDeposit: depositValue
-	^'Depósito por ', (depositValue asString), '.'! !
+	lines := lines, 'Depósito por ', (depositValue asString), '.','\n'! !
 
-!AccountSummary methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:55:03'!
+!AccountSummary methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 01:46:09'!
 processDepositTransfer: depositTransferValue
-	^'Entrada por transferencia de ', (depositTransferValue asString), '. '! !
+	lines := lines , 'Entrada por transferencia de ', (depositTransferValue asString), '. ','\n'.! !
 
-!AccountSummary methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:55:08'!
+!AccountSummary methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 01:46:20'!
 processWithdraw: withdrawValue
-	^'Extracción por ', (withdrawValue asString), '. '! !
+	lines := lines, 'Extracción por ', (withdrawValue asString), '. ', '\n'! !
 
-!AccountSummary methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 01:10:54'!
+!AccountSummary methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 01:46:34'!
 processWithdrawTransfer: withdrawTransferValue
-	^'Salida por transferencia de ', (withdrawTransferValue asString), '. '! !
+	lines := lines, 'Salida por transferencia de ', (withdrawTransferValue asString), '. ', '\n'.! !
 
-!AccountSummary methodsFor: 'as yet unclassified' stamp: 'BR 10/25/2023 01:12:14'!
-useAsInput: aTransaction appliedTo: accum
-	^aTransaction doAccountSummaryAppliedTo: accum.! !
+!AccountSummary methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 03:21:29'!
+runOn: anAccount
+	
+	anAccount doReport: self.
+	^lines, 'Balance = ', (anAccount balance) asString.! !
+
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'AccountSummary class' category: 'Portfolio-Solucion'!
+AccountSummary class
+	instanceVariableNames: ''!
+
+!AccountSummary class methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 01:42:43'!
+runOn: anAccount
+
+	^(self new runOn: anAccount)! !
 
 
 !classDefinition: #ExtensiveReport category: 'Portfolio-Solucion'!
@@ -1200,38 +1185,110 @@ Report subclass: #ExtensiveReport
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
+!ExtensiveReport methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 01:36:32'!
+initializeOn: anAccount
+	account := anAccount.! !
+
+!ExtensiveReport methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 01:54:23'!
+processDeposit: depositValue
+	lines := lines, 'Depósito por ', (depositValue asString), '.','\n'! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'ExtensiveReport class' category: 'Portfolio-Solucion'!
+ExtensiveReport class
+	instanceVariableNames: ''!
+
+!ExtensiveReport class methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 03:15:22'!
+runOn: anAccount
+	^self new initializeOn: anAccount.! !
+
 
 !classDefinition: #TransferNet category: 'Portfolio-Solucion'!
 Report subclass: #TransferNet
-	instanceVariableNames: ''
+	instanceVariableNames: 'transferNetResult'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
-!TransferNet methodsFor: 'as yet unclassified' stamp: 'BR 10/25/2023 01:49:56'!
-aggregate: aReportOutput to: accum
-	^accum + aReportOutput.! !
+!TransferNet methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 02:01:43'!
+initialize
+	transferNetResult := 0.! !
 
-!TransferNet methodsFor: 'as yet unclassified' stamp: 'BR 10/25/2023 01:05:32'!
-initializerOn
-	^0! !
+!TransferNet methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 01:57:11'!
+processDeposit: depositValue
+! !
 
-!TransferNet methodsFor: 'as yet unclassified' stamp: 'BR 10/25/2023 01:12:22'!
-useAsInput: aTransaction appliedTo: accum
-	^aTransaction doTransferNetAppliedTo: accum.! !
+!TransferNet methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 01:57:27'!
+processDepositTransfer: depositTransferValue
+
+	transferNetResult := transferNetResult + depositTransferValue ! !
+
+!TransferNet methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 01:58:08'!
+processWithdraw: withdrawValue
+! !
+
+!TransferNet methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 01:57:48'!
+processWithdrawTransfer: withdrawTransferValue
+
+	transferNetResult := transferNetResult - withdrawTransferValue ! !
+
+!TransferNet methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 01:59:02'!
+runOn: anAccount
+	
+	anAccount doReport: self.
+	^transferNetResult
+	! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TransferNet class' category: 'Portfolio-Solucion'!
+TransferNet class
+	instanceVariableNames: ''!
+
+!TransferNet class methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 01:59:42'!
+runOn: anAccount
+
+	^(self new runOn: anAccount)! !
 
 
-!classDefinition: #TreeStructure category: 'Portfolio-Solucion'!
-Report subclass: #TreeStructure
-	instanceVariableNames: ''
+!classDefinition: #TreeStructureReport category: 'Portfolio-Solucion'!
+Object subclass: #TreeStructureReport
+	instanceVariableNames: 'indentedLines margin'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
-!TreeStructure methodsFor: 'as yet unclassified' stamp: 'BR 10/25/2023 15:26:08'!
-aggregate: aReportOutput to: accum
-	^accum,  aReportOutput.! !
+!TreeStructureReport methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 02:30:11'!
+initialize
+	indentedLines := ''! !
 
-!TreeStructure methodsFor: 'as yet unclassified' stamp: 'BR 10/25/2023 13:40:20'!
-initializerOn
-	^''! !
+!TreeStructureReport methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 03:12:40'!
+processPortfolio: aName withAccounts: accounts
+	indentedLines := indentedLines, aName, '\n'.
+	accounts do: [:account | indentedLines := indentedLines , (TreeStructureReport runOn: account withMargin: (margin, '\t'))] ! !
+
+!TreeStructureReport methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 02:46:51'!
+processReceptiveAccount: aName
+	indentedLines := indentedLines, aName, '\n'.! !
+
+!TreeStructureReport methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 03:01:07'!
+runOn: aPortfolio withMargin: aString
+
+	margin := aString.
+	aPortfolio doTreeStructureReport: self.
+	^margin, indentedLines! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TreeStructureReport class' category: 'Portfolio-Solucion'!
+TreeStructureReport class
+	instanceVariableNames: ''!
+
+!TreeStructureReport class methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 03:12:40'!
+runOn: anAccount 
+	^TreeStructureReport runOn: anAccount withMargin: ''.! !
+
+!TreeStructureReport class methodsFor: 'as yet unclassified' stamp: 'BR 10/26/2023 03:03:14'!
+runOn: anAccount withMargin: aString
+	^self new runOn: anAccount withMargin: aString.! !
