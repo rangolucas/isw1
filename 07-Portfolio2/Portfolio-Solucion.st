@@ -1,3 +1,18 @@
+!classDefinition: #ExtensiveReportTest category: 'Portfolio-Solucion'!
+TestCase subclass: #ExtensiveReportTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
+
+!ExtensiveReportTest methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:05:03'!
+test01EmptyReport
+	| report |
+	report := (Portfolio named: 'mi portfolio') extensiveReport.
+	self assert: report equals: 'mi portfolio\n\tBalance = 0'
+	! !
+
+
 !classDefinition: #PortfolioTest category: 'Portfolio-Solucion'!
 TestCase subclass: #PortfolioTest
 	instanceVariableNames: ''
@@ -818,6 +833,21 @@ Object subclass: #AccountTransaction
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
+!AccountTransaction methodsFor: 'value' stamp: 'LR 10/26/2023 00:43:35'!
+acceptReport: report
+
+	self subclassResponsibility! !
+
+!AccountTransaction methodsFor: 'value' stamp: 'LR 10/26/2023 00:29:36'!
+doAccountSummaryAppliedTo: accum
+
+	self subclassResponsibility! !
+
+!AccountTransaction methodsFor: 'value' stamp: 'LR 10/26/2023 00:29:42'!
+doTransferNetAppliedTo: accum
+
+	self subclassResponsibility! !
+
 !AccountTransaction methodsFor: 'value' stamp: 'HernanWilkinson 9/12/2011 12:25'!
 value 
 
@@ -829,8 +859,8 @@ affectBalance: aBalance
 
 	self subclassResponsibility ! !
 
-!AccountTransaction methodsFor: 'balance' stamp: 'BR 10/25/2023 00:45:43'!
-parseReport: aReport
+!AccountTransaction methodsFor: 'balance' stamp: 'LR 10/26/2023 00:29:51'!
+parseReport: aReport appliedTo: accum
 
 	self subclassResponsibility! !
 
@@ -887,6 +917,11 @@ affectBalance: aBalance
 parseReport: aReport appliedTo: accum
 	^aReport useAsInput: self appliedTo: accum.! !
 
+
+!Deposit methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:49:17'!
+acceptReport: report
+	report processDeposit: self value! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Deposit class' category: 'Portfolio-Solucion'!
@@ -906,17 +941,21 @@ AccountTransaction subclass: #DepositTransfer
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
-!DepositTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:37:49'!
+!DepositTransfer methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:44:50'!
+acceptReport: report
+	report processDepositTransfer: self! !
+
+!DepositTransfer methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:27:34'!
 affectBalance: aBalance
-	^aBalance + (transfer value)! !
+	^aBalance + (self value)! !
 
-!DepositTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/25/2023 01:14:00'!
+!DepositTransfer methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:27:23'!
 doAccountSummaryAppliedTo: accum
-	^accum, 'Entrada por transferencia de ', (transfer value) asString, '. '! !
+	^accum, 'Entrada por transferencia de ', (self value) asString, '. '! !
 
-!DepositTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/25/2023 01:14:22'!
+!DepositTransfer methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:27:29'!
 doTransferNetAppliedTo: accum
-	^accum + transfer value! !
+	^accum + self value! !
 
 !DepositTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:31:39'!
 initializeBy: aTransfer
@@ -925,6 +964,10 @@ initializeBy: aTransfer
 !DepositTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:57:36'!
 transfer
 	^transfer! !
+
+!DepositTransfer methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:29:05'!
+value
+	^transfer value! !
 
 
 !DepositTransfer methodsFor: 'balance' stamp: 'BR 10/25/2023 01:06:47'!
@@ -978,6 +1021,11 @@ affectBalance: aBalance
 parseReport: aReport appliedTo: accum
 	^aReport useAsInput: self appliedTo: accum.! !
 
+
+!Withdraw methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:45:07'!
+acceptReport: report
+	report processWithdraw: self! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Withdraw class' category: 'Portfolio-Solucion'!
@@ -997,17 +1045,21 @@ AccountTransaction subclass: #WithdrawTransfer
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
-!WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:38:40'!
+!WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:45:35'!
+acceptReport: report
+	report processWithdrawTransfer: self! !
+
+!WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:28:24'!
 affectBalance: aBalance
-	^aBalance - (transfer value)! !
+	^aBalance - (self value)! !
 
-!WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/25/2023 01:15:12'!
+!WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:27:13'!
 doAccountSummaryAppliedTo: accum
-	^accum, 'Salida por transferencia de ', (transfer value) asString, '. '! !
+	^accum, 'Salida por transferencia de ', (self value) asString, '. '! !
 
-!WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/25/2023 12:56:00'!
+!WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:28:38'!
 doTransferNetAppliedTo: accum
-	^accum - (transfer value)! !
+	^accum - (self value)! !
 
 !WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:31:00'!
 initializeBy: aTransfer
@@ -1016,6 +1068,10 @@ initializeBy: aTransfer
 !WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'BR 10/21/2023 17:57:26'!
 transfer
 	^transfer! !
+
+!WithdrawTransfer methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:28:56'!
+value
+	^transfer value! !
 
 
 !WithdrawTransfer methodsFor: 'balance' stamp: 'BR 10/25/2023 01:07:05'!
@@ -1116,9 +1172,33 @@ aggregate: aReportOutput to: accum
 initializerOn
 	^''! !
 
+!AccountSummary methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:54:58'!
+processDeposit: depositValue
+	^'Depósito por ', (depositValue asString), '.'! !
+
+!AccountSummary methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:55:03'!
+processDepositTransfer: depositTransferValue
+	^'Entrada por transferencia de ', (depositTransferValue asString), '. '! !
+
+!AccountSummary methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 00:55:08'!
+processWithdraw: withdrawValue
+	^'Extracción por ', (withdrawValue asString), '. '! !
+
+!AccountSummary methodsFor: 'as yet unclassified' stamp: 'LR 10/26/2023 01:10:54'!
+processWithdrawTransfer: withdrawTransferValue
+	^'Salida por transferencia de ', (withdrawTransferValue asString), '. '! !
+
 !AccountSummary methodsFor: 'as yet unclassified' stamp: 'BR 10/25/2023 01:12:14'!
 useAsInput: aTransaction appliedTo: accum
 	^aTransaction doAccountSummaryAppliedTo: accum.! !
+
+
+!classDefinition: #ExtensiveReport category: 'Portfolio-Solucion'!
+Report subclass: #ExtensiveReport
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-Solucion'!
 
 
 !classDefinition: #TransferNet category: 'Portfolio-Solucion'!
