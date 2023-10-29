@@ -1,3 +1,65 @@
+!classDefinition: #MarsRoverLoggerTest category: 'MarsRover-WithHeading'!
+TestCase subclass: #MarsRoverLoggerTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-WithHeading'!
+
+!MarsRoverLoggerTest methodsFor: 'as yet unclassified' stamp: 'BR 10/28/2023 20:41:49'!
+east
+
+	^ MarsRoverHeadingEast ! !
+
+!MarsRoverLoggerTest methodsFor: 'as yet unclassified' stamp: 'BR 10/28/2023 20:42:03'!
+north
+
+	^ MarsRoverHeadingNorth! !
+
+!MarsRoverLoggerTest methodsFor: 'as yet unclassified' stamp: 'BR 10/28/2023 20:42:12'!
+south
+	^ MarsRoverHeadingSouth! !
+
+!MarsRoverLoggerTest methodsFor: 'as yet unclassified' stamp: 'BR 10/28/2023 20:49:03'!
+test01HasEmptyLogWhenNoCommand
+	|marsRover|
+	
+	marsRover := MarsRover at: 0@0 heading: self north.
+	
+	self assert: (marsRover positionLog) = ''.
+	self assert: (marsRover headingLog) = ''.! !
+
+!MarsRoverLoggerTest methodsFor: 'as yet unclassified' stamp: 'BR 10/28/2023 21:01:42'!
+test02HasInitialWindowEmptyWhenNoCommand
+	|marsRover|
+	
+	marsRover := MarsRover at: 0@0 heading: self north.
+	
+	self assert: (marsRover window) = ''.! !
+
+!MarsRoverLoggerTest methodsFor: 'as yet unclassified' stamp: 'BR 10/28/2023 21:17:49'!
+test03FollowsDirectionChangeCorrectly
+	|marsRover|
+	
+	marsRover := MarsRover at: 0@0 heading: self north.
+	marsRover process: 'frf'.
+	
+	self assert: (marsRover positionLog) = '0@1\n1@1\n'.! !
+
+!MarsRoverLoggerTest methodsFor: 'as yet unclassified' stamp: 'BR 10/28/2023 21:21:09'!
+test04FollowsHeadingChangeCorrectly
+	|marsRover|
+	
+	marsRover := MarsRover at: 0@0 heading: self north.
+	marsRover process: 'frfr'.
+	
+	self assert: (marsRover headingLog) = 'East\nSouth\n'.! !
+
+!MarsRoverLoggerTest methodsFor: 'as yet unclassified' stamp: 'BR 10/28/2023 20:41:55'!
+west
+
+	^ MarsRoverHeadingWest ! !
+
+
 !classDefinition: #MarsRoverTest category: 'MarsRover-WithHeading'!
 TestCase subclass: #MarsRoverTest
 	instanceVariableNames: ''
@@ -205,7 +267,7 @@ assertIsAt: newPosition heading: newHeadingType afterProcessing: commands whenSt
 
 !classDefinition: #MarsRover category: 'MarsRover-WithHeading'!
 Object subclass: #MarsRover
-	instanceVariableNames: 'position head'
+	instanceVariableNames: 'position head positionLog headingLog'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'MarsRover-WithHeading'!
@@ -221,32 +283,38 @@ signalInvalidCommand
 	self error: self invalidCommandErrorDescription ! !
 
 
-!MarsRover methodsFor: 'initialization' stamp: 'HAW 10/7/2021 20:10:49'!
+!MarsRover methodsFor: 'initialization' stamp: 'BR 10/28/2023 21:18:59'!
 initializeAt: aPosition heading: aHeadingType
 
 	position := aPosition.
-	head := aHeadingType for: self ! !
+	head := aHeadingType for: self. 
+	positionLog := ''.
+	headingLog := ''.! !
 
 
-!MarsRover methodsFor: 'heading' stamp: 'HAW 10/7/2021 20:17:02'!
+!MarsRover methodsFor: 'heading' stamp: 'BR 10/28/2023 21:19:33'!
 headEast
 	
-	head := MarsRoverHeadingEast for: self! !
+	head := MarsRoverHeadingEast for: self.
+	headingLog := headingLog, 'East\n'! !
 
-!MarsRover methodsFor: 'heading' stamp: 'HAW 10/7/2021 20:17:12'!
+!MarsRover methodsFor: 'heading' stamp: 'BR 10/28/2023 21:19:44'!
 headNorth
 	
-	head := MarsRoverHeadingNorth for: self ! !
+	head := MarsRoverHeadingNorth for: self.
+	headingLog := headingLog, 'North\n' ! !
 
-!MarsRover methodsFor: 'heading' stamp: 'HAW 10/7/2021 20:17:17'!
+!MarsRover methodsFor: 'heading' stamp: 'BR 10/28/2023 21:19:53'!
 headSouth
 	
-	head := MarsRoverHeadingSouth for: self! !
+	head := MarsRoverHeadingSouth for: self.
+	headingLog := headingLog, 'South\n'! !
 
-!MarsRover methodsFor: 'heading' stamp: 'HAW 10/7/2021 20:17:24'!
+!MarsRover methodsFor: 'heading' stamp: 'BR 10/28/2023 21:20:00'!
 headWest
 	
-	head := MarsRoverHeadingWest for: self ! !
+	head := MarsRoverHeadingWest for: self.
+	headingLog := headingLog, 'West\n' ! !
 
 !MarsRover methodsFor: 'heading' stamp: 'HAW 10/7/2021 20:14:20'!
 rotateLeft
@@ -290,30 +358,34 @@ moveBackward
 	
 	head moveBackward! !
 
-!MarsRover methodsFor: 'moving' stamp: 'HAW 8/22/2019 12:15:01'!
+!MarsRover methodsFor: 'moving' stamp: 'BR 10/28/2023 21:17:09'!
 moveEast
 	
-	position := position + (1@0)! !
+	position := position + (1@0).
+	positionLog := positionLog, (position asString), '\n'. ! !
 
 !MarsRover methodsFor: 'moving' stamp: 'HAW 10/7/2021 20:13:53'!
 moveForward
 	
 	head moveForward! !
 
-!MarsRover methodsFor: 'moving' stamp: 'HAW 8/22/2019 12:13:12'!
+!MarsRover methodsFor: 'moving' stamp: 'BR 10/28/2023 21:16:49'!
 moveNorth
 	
-	position := position + (0@1)! !
+	position := position + (0@1).
+	positionLog := positionLog, (position asString), '\n'. ! !
 
-!MarsRover methodsFor: 'moving' stamp: 'HAW 8/22/2019 12:13:34'!
+!MarsRover methodsFor: 'moving' stamp: 'BR 10/28/2023 21:16:54'!
 moveSouth
 	
-	position := position + (0@-1)! !
+	position := position + (0@-1).
+	positionLog := positionLog, (position asString), '\n'. ! !
 
-!MarsRover methodsFor: 'moving' stamp: 'HAW 8/22/2019 12:15:32'!
+!MarsRover methodsFor: 'moving' stamp: 'BR 10/28/2023 21:16:59'!
 moveWest
 	
-	position := position + (-1@0)! !
+	position := position + (-1@0).
+	positionLog := positionLog, (position asString), '\n'. ! !
 
 
 !MarsRover methodsFor: 'command processing' stamp: 'HAW 6/30/2018 19:48:26'!
@@ -331,6 +403,19 @@ processCommand: aCommand
 	(self isRotateLeftCommand: aCommand) ifTrue: [ ^ self rotateLeft ].
 
 	self signalInvalidCommand.! !
+
+
+!MarsRover methodsFor: 'log' stamp: 'BR 10/28/2023 21:20:47'!
+headingLog
+	^headingLog.! !
+
+!MarsRover methodsFor: 'log' stamp: 'BR 10/28/2023 21:13:13'!
+positionLog
+	^positionLog! !
+
+!MarsRover methodsFor: 'log' stamp: 'BR 10/28/2023 21:01:14'!
+window
+	^''! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
