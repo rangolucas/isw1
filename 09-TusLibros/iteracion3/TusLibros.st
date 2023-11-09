@@ -10,7 +10,7 @@ test01NewCartsAreCreatedEmpty
 
 	self assert: testObjectsFactory createCart isEmpty! !
 
-!CartTest methodsFor: 'tests' stamp: 'BR 11/8/2023 14:16:05'!
+!CartTest methodsFor: 'tests' stamp: 'LR 11/9/2023 00:17:07'!
 test02CanNotAddItemsThatDoNotBelongToStore
 
 	| cart |
@@ -24,7 +24,7 @@ test02CanNotAddItemsThatDoNotBelongToStore
 			self assert: anError messageText = Cart invalidItemErrorMessage.
 			self assert: cart isEmpty ]! !
 
-!CartTest methodsFor: 'tests' stamp: 'BR 11/8/2023 14:16:34'!
+!CartTest methodsFor: 'tests' stamp: 'LR 11/9/2023 00:16:49'!
 test03AfterAddingAnItemTheCartIsNotEmptyAnymore
 
 	| cart |
@@ -34,7 +34,7 @@ test03AfterAddingAnItemTheCartIsNotEmptyAnymore
 	cart add: testObjectsFactory itemSoldByTheStore.
 	self deny: cart isEmpty ! !
 
-!CartTest methodsFor: 'tests' stamp: 'BR 11/8/2023 14:16:34'!
+!CartTest methodsFor: 'tests' stamp: 'LR 11/9/2023 00:16:49'!
 test04CanNotAddNonPositiveNumberOfItems
 
 	| cart |
@@ -48,7 +48,7 @@ test04CanNotAddNonPositiveNumberOfItems
 			self assert: anError messageText = cart invalidQuantityErrorMessage.
 			self assert: cart isEmpty ]! !
 
-!CartTest methodsFor: 'tests' stamp: 'BR 11/8/2023 14:16:05'!
+!CartTest methodsFor: 'tests' stamp: 'LR 11/9/2023 00:17:07'!
 test05CanNotAddMoreThanOneItemNotSellByTheStore
 
 	| cart |
@@ -62,7 +62,7 @@ test05CanNotAddMoreThanOneItemNotSellByTheStore
 			self assert: anError messageText = Cart invalidItemErrorMessage.
 			self assert: cart isEmpty ]! !
 
-!CartTest methodsFor: 'tests' stamp: 'BR 11/8/2023 14:16:34'!
+!CartTest methodsFor: 'tests' stamp: 'LR 11/9/2023 00:16:49'!
 test06CartRemembersAddedItems
 
 	| cart |
@@ -72,7 +72,7 @@ test06CartRemembersAddedItems
 	cart add: testObjectsFactory itemSoldByTheStore.
 	self assert: (cart includes: testObjectsFactory itemSoldByTheStore)! !
 
-!CartTest methodsFor: 'tests' stamp: 'BR 11/8/2023 14:16:34'!
+!CartTest methodsFor: 'tests' stamp: 'LR 11/9/2023 00:16:49'!
 test07CartDoesNotHoldNotAddedItems
 
 	| cart |
@@ -81,7 +81,7 @@ test07CartDoesNotHoldNotAddedItems
 	
 	self deny: (cart includes: testObjectsFactory itemSoldByTheStore)! !
 
-!CartTest methodsFor: 'tests' stamp: 'BR 11/8/2023 14:16:34'!
+!CartTest methodsFor: 'tests' stamp: 'LR 11/9/2023 00:16:49'!
 test08CartRemembersTheNumberOfAddedItems
 
 	| cart |
@@ -123,7 +123,7 @@ test01CanNotCheckoutAnEmptyCart
 			self assert: anError messageText = Cashier cartCanNotBeEmptyErrorMessage.
 			self assert: salesBook isEmpty ]! !
 
-!CashierTest methodsFor: 'tests' stamp: 'BR 11/8/2023 14:16:54'!
+!CashierTest methodsFor: 'tests' stamp: 'LR 11/9/2023 00:17:00'!
 test02CalculatedTotalIsCorrect
 
 	| cart cashier |
@@ -140,7 +140,7 @@ test02CalculatedTotalIsCorrect
 		
 	self assert: cashier checkOut = (testObjectsFactory itemSoldByTheStorePrice * 2)! !
 
-!CashierTest methodsFor: 'tests' stamp: 'BR 11/8/2023 14:16:34'!
+!CashierTest methodsFor: 'tests' stamp: 'LR 11/9/2023 00:16:49'!
 test03CanNotCheckoutWithAnExpiredCreditCart
 
 	| cart salesBook |
@@ -161,7 +161,7 @@ test03CanNotCheckoutWithAnExpiredCreditCart
 			self assert: anError messageText = Cashier canNotChargeAnExpiredCreditCardErrorMessage.
 			self assert: salesBook isEmpty ]! !
 
-!CashierTest methodsFor: 'tests' stamp: 'BR 11/8/2023 14:16:34'!
+!CashierTest methodsFor: 'tests' stamp: 'LR 11/9/2023 00:16:49'!
 test04CheckoutRegistersASale
 
 	| cart cashier salesBook total |
@@ -182,7 +182,7 @@ test04CheckoutRegistersASale
 	self assert: salesBook size = 1.
 	self assert: salesBook first total = total.! !
 
-!CashierTest methodsFor: 'tests' stamp: 'BR 11/8/2023 14:16:34'!
+!CashierTest methodsFor: 'tests' stamp: 'LR 11/9/2023 00:16:49'!
 test05CashierChargesCreditCardUsingMerchantProcessor
 
 	| cart cashier salesBook total creditCard debitedAmout debitedCreditCard  |
@@ -207,7 +207,7 @@ test05CashierChargesCreditCardUsingMerchantProcessor
 	self assert: debitedCreditCard = creditCard.
 	self assert: debitedAmout = total.! !
 
-!CashierTest methodsFor: 'tests' stamp: 'BR 11/8/2023 14:16:34'!
+!CashierTest methodsFor: 'tests' stamp: 'LR 11/9/2023 00:16:49'!
 test06CashierDoesNotSaleWhenTheCreditCardHasNoCredit
 
 	| cart cashier salesBook creditCard |
@@ -248,10 +248,22 @@ debit: anAmount from: aCreditCard
 
 !classDefinition: #TusLibrosTest category: 'TusLibros'!
 TestCase subclass: #TusLibrosTest
-	instanceVariableNames: 'testObjectsFactory credentialValidatorBehavior idGenerator tusLibros'
+	instanceVariableNames: 'testObjectsFactory credentialValidatorBehavior idGenerator tusLibros debitBehavior todayMonthOfYear currentTime'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
+
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 04:09:04'!
+createCartWithValidCredentials
+	^tusLibros createNewCartByClient: testObjectsFactory userId usingPassword: testObjectsFactory validPassword ! !
+
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 03:47:38'!
+dateTime
+	^currentTime. ! !
+
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/8/2023 23:29:03'!
+debit: debitAmount from: creditCard
+	^debitBehavior value: creditCard value: debitAmount.! !
 
 !TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/6/2023 23:29:27'!
 invalidateClientId: invalidClientId andPassword: invalidPassword
@@ -262,22 +274,50 @@ isValidClient: aClientId withPassword: aPassword
 	^credentialValidatorBehavior value: aClientId value: aPassword.
 	! !
 
-!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/7/2023 00:54:45'!
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 02:32:37'!
+listPurchasesForUser: userId andPassword: password hasSales: sales andTotal: itemPrice 
+	self assert: (tusLibros listPurchasesForUser: userId usingPassword: password) sales equals: sales.
+	self assert: (tusLibros listPurchasesForUser: userId usingPassword: password) total equals: itemPrice.! !
+
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 04:13:29'!
 setUp 
 
 	testObjectsFactory := StoreTestObjectsFactory new.
-	credentialValidatorBehavior := [ :aClientId :aPassword | true ].
+	credentialValidatorBehavior := [ :aClientId :aPassword |
+		 aClientId = (testObjectsFactory userId) and: [aPassword = testObjectsFactory validPassword ]
+	].
 	idGenerator := IdGenerator new.
-	tusLibros := TusLibros createAcceptingCatalog: testObjectsFactory defaultCatalog withCredentialValidator: self withIdGenerator: idGenerator! !
+	tusLibros := TusLibros createAcceptingCatalog: testObjectsFactory defaultCatalog withCredentialValidator: self withIdGenerator: idGenerator withMerchantProcessor: self withClock: self.
+	debitBehavior := [:card :price].
+	currentTime := testObjectsFactory today! !
 
-!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'BR 11/8/2023 14:16:34'!
-test02ValidUserCanCreateManyCarts
-	| clientId password cartId1 cartId2 item |
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 04:27:10'!
+shouldNotBeAbleToDoWithExpiredCart: anActionWithCartId
+
+	| expiredCartId |
 	
-	clientId := '1'.
-	password := '1234'.
-	cartId1 := tusLibros createNewCartByClient: clientId usingPassword: password.
-	cartId2 := tusLibros createNewCartByClient: clientId usingPassword: password.
+	expiredCartId := self createCartWithValidCredentials.
+	
+	currentTime := testObjectsFactory today + (Duration minutes: 40).
+	
+	self
+		should: [anActionWithCartId value: expiredCartId]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [ :error |
+			self assert: error messageText equals: TimedCart cannotOperateWithExpiredCartErrorDescription.
+			self 
+				listPurchasesForUser: testObjectsFactory userId 
+				andPassword: testObjectsFactory validPassword 
+				hasSales: OrderedCollection new 
+				andTotal: 0.
+		]! !
+
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 04:09:36'!
+test02ValidUserCanCreateManyCarts
+	| cartId1 cartId2 item |
+	
+	cartId1 := self createCartWithValidCredentials.
+	cartId2 := self createCartWithValidCredentials .
 	item := testObjectsFactory itemSoldByTheStore.
 	
 	tusLibros addToCart: cartId1 bookIsbn: item withQuantity: 1.
@@ -304,21 +344,21 @@ test03InvalidUserCannotCreateCart
 		].
 	! !
 
-!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'BR 11/8/2023 14:16:34'!
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 04:13:56'!
 test04CanAddToCart
 	| cartId book |
 	book := testObjectsFactory itemSoldByTheStore.
-	cartId := tusLibros createNewCartByClient: '1' usingPassword: '123'.
+	cartId := self createCartWithValidCredentials.
 	
 	tusLibros addToCart: cartId bookIsbn: book withQuantity: 1.
 	
 	self assert: (tusLibros listCart: cartId) equals: (Dictionary with: book -> 1)! !
 
-!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'BR 11/8/2023 14:16:34'!
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 04:14:06'!
 test05CannotAddToCartItemNotInCatalog
 	| cartId |
 	
-	cartId := tusLibros createNewCartByClient: '1' usingPassword: '123'.
+	cartId := self createCartWithValidCredentials.
 	tusLibros addToCart: cartId bookIsbn: testObjectsFactory itemSoldByTheStore withQuantity: 1.
 	
 	self
@@ -331,7 +371,7 @@ test05CannotAddToCartItemNotInCatalog
 			self assert: (tusLibros listCart: cartId) equals: (Dictionary with: testObjectsFactory itemSoldByTheStore -> 1)
 		]! !
 
-!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'BR 11/8/2023 14:16:34'!
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 00:16:49'!
 test06CannotAddToNonExistingCart
 	
 	self
@@ -340,53 +380,188 @@ test06CannotAddToNonExistingCart
 		]
 		raise: Error
 		withExceptionDo: [ :error |
-			self assert: error messageText equals: tusLibros invalidCartErrorMessage.
+			self assert: error messageText equals: tusLibros invalidCartIdErrorMessage.
 		]! !
 
-!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/7/2023 01:30:35'!
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 04:14:20'!
 test07ListExistingEmptyCart
 	| cartId |
-	cartId := tusLibros createNewCartByClient: '1' usingPassword: '123'.
+	cartId := self createCartWithValidCredentials.
 	
 	self assert: (tusLibros listCart: cartId) equals: Dictionary new.! !
 
-!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'BR 11/8/2023 14:16:34'!
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 04:14:31'!
 test08ListExistingNonEmptyCart
 	| cartId itemInCart |
-	cartId := tusLibros createNewCartByClient: '1' usingPassword: '123'.
+	cartId := self createCartWithValidCredentials.
 	itemInCart := testObjectsFactory itemSoldByTheStore.
 	tusLibros addToCart: cartId bookIsbn: itemInCart withQuantity: 1.
 	
 	self assert: (tusLibros listCart: cartId) equals: (Dictionary with: itemInCart -> 1).! !
 
-!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/7/2023 01:35:01'!
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 04:14:45'!
 test09CannotListNonExistingCart
 	
 	self
-		should: [
-			tusLibros listCart: '1'.
-		]
+		should: [ tusLibros listCart: '1' ]
 		raise: Error
 		withExceptionDo: [ :error |
-			self assert: error messageText equals: tusLibros invalidCartErrorMessage.
+			self assert: error messageText equals: tusLibros invalidCartIdErrorMessage.
 		]! !
 
-!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'BR 11/8/2023 21:24:49'!
-test10CanCheckOutCart
-	| cartId itemBought clientId|
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 04:14:53'!
+test10CartCheckoutUsesMerchantProcessor
+	| cartId itemBought creditCardUsed chargedPrice userCreditCard |
+	userCreditCard := testObjectsFactory notExpiredCreditCard .
 	itemBought := testObjectsFactory itemSoldByTheStore.
-	cartId := tusLibros createNewCartByClient: '1' usingPassword: '123'.
+	cartId := self createCartWithValidCredentials.
 	tusLibros addToCart: cartId bookIsbn: itemBought withQuantity: 1.
-	clientId := '1'.
+	debitBehavior := [:creditCard :price |
+		creditCardUsed := creditCard.
+		chargedPrice := price
+	].
 	
-	tusLibros checkOut: cartId.
+	tusLibros checkOut: cartId withCreditCard: userCreditCard todayIs: testObjectsFactory today.
 	
-	self assert: (tusLibros listPurchasesForUser: '1' withPassword: '123') equals: (OrderedCollection with: (Sale of: itemBought doneBy: clientId)). ! !
+	self assert: chargedPrice equals: testObjectsFactory itemSoldByTheStorePrice.
+	self assert: creditCardUsed equals: userCreditCard ! !
+
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 00:30:02'!
+test11CannotCheckOutNonExistingCart
+	| merchantProcessorWasUsed |
+	
+	merchantProcessorWasUsed := false.
+	debitBehavior := [ :card :price | merchantProcessorWasUsed := true ].
+	
+	self
+		should: [
+			tusLibros checkOut: '1' withCreditCard: testObjectsFactory notExpiredCreditCard todayIs: testObjectsFactory today.
+		]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [:error |
+			self assert: error messageText equals: tusLibros invalidCartIdErrorMessage.
+			self deny: merchantProcessorWasUsed.
+		]! !
+
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 04:16:51'!
+test12CartCheckoutRegistersPurchase
+	| cartId itemBought creditCard userId password |
+	creditCard := testObjectsFactory notExpiredCreditCard.
+	userId := testObjectsFactory userId.
+	password := testObjectsFactory validPassword.
+	itemBought := testObjectsFactory itemSoldByTheStore.
+	cartId := self createCartWithValidCredentials.
+	tusLibros addToCart: cartId bookIsbn: itemBought withQuantity: 1.
+	
+	tusLibros checkOut: cartId withCreditCard: creditCard todayIs: testObjectsFactory today.
+	
+	self assert: (tusLibros listPurchasesForUser: userId usingPassword: password) total equals: testObjectsFactory itemSoldByTheStorePrice .! !
+
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 04:18:02'!
+test13CannotCheckOutWithExpiredCreditCard
+	| cartId itemBought merchantProcessorWasUsed |
+	merchantProcessorWasUsed := false.
+	debitBehavior := [ :card :price | merchantProcessorWasUsed := true ].
+	itemBought := testObjectsFactory itemSoldByTheStore.
+	cartId := self createCartWithValidCredentials.
+	tusLibros addToCart: cartId bookIsbn: itemBought withQuantity: 1.
+	
+	self
+		should: [ tusLibros checkOut: cartId withCreditCard: testObjectsFactory expiredCreditCard todayIs: testObjectsFactory today]
+		raise: Error
+		withExceptionDo: [:error |
+			self assert: error messageText equals: Cashier canNotChargeAnExpiredCreditCardErrorMessage.
+			self deny: merchantProcessorWasUsed.
+			self assert: (tusLibros listPurchasesForUser: testObjectsFactory userId usingPassword: testObjectsFactory validPassword) isEmpty.
+		]! !
+
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 04:19:14'!
+test14KeepHistoryOfMultiplePurchases
+	| olderCartId newerCartId itemBought itemPrice sale |
+	itemBought := testObjectsFactory itemSoldByTheStore.
+	itemPrice := testObjectsFactory itemSoldByTheStorePrice .
+	sale := (Sale of: itemPrice to: '1' items: (OrderedCollection with: itemBought) ).
+	olderCartId := self createCartWithValidCredentials.
+	tusLibros addToCart: olderCartId bookIsbn: itemBought withQuantity: 1.
+	newerCartId := self createCartWithValidCredentials.
+	tusLibros addToCart: newerCartId bookIsbn: itemBought withQuantity: 1.
+	tusLibros checkOut: olderCartId withCreditCard: testObjectsFactory notExpiredCreditCard todayIs: testObjectsFactory today.
+	tusLibros checkOut: newerCartId withCreditCard: testObjectsFactory notExpiredCreditCard todayIs: testObjectsFactory today.
+	
+	self 
+		listPurchasesForUser: testObjectsFactory userId
+		andPassword: testObjectsFactory validPassword
+		hasSales: (OrderedCollection with: sale with: sale) 
+		andTotal: itemPrice * 2! !
+
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 04:24:41'!
+test15FilterPurchasesOfGivenUser
+	| olderCartId newerCartId itemBought itemPrice sale |
+	itemBought := testObjectsFactory itemSoldByTheStore.
+	itemPrice := testObjectsFactory itemSoldByTheStorePrice .
+	sale := (Sale of: itemPrice to: '1' items: (OrderedCollection with: itemBought) ).
+	olderCartId := self createCartWithValidCredentials.
+	tusLibros addToCart: olderCartId bookIsbn: itemBought withQuantity: 1.
+	newerCartId := self createCartWithValidCredentials.
+	tusLibros addToCart: newerCartId bookIsbn: itemBought withQuantity: 1.
+	tusLibros checkOut: olderCartId withCreditCard: testObjectsFactory notExpiredCreditCard todayIs: testObjectsFactory today.
+	tusLibros checkOut: newerCartId withCreditCard: testObjectsFactory notExpiredCreditCard todayIs: testObjectsFactory today.
+	
+	self 
+		listPurchasesForUser: testObjectsFactory userId
+		andPassword: testObjectsFactory validPassword 
+		hasSales: (OrderedCollection with: sale with: sale)
+		andTotal: itemPrice * 2! !
+
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 04:25:46'!
+test16CannotCheckoutExpiredCart
+	| creditCard today |
+	creditCard := testObjectsFactory notExpiredCreditCard.
+	today := testObjectsFactory today.
+	self shouldNotBeAbleToDoWithExpiredCart: [ :expiredCartId |
+		tusLibros checkOut: expiredCartId withCreditCard: creditCard todayIs: today
+	 ]! !
+
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 03:53:02'!
+test17CannotListExpiredCart
+	self shouldNotBeAbleToDoWithExpiredCart: [ :expiredCartId | tusLibros listCart: expiredCartId ]! !
+
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 03:55:12'!
+test18CannotAddToExpiredCart
+	self shouldNotBeAbleToDoWithExpiredCart: [ :expiredCartId | 
+		tusLibros addToCart: expiredCartId bookIsbn: testObjectsFactory itemSoldByTheStore withQuantity: 1
+	]! !
+
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 04:22:24'!
+test19ResetExpirationTimeAfterInteractionWithCart
+	| cartId |
+	cartId := self createCartWithValidCredentials.
+	
+	currentTime := currentTime + (Duration minutes: 20).
+	tusLibros listCart: cartId.
+	currentTime := currentTime + (Duration minutes: 20).
+	
+	self shouldntFail: [tusLibros listCart: cartId]! !
+
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 04:05:43'!
+test20CannotListPurchasesWithInvalidCredentials
+	| invalidClientId invalidClientPassword |
+	
+	invalidClientId := '2'.
+	invalidClientPassword := '1234'.
+	credentialValidatorBehavior := self invalidateClientId: invalidClientId andPassword: invalidClientPassword.
+	
+	self 
+		should: [ tusLibros listPurchasesForUser: invalidClientId usingPassword: invalidClientPassword ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :error |
+			TusLibros invalidClientCredentialsErrorMessage.
+		]! !
 
 
 !classDefinition: #Cart category: 'TusLibros'!
 Object subclass: #Cart
-	instanceVariableNames: 'catalog items'
+	instanceVariableNames: 'catalog items owner'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
@@ -408,17 +583,22 @@ assertIsValidQuantity: aQuantity
 	aQuantity strictlyPositive ifFalse: [ self error: self invalidQuantityErrorMessage ]! !
 
 
-!Cart methodsFor: 'initialization' stamp: 'HernanWilkinson 6/17/2013 17:48'!
-initializeAcceptingItemsOf: aCatalog
+!Cart methodsFor: 'initialization' stamp: 'LR 11/9/2023 01:25:26'!
+initializeAcceptingItemsOf: aCatalog ownedBy: userId
 
 	catalog := aCatalog.
-	items := OrderedCollection new.! !
+	items := OrderedCollection new.
+	owner := userId.! !
 
 
 !Cart methodsFor: 'queries' stamp: 'HernanWilkinson 6/17/2013 17:45'!
 occurrencesOf: anItem
 
 	^items occurrencesOf: anItem  ! !
+
+!Cart methodsFor: 'queries' stamp: 'LR 11/9/2023 01:46:48'!
+owner
+	^owner! !
 
 
 !Cart methodsFor: 'testing' stamp: 'HernanWilkinson 6/17/2013 17:44'!
@@ -466,39 +646,16 @@ acceptingItemsOf: aCatalog
 
 	^self new initializeAcceptingItemsOf: aCatalog ! !
 
+!Cart class methodsFor: 'instance creation' stamp: 'LR 11/9/2023 01:26:32'!
+acceptingItemsOf: aCatalog ownedBy: userId
+
+	^self new initializeAcceptingItemsOf: aCatalog ownedBy: userId! !
+
 
 !Cart class methodsFor: 'error messages' stamp: 'LR 11/7/2023 00:31:55'!
 invalidItemErrorMessage
 	
 	^'Item is not in catalog'! !
-
-
-!classDefinition: #CartStateInTime category: 'TusLibros'!
-Object subclass: #CartStateInTime
-	instanceVariableNames: 'cart interface lastUpdate'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'TusLibros'!
-
-!CartStateInTime methodsFor: 'as yet unclassified' stamp: 'BR 11/8/2023 21:35:45'!
-initializeWith: aCart using: anInterface
-	cart := aCart.
-	interface := anInterface.
-	lastUpdate := 0 * minute.! !
-
-!CartStateInTime methodsFor: 'as yet unclassified' stamp: 'BR 11/8/2023 21:32:24'!
-isExpiredRelativeTo: timePassed
-	^(lastUpdate + timePassed) > 30 * minute.! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'CartStateInTime class' category: 'TusLibros'!
-CartStateInTime class
-	instanceVariableNames: ''!
-
-!CartStateInTime class methodsFor: 'as yet unclassified' stamp: 'BR 11/8/2023 21:35:07'!
-createWith: aCart using: anInterface 
-	^self new initializeWith: aCart using: anInterface! !
 
 
 !classDefinition: #Cashier category: 'TusLibros'!
@@ -514,10 +671,10 @@ calculateTotal
 	total := cart total.
 	! !
 
-!Cashier methodsFor: 'checkout - private' stamp: 'HernanWilkinson 6/17/2013 19:07'!
+!Cashier methodsFor: 'checkout - private' stamp: 'LR 11/9/2023 01:47:09'!
 createSale
 
-	^ Sale of: total
+	^ Sale of: total to: cart owner items: cart items
 ! !
 
 !Cashier methodsFor: 'checkout - private' stamp: 'HernanWilkinson 6/17/2013 19:06'!
@@ -648,25 +805,41 @@ initialize
 
 !classDefinition: #Sale category: 'TusLibros'!
 Object subclass: #Sale
-	instanceVariableNames: 'total purchaser'
+	instanceVariableNames: 'total clientId items'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-
-!Sale methodsFor: 'initialization' stamp: 'BR 11/8/2023 21:14:06'!
-initializeTotal: aTotal doneBy: aPurchaser
-
-	total := aTotal.
-	purchaser := aPurchaser.! !
-
-!Sale methodsFor: 'initialization' stamp: 'BR 11/8/2023 21:12:55'!
-purchaser
-	^purchaser! !
-
-!Sale methodsFor: 'initialization' stamp: 'BR 11/8/2023 21:14:19'!
+!Sale methodsFor: 'total' stamp: 'HernanWilkinson 6/17/2013 18:48'!
 total
-	^total! !
+	
+	^ total! !
+
+
+!Sale methodsFor: 'initialization' stamp: 'LR 11/9/2023 01:52:18'!
+initializeWithTotal: aTotal to: aClientId items: aCollectionOfItems 
+	total := aTotal.
+	clientId := aClientId.
+	items := aCollectionOfItems.! !
+
+
+!Sale methodsFor: 'nil' stamp: 'LR 11/9/2023 02:03:52'!
+= otherObject
+
+(otherObject isKindOf: self class) ifTrue: [
+	^(otherObject clientId = clientId) and: [ otherObject total = total and: [ otherObject items = items ] ]
+] ifFalse: [
+	^false
+]! !
+
+!Sale methodsFor: 'nil' stamp: 'LR 11/9/2023 02:04:12'!
+items
+	^items! !
+
+
+!Sale methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 02:04:23'!
+clientId
+	^clientId! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -674,11 +847,9 @@ total
 Sale class
 	instanceVariableNames: ''!
 
-!Sale class methodsFor: 'instance creation' stamp: 'BR 11/8/2023 21:13:37'!
-of: aTotal doneBy: aPurchaser
-
-	"should assert total is not negative or 0!!"
-	^self new initializeTotal: aTotal doneBy: aPurchaser! !
+!Sale class methodsFor: 'instance creation' stamp: 'LR 11/9/2023 01:51:45'!
+of: aTotal to: aClientId items: aCollectionOfItems 
+	^self new initializeWithTotal: aTotal to: aClientId items: aCollectionOfItems ! !
 
 
 !classDefinition: #Salesbook category: 'TusLibros'!
@@ -688,9 +859,38 @@ Object subclass: #Salesbook
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!Salesbook methodsFor: 'as yet unclassified' stamp: 'BR 11/8/2023 20:51:51'!
-registerSale: aSale
-	sales add: aSale.! !
+
+!Salesbook methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 00:12:05'!
+isEmpty
+	^true! !
+
+
+!Salesbook methodsFor: 'updating' stamp: 'LR 11/9/2023 02:04:59'!
+add: sale
+	sales add: sale! !
+
+
+!Salesbook methodsFor: 'evaluate' stamp: 'LR 11/9/2023 01:53:57'!
+sales
+	^sales! !
+
+!Salesbook methodsFor: 'evaluate' stamp: 'LR 11/9/2023 02:05:38'!
+total
+	^sales sum: [ :sale | sale total ] ifEmpty: 0.! !
+
+
+!Salesbook methodsFor: 'initialization' stamp: 'LR 11/9/2023 01:53:40'!
+initialize
+	sales := OrderedCollection new.! !
+
+!Salesbook methodsFor: 'initialization' stamp: 'LR 11/9/2023 02:29:56'!
+with: salesCollection
+	sales := salesCollection! !
+
+
+!Salesbook methodsFor: 'filter' stamp: 'LR 11/9/2023 02:24:12'!
+filteredBy: clientId
+	^Salesbook with: (sales select: [:sale | sale clientId = clientId ]) copy! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -698,9 +898,9 @@ registerSale: aSale
 Salesbook class
 	instanceVariableNames: ''!
 
-!Salesbook class methodsFor: 'instance creation' stamp: 'BR 11/8/2023 20:51:13'!
-with: aSale
-	^self new initializeWith: aSale! !
+!Salesbook class methodsFor: 'instance creation' stamp: 'LR 11/9/2023 02:28:38'!
+with: sales
+	^self new with: sales! !
 
 
 !classDefinition: #StoreTestObjectsFactory category: 'TusLibros'!
@@ -710,28 +910,28 @@ Object subclass: #StoreTestObjectsFactory
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!StoreTestObjectsFactory methodsFor: 'items' stamp: 'BR 11/8/2023 14:16:05'!
+!StoreTestObjectsFactory methodsFor: 'items' stamp: 'LR 11/9/2023 00:17:07'!
 itemNotSoldByTheStore
 	
 	^'invalidBook'! !
 
-!StoreTestObjectsFactory methodsFor: 'items' stamp: 'BR 11/8/2023 14:16:34'!
+!StoreTestObjectsFactory methodsFor: 'items' stamp: 'LR 11/9/2023 00:16:49'!
 itemSoldByTheStore
 	
 	^ 'validBook'! !
 
-!StoreTestObjectsFactory methodsFor: 'items' stamp: 'BR 11/8/2023 14:16:54'!
+!StoreTestObjectsFactory methodsFor: 'items' stamp: 'LR 11/9/2023 00:17:00'!
 itemSoldByTheStorePrice
 	
 	^10! !
 
 
-!StoreTestObjectsFactory methodsFor: 'cart' stamp: 'HernanWilkinson 6/17/2013 18:08'!
+!StoreTestObjectsFactory methodsFor: 'cart' stamp: 'LR 11/9/2023 04:06:59'!
 createCart
 	
-	^Cart acceptingItemsOf: self defaultCatalog! !
+	^Cart acceptingItemsOf: self defaultCatalog ownedBy: self userId! !
 
-!StoreTestObjectsFactory methodsFor: 'cart' stamp: 'BR 11/8/2023 14:16:54'!
+!StoreTestObjectsFactory methodsFor: 'cart' stamp: 'LR 11/9/2023 00:17:00'!
 defaultCatalog
 	
 	^ Dictionary new
@@ -761,10 +961,60 @@ today
 	
 	^ today! !
 
+
+!StoreTestObjectsFactory methodsFor: 'user' stamp: 'LR 11/9/2023 04:06:59'!
+userId
+	^'1'! !
+
+!StoreTestObjectsFactory methodsFor: 'user' stamp: 'LR 11/9/2023 04:07:31'!
+validPassword
+	^'c451h4ck3r'! !
+
+
+!classDefinition: #TimedCart category: 'TusLibros'!
+Object subclass: #TimedCart
+	instanceVariableNames: 'cart timer clock lastUpdate'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!TimedCart methodsFor: 'nil' stamp: 'LR 11/9/2023 03:45:26'!
+cart
+	| currentTime maxDuration |
+	maxDuration := Duration minutes: 30.
+	currentTime := clock dateTime.
+	(currentTime > (lastUpdate + maxDuration)) ifTrue: [
+		self error: self class cannotOperateWithExpiredCartErrorDescription 
+	] ifFalse: [
+		lastUpdate := currentTime.
+		^cart
+	]! !
+
+
+!TimedCart methodsFor: 'initialization' stamp: 'LR 11/9/2023 03:28:02'!
+initializeWith: aCart andClock: aClock
+	clock := aClock.
+	cart := aCart.
+	lastUpdate := clock dateTime.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TimedCart class' category: 'TusLibros'!
+TimedCart class
+	instanceVariableNames: ''!
+
+!TimedCart class methodsFor: 'instance creation' stamp: 'LR 11/9/2023 03:31:05'!
+cannotOperateWithExpiredCartErrorDescription
+	^'Cannot operate with invalid cart'! !
+
+!TimedCart class methodsFor: 'instance creation' stamp: 'LR 11/9/2023 03:28:16'!
+with: aCart andClock: aClock
+	^self new initializeWith: aCart andClock: aClock! !
+
 
 !classDefinition: #TusLibros category: 'TusLibros'!
 Object subclass: #TusLibros
-	instanceVariableNames: 'total carts catalog credentialValidator idGenerator merchantProcessor booksByCart sales salesBook'
+	instanceVariableNames: 'total carts catalog credentialValidator idGenerator merchantProcessor salesbook clock'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
@@ -776,14 +1026,13 @@ addToCart: cartId bookIsbn: bookIsbn withQuantity: anAmount
 	targetCart := self findCart: cartId.
 	targetCart add: anAmount of: bookIsbn! !
 
-!TusLibros methodsFor: 'updating' stamp: 'BR 11/8/2023 19:52:39'!
+!TusLibros methodsFor: 'updating' stamp: 'LR 11/9/2023 03:28:35'!
 createNewCartByClient: clientId usingPassword: clientPassword 
 	| assignedId |
 	self validateCredentialsWithId: clientId andPassword: clientPassword.
 	 
 	assignedId := idGenerator nextId.
-	carts add: (assignedId -> (Cart acceptingItemsOf: catalog)). 
-	sales add: (clientId -> (OrderedCollection new)).
+	carts add: (assignedId -> (TimedCart with: (Cart acceptingItemsOf: catalog ownedBy: clientId) andClock: clock)). 
 	^assignedId! !
 
 !TusLibros methodsFor: 'updating' stamp: 'LR 11/7/2023 01:05:36'!
@@ -804,50 +1053,47 @@ listCart: cartId
 	
 	^occurrenciesByBook.! !
 
-!TusLibros methodsFor: 'evaluating' stamp: 'BR 11/8/2023 21:17:52'!
-listPurchasesForUser: userId withPassword: password 
-	(userId = '1' and: [password = '123']) ifTrue: [
-		^salesBook select: [:aSale | 		aSale purchaser = userId]].! !
+!TusLibros methodsFor: 'evaluating' stamp: 'LR 11/9/2023 04:06:10'!
+listPurchasesForUser: userId usingPassword: password 
+	self validateCredentialsWithId: userId andPassword: password.
+	^salesbook filteredBy: userId! !
 
 
-!TusLibros methodsFor: 'error handling' stamp: 'LR 11/7/2023 00:57:39'!
-invalidCartErrorMessage
+!TusLibros methodsFor: 'error handling' stamp: 'LR 11/8/2023 23:37:03'!
+invalidCartIdErrorMessage
 	^'Error trying to operate with invalid cart'! !
 
 
-!TusLibros methodsFor: 'private' stamp: 'LR 11/7/2023 01:36:24'!
+!TusLibros methodsFor: 'private' stamp: 'LR 11/9/2023 03:29:05'!
 findCart: cartId
 
-	^ carts at: cartId ifAbsent: [ self error: self invalidCartErrorMessage ]! !
+	^ (carts at: cartId ifAbsent: [ self error: self invalidCartIdErrorMessage ]) cart! !
 
 
-!TusLibros methodsFor: 'initialization' stamp: 'BR 11/8/2023 20:50:52'!
-initializeAcceptingCatalog: aCatalog withCredentialValidator: aCredentialValidator withIdGenerator: anIdGenerator through: aMerchantProcessor
+!TusLibros methodsFor: 'initialization' stamp: 'LR 11/9/2023 03:22:54'!
+initializeAcceptingCatalog: aCatalog withCredentialValidator: aCredentialValidator withIdGenerator: anIdGenerator withMerchantProcessor: aMerchantProcessor withClock: aClock
 	catalog := aCatalog.
 	carts := Dictionary new.
 	credentialValidator := aCredentialValidator.
 	idGenerator := anIdGenerator.
 	merchantProcessor := aMerchantProcessor.
-	salesBook := Salesbook new.
-	booksByCart := Dictionary new.! !
+	salesbook := Salesbook new.
+	clock := aClock.! !
 
 
-!TusLibros methodsFor: 'events-triggering' stamp: 'LR 11/7/2023 01:52:17'!
-checkOut: cartId 
-	! !
-
-!TusLibros methodsFor: 'events-triggering' stamp: 'BR 11/8/2023 21:22:13'!
-checkOut: cartId usingCreditCardNumber: aCreditCard andOwner: ownerName 
-	|cashier|
+!TusLibros methodsFor: 'events-triggering' stamp: 'LR 11/9/2023 01:39:29'!
+checkOut: cartId withCreditCard: aCreditCard todayIs: aDate
+	| cartToCheckOut cashier |
 	
+	cartToCheckOut := self findCart: cartId.
 	cashier := Cashier 
-		toCheckout: (carts at: cartId) 
-		charging: aCreditCard
-		throught: merchantProcessor
-		on: StoreTestObjectsFactory new today
-		registeringOn: salesBook.
-		
-	cashier checkout.! !
+		toCheckout: cartToCheckOut 
+		charging: aCreditCard 
+		throught: merchantProcessor 
+		on: aDate 
+		registeringOn: salesbook.
+	^cashier checkOut.
+	! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -855,19 +1101,17 @@ checkOut: cartId usingCreditCardNumber: aCreditCard andOwner: ownerName
 TusLibros class
 	instanceVariableNames: ''!
 
-!TusLibros class methodsFor: 'as yet unclassified' stamp: 'LR 11/6/2023 23:15:55'!
-createAcceptingCatalog: aCatalog withCredentialValidator: aCredentialValidator withIdGenerator: anIdGenerator
-	^self new initializeAcceptingCatalog: aCatalog withCredentialValidator: aCredentialValidator withIdGenerator: anIdGenerator.! !
-
-!TusLibros class methodsFor: 'as yet unclassified' stamp: 'BR 11/8/2023 15:57:58'!
-createAcceptingCatalog: aCatalog withCredentialValidator: aCredentialValidator withIdGenerator: anIdGenerator through: aMerchantProcessor
-	^self new initializeAcceptingCatalog: aCatalog withCredentialValidator: aCredentialValidator withIdGenerator: anIdGenerator through: aMerchantProcessor.! !
-
-!TusLibros class methodsFor: 'as yet unclassified' stamp: 'BR 11/6/2023 21:42:34'!
-invalidCartIdErrorMessage
-	^'Invalid cart id'.! !
+!TusLibros class methodsFor: 'as yet unclassified' stamp: 'LR 11/9/2023 03:22:25'!
+createAcceptingCatalog: aCatalog withCredentialValidator: aCredentialValidator withIdGenerator: anIdGenerator withMerchantProcessor: aMerchantProcessor withClock: aClock
+	^self new
+		initializeAcceptingCatalog: aCatalog 
+		withCredentialValidator: aCredentialValidator 
+		withIdGenerator: anIdGenerator 
+		withMerchantProcessor: aMerchantProcessor
+		withClock: aClock! !
 
 !TusLibros class methodsFor: 'as yet unclassified' stamp: 'BR 11/6/2023 21:13:40'!
 invalidClientCredentialsErrorMessage
 	^'Invalid client credentials'.! !
+
 
