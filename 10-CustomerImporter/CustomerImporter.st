@@ -5,96 +5,29 @@ TestCase subclass: #ImportTest
 	poolDictionaries: ''
 	category: 'CustomerImporter'!
 
-!ImportTest methodsFor: 'as yet unclassified' stamp: 'LR 11/13/2023 21:12:10'!
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'BR 11/14/2023 19:37:53'!
 importCustomers
+
+	^self importCustomersFrom: (UniFileStream new open: 'input.txt' forWrite: false).
+	! !
+
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'BR 11/14/2023 20:09:33'!
+importCustomersFrom: inputStream
 
 	"
 	self importCustomers
 	"
-	| inputStream  newCustomer line |
-
-	inputStream := UniFileStream new open: 'input.txt' forWrite: false.
-
-	line := inputStream nextLine.
-	[ line notNil ] whileTrue: [
-		(line beginsWith: 'C') ifTrue: [ | customerData |
-			customerData := line findTokens: $,.
-			newCustomer := Customer new.
-			newCustomer firstName: customerData second.
-			newCustomer lastName: customerData third.
-			newCustomer identificationType: customerData fourth.
-			newCustomer identificationNumber: customerData fifth.
-			session persist: newCustomer ].
-
-		(line beginsWith: 'A') ifTrue: [ | addressData newAddress |
-			addressData := line findTokens: $,.
-			newAddress := Address new.
-			newCustomer addAddress: newAddress.
-			newAddress streetName: addressData second.
-			newAddress streetNumber: addressData third asNumber .
-			newAddress town: addressData fourth.
-			newAddress zipCode: addressData fifth asNumber .
-			newAddress province: addressData fourth ].
-
-		line := inputStream nextLine. ].
-
-	inputStream close.
+	Importer new importFrom: inputStream persistInto: session.
 	! !
 
-!ImportTest methodsFor: 'as yet unclassified' stamp: 'LR 11/13/2023 20:52:58'!
-setUp
 
-	session := DataBaseSession for: (Array with: Address with: Customer).
-	session beginTransaction! !
-
-!ImportTest methodsFor: 'as yet unclassified' stamp: 'LR 11/13/2023 20:55:48'!
-tearDown
-
-	session commit.
-	session close.! !
-
-!ImportTest methodsFor: 'as yet unclassified' stamp: 'LR 11/13/2023 21:48:41'!
-test01CanImportCustomerSuccessfullyToDatabase
-
-	|filteredList customer |
-		
-	self importCustomers. 
-	
-	filteredList := session selectAllOfType: Customer.
-	
-	self assert: filteredList size equals: 2.
-
-	filteredList := session select: [ :aCustomer | aCustomer identificationType = 'D' and: [ aCustomer identificationNumber = '22333444' ]] ofType: Customer.
-	
-	self assert: filteredList size equals: 1.
-	
-	customer := filteredList anyOne.
-	self assertCustomer: customer hasName: 'Pepe' withLastName: 'Sanchez' withIdNmb: '22333444' withIdType: 'D'.
-	
-
-! !
-
-!ImportTest methodsFor: 'as yet unclassified' stamp: 'LR 11/13/2023 21:50:21'!
-test02CanImportAddressSuccessfullyToDatabase
-
-	|filteredList customer |
-		
-	self importCustomers. 
-	
-	filteredList := session selectAllOfType: Address.
-	
-	self assert: filteredList size equals: 3.
-"
-	filteredList := session select: [ :aCustomer | aCustomer identificationType = 'D' and: [ aCustomer identificationNumber = '22333444' ]] ofType: Customer.
-	
-	self assert: filteredList size equals: 1.
-	
-	customer := filteredList anyOne.
-	self assertCustomer: customer hasName: 'Pepe' withLastName: 'Sanchez' withIdNmb: '22333444' withIdType: 'D'.
-	
-
-"! !
-
+!ImportTest methodsFor: 'assertions' stamp: 'BR 11/14/2023 19:26:50'!
+assertAddress: anAddress hasStreetName: aStreetName andStreetNumber: aStreetNmb andTown: aTown andZipCode: aZipCode andProvince: aProvince
+	self assert: anAddress streetName equals: aStreetName.
+	self assert: anAddress streetNumber equals: aStreetNmb.
+	self assert: anAddress town equals: aTown.
+	self assert: anAddress zipCode equals: aZipCode.
+	self assert: anAddress province equals: aProvince.! !
 
 !ImportTest methodsFor: 'assertions' stamp: 'LR 11/13/2023 21:46:38'!
 assertCustomer: customer hasName: aName withLastName: aLastName withIdNmb: anIdNmb withIdType: anIdType 
@@ -102,6 +35,97 @@ assertCustomer: customer hasName: aName withLastName: aLastName withIdNmb: anIdN
 	self assert: customer lastName equals: aLastName.
 	self assert: customer identificationNumber equals: anIdNmb.
 	self assert: customer identificationType equals: anIdType.! !
+
+!ImportTest methodsFor: 'assertions' stamp: 'BR 11/14/2023 20:26:14'!
+assertFirstCustomerWasImportedSucessfully
+	
+	|filteredList customer |
+
+	filteredList := session select: [ :aCustomer | aCustomer identificationType = 'D' and: [ aCustomer identificationNumber = '22333444' ]] ofType: Customer.
+	customer := filteredList anyOne.
+	
+	self assert: filteredList size equals: 1.
+	self assertCustomer: customer hasName: 'Pepe' withLastName: 'Sanchez' withIdNmb: '22333444' withIdType: 'D'.
+! !
+
+!ImportTest methodsFor: 'assertions' stamp: 'BR 11/14/2023 20:26:23'!
+assertSecondCustomerWasImportedSucessfully
+	
+	|filteredList customer |
+
+	filteredList := session select: [ :aCustomer | aCustomer identificationType = 'C' and: [ aCustomer identificationNumber = '23-25666777-9' ]] ofType: Customer.
+	customer := filteredList anyOne.
+	
+	self assert: filteredList size equals: 1.
+	self assertCustomer: customer hasName: 'Juan' withLastName: 'Perez' withIdNmb: '23-25666777-9' withIdType: 'C'.
+! !
+
+!ImportTest methodsFor: 'assertions' stamp: 'BR 11/14/2023 20:22:16'!
+asssertAddressesCorrectlyLoadedForFirstCustomer
+
+	| filteredList customer|
+
+	filteredList := session select: [ :aCustomer | aCustomer identificationType = 'D' and: [ aCustomer identificationNumber = '22333444' ]] ofType: Customer.
+	
+	self assert: (filteredList size) equals:1.
+	self assert: (filteredList anyOne) addresses size equals: 2.
+	
+	customer := filteredList anyOne.
+	
+	self assertAddress: (customer addresses first) hasStreetName: 'San Martin' andStreetNumber: 3322 andTown: 'Olivos' andZipCode: 1636 andProvince: 'BsAs'.
+	self assertAddress: (customer addresses second) hasStreetName: 'Maipu' andStreetNumber: 888 andTown: 'Florida' andZipCode: 1122 andProvince: 'Buenos Aires'.! !
+
+!ImportTest methodsFor: 'assertions' stamp: 'BR 11/14/2023 20:23:18'!
+asssertAddressesCorrectlyLoadedForSecondCustomer
+
+	| filteredList customer |
+
+	filteredList := session select: [ :aCustomer | aCustomer identificationType = 'C' and: [ aCustomer identificationNumber = '23-25666777-9' ]] ofType: Customer.
+	
+	self assert: (filteredList size) equals:1.
+	self assert: (filteredList anyOne) addresses size equals: 1.
+	
+	customer := filteredList anyOne.
+	
+	self assertAddress: (customer addresses first) hasStreetName: 'Alem' andStreetNumber: 1122 andTown: 'CABA' andZipCode: 1001 andProvince: 'CABA'.! !
+
+
+!ImportTest methodsFor: 'testing' stamp: 'BR 11/14/2023 20:25:13'!
+test01CanImportCustomerSuccessfullyToDatabase
+
+	|filteredList |
+		
+	self importCustomers. 
+	
+	self assertFirstCustomerWasImportedSucessfully.
+	self assertSecondCustomerWasImportedSucessfully.
+	
+
+! !
+
+!ImportTest methodsFor: 'testing' stamp: 'BR 11/14/2023 20:25:32'!
+test02CanImportAddressSuccessfullyToCustomers
+
+	|filteredList customer |
+		
+	self importCustomers. 
+	
+	self asssertAddressesCorrectlyLoadedForFirstCustomer.
+	self asssertAddressesCorrectlyLoadedForSecondCustomer.
+! !
+
+
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'LR 11/13/2023 20:52:58'!
+setUp
+
+	session := DataBaseSession for: (Array with: Address with: Customer).
+	session beginTransaction! !
+
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'LR 11/13/2023 20:55:48'!
+tearDown
+
+	session commit.
+	session close.! !
 
 
 !classDefinition: #Address category: 'CustomerImporter'!
@@ -352,3 +376,45 @@ DataBaseSession class
 for: aConfiguration
 
 	^self new initializeFor: aConfiguration! !
+
+
+!classDefinition: #Importer category: 'CustomerImporter'!
+Object subclass: #Importer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!Importer methodsFor: 'as yet unclassified' stamp: 'BR 11/14/2023 20:06:57'!
+importFrom: inputStream persistInto: dbSession
+	
+	
+	"
+	self importCustomers
+	"
+	|  newCustomer line |
+
+	line := inputStream nextLine.
+	[ line notNil ] whileTrue: [
+		(line beginsWith: 'C') ifTrue: [ | customerData |
+			customerData := line findTokens: $,.
+			newCustomer := Customer new.
+			newCustomer firstName: customerData second.
+			newCustomer lastName: customerData third.
+			newCustomer identificationType: customerData fourth.
+			newCustomer identificationNumber: customerData fifth.
+			dbSession persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | addressData newAddress |
+			addressData := line findTokens: $,.
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: addressData second.
+			newAddress streetNumber: addressData third asNumber .
+			newAddress town: addressData fourth.
+			newAddress zipCode: addressData fifth asNumber .
+			newAddress province: addressData sixth ].
+
+		line := inputStream nextLine. ].
+
+	inputStream close.! !
