@@ -1,131 +1,225 @@
-!classDefinition: #ImportTest category: 'CustomerImporter'!
-TestCase subclass: #ImportTest
+!classDefinition: #PersistentSet category: 'CustomerImporter'!
+Set subclass: #PersistentSet
 	instanceVariableNames: 'session'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'CustomerImporter'!
 
-!ImportTest methodsFor: 'as yet unclassified' stamp: 'BR 11/14/2023 19:37:53'!
-importCustomers
+!PersistentSet methodsFor: 'initialization' stamp: 'HAW 11/14/2023 08:25:31'!
+initializeOn: aSession from: aNonPersistentSet
 
-	^self importCustomersFrom: (UniFileStream new open: 'input.txt' forWrite: false).
+	session := aSession.
+	self addAll: aNonPersistentSet ! !
+
+
+!PersistentSet methodsFor: 'adding' stamp: 'HAW 11/14/2023 08:23:40'!
+add: newObject
+
+	super add: newObject.
+	session persist: newObject.
+	
+	^newObject! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'PersistentSet class' category: 'CustomerImporter'!
+PersistentSet class
+	instanceVariableNames: ''!
+
+!PersistentSet class methodsFor: 'instance creation' stamp: 'HAW 11/14/2023 08:24:32'!
+on: aSession
+
+	^self on: aSession from: #()! !
+
+!PersistentSet class methodsFor: 'instance creation' stamp: 'HAW 11/14/2023 08:25:00'!
+on: aSession from: aNonPersistentSet
+
+	^self new initializeOn: aSession from: aNonPersistentSet
+! !
+
+
+!classDefinition: #ImportTest category: 'CustomerImporter'!
+TestCase subclass: #ImportTest
+	instanceVariableNames: 'session customerSystem'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!ImportTest methodsFor: 'tests' stamp: 'BR 11/16/2023 20:09:23'!
+test01ImportCorrectDataFromCsv
+
+	CustomerImporter valueFrom: self validImportData into: session..
+
+	self assertImportedRightNumberOfCustomers.
+	self assertPepeSanchezWasImportedCorrecty.
+	self assertJuanPerezWasImportedCorrectly ! !
+
+!ImportTest methodsFor: 'tests' stamp: 'BR 11/16/2023 20:19:05'!
+test02CannotImportRegisterWithLessThan5Fields
+	
+	self should:[
+			CustomerImporter valueFrom: self invalidImportDataWithMoreThan5Fields into: session..
+		] 
+	raise: Error - MessageNotUnderstood
+	withExceptionDo: [:error |
+						self assert: error messageText = CustomerImporter invalidNumberOfFieldsErrorMessage
+					].
+! !
+
+!ImportTest methodsFor: 'tests' stamp: 'BR 11/16/2023 20:23:09'!
+test03CannotImportRegisterWithMoreThan5Fields
+
+	self should:[
+			CustomerImporter valueFrom: self invalidImportDataWithMoreThan5Fields into: session..
+		] 
+	raise: Error - MessageNotUnderstood
+	withExceptionDo: [:error |
+						self assert: error messageText = CustomerImporter invalidNumberOfFieldsErrorMessage
+					].! !
+
+!ImportTest methodsFor: 'tests' stamp: 'BR 11/16/2023 20:30:04'!
+test04EmptyCsvDoesNotImportAnything
+
+	self should:[
+			CustomerImporter valueFrom: self emptyCsv into: session..
+		] 
+	raise: Error - MessageNotUnderstood
+	withExceptionDo: [:error |
+						self assert: error messageText = CustomerImporter invalidNumberOfFieldsErrorMessage
+					].! !
+
+!ImportTest methodsFor: 'tests' stamp: 'BR 11/16/2023 20:34:41'!
+test05CsvWithAddressWithoutCustomerFails
+
+	CustomerImporter valueFrom: self validImportData into: session..! !
+
+!ImportTest methodsFor: 'tests' stamp: 'BR 11/16/2023 20:37:35'!
+test06DoesNotImportRecordsThatStartWithMoreThanOneC
+
+	CustomerImporter valueFrom: self validImportData into: session..! !
+
+!ImportTest methodsFor: 'tests' stamp: 'BR 11/16/2023 20:37:44'!
+test07DoesNotImportRecordsThatStartWithMoreThanOneA
+
+	CustomerImporter valueFrom: self validImportData into: session..! !
+
+!ImportTest methodsFor: 'tests' stamp: 'BR 11/16/2023 20:46:25'!
+test08CannotImportEmptyLine
+
+	self should: [
+		CustomerImporter valueFrom: (ReadStream on: 'A') into: session..
+	]
+	raise: Error - MessageNotUnderstood
+	withExceptionDo: [:error |
+						self assert: error messageText = CustomerImporter invalidNumberOfFieldsErrorMessage
+					].! !
+
+!ImportTest methodsFor: 'tests' stamp: 'BR 11/16/2023 20:39:36'!
+test09CannotImportInvalidRecords
+
+	CustomerImporter valueFrom: self validImportData into: session..! !
+
+
+!ImportTest methodsFor: 'assertions' stamp: 'HAW 5/22/2022 18:22:05'!
+assertAddressOf: importedCustomer at: aStreetName hasNumber: aNumber town: aTown zipCode: aZipCode province: aProvince
+
+	| importedAddress |
+
+	importedAddress := importedCustomer addressAt: aStreetName ifNone: [ self fail ].
+	self assert: aStreetName equals: importedAddress streetName.
+	self assert: aNumber equals: importedAddress streetNumber.
+	self assert: aTown equals: importedAddress town.
+	self assert: aZipCode equals: importedAddress zipCode.
+	self assert: aProvince equals: importedAddress province.
+
 	! !
 
-!ImportTest methodsFor: 'as yet unclassified' stamp: 'BR 11/14/2023 20:09:33'!
-importCustomersFrom: inputStream
+!ImportTest methodsFor: 'assertions' stamp: 'HAW 5/22/2022 18:27:57'!
+assertCustomerWithIdentificationType: anIdType number: anIdNumber hasFirstName: aFirstName lastName: aLastName
 
-	"
-	self importCustomers
-	"
-	Importer new importFrom: inputStream persistInto: session.
+	| importedCustomer |
+
+	importedCustomer := self customerWithIdentificationType: anIdType number: anIdNumber.
+
+	self assert: aFirstName equals: importedCustomer firstName.
+	self assert: aLastName equals: importedCustomer lastName.
+	self assert: anIdType equals: importedCustomer identificationType.
+	self assert: anIdNumber equals: importedCustomer identificationNumber.
+
+	^importedCustomer
+
+	! !
+
+!ImportTest methodsFor: 'assertions' stamp: 'HAW 5/22/2022 18:12:18'!
+assertImportedRightNumberOfCustomers
+
+	^ self assert: 2 equals: (session selectAllOfType: Customer) size! !
+
+!ImportTest methodsFor: 'assertions' stamp: 'HAW 5/22/2022 18:28:45'!
+assertJuanPerezWasImportedCorrectly
+
+	| importedCustomer |
+
+	importedCustomer := self assertCustomerWithIdentificationType: 'C' number: '23-25666777-9' hasFirstName: 'Juan' lastName: 'Perez'.
+	self assertAddressOf: importedCustomer at: 'Alem' hasNumber: 1122 town: 'CABA' zipCode: 1001 province: 'CABA'
+	! !
+
+!ImportTest methodsFor: 'assertions' stamp: 'HAW 5/22/2022 18:28:05'!
+assertPepeSanchezWasImportedCorrecty
+
+	| importedCustomer |
+
+	importedCustomer := self assertCustomerWithIdentificationType: 'D' number: '22333444' hasFirstName: 'Pepe' lastName: 'Sanchez'.
+	self assertAddressOf: importedCustomer at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'.
+	self assertAddressOf: importedCustomer at: 'Maipu' hasNumber: 888 town: 'Florida' zipCode: 1122 province: 'Buenos Aires'.
+
+
 	! !
 
 
-!ImportTest methodsFor: 'assertions' stamp: 'BR 11/14/2023 19:26:50'!
-assertAddress: anAddress hasStreetName: aStreetName andStreetNumber: aStreetNmb andTown: aTown andZipCode: aZipCode andProvince: aProvince
-	self assert: anAddress streetName equals: aStreetName.
-	self assert: anAddress streetNumber equals: aStreetNmb.
-	self assert: anAddress town equals: aTown.
-	self assert: anAddress zipCode equals: aZipCode.
-	self assert: anAddress province equals: aProvince.! !
-
-!ImportTest methodsFor: 'assertions' stamp: 'LR 11/13/2023 21:46:38'!
-assertCustomer: customer hasName: aName withLastName: aLastName withIdNmb: anIdNmb withIdType: anIdType 
-	self assert: customer firstName equals: aName.
-	self assert: customer lastName equals: aLastName.
-	self assert: customer identificationNumber equals: anIdNmb.
-	self assert: customer identificationType equals: anIdType.! !
-
-!ImportTest methodsFor: 'assertions' stamp: 'BR 11/14/2023 20:26:14'!
-assertFirstCustomerWasImportedSucessfully
-	
-	|filteredList customer |
-
-	filteredList := session select: [ :aCustomer | aCustomer identificationType = 'D' and: [ aCustomer identificationNumber = '22333444' ]] ofType: Customer.
-	customer := filteredList anyOne.
-	
-	self assert: filteredList size equals: 1.
-	self assertCustomer: customer hasName: 'Pepe' withLastName: 'Sanchez' withIdNmb: '22333444' withIdType: 'D'.
-! !
-
-!ImportTest methodsFor: 'assertions' stamp: 'BR 11/14/2023 20:26:23'!
-assertSecondCustomerWasImportedSucessfully
-	
-	|filteredList customer |
-
-	filteredList := session select: [ :aCustomer | aCustomer identificationType = 'C' and: [ aCustomer identificationNumber = '23-25666777-9' ]] ofType: Customer.
-	customer := filteredList anyOne.
-	
-	self assert: filteredList size equals: 1.
-	self assertCustomer: customer hasName: 'Juan' withLastName: 'Perez' withIdNmb: '23-25666777-9' withIdType: 'C'.
-! !
-
-!ImportTest methodsFor: 'assertions' stamp: 'BR 11/14/2023 20:22:16'!
-asssertAddressesCorrectlyLoadedForFirstCustomer
-
-	| filteredList customer|
-
-	filteredList := session select: [ :aCustomer | aCustomer identificationType = 'D' and: [ aCustomer identificationNumber = '22333444' ]] ofType: Customer.
-	
-	self assert: (filteredList size) equals:1.
-	self assert: (filteredList anyOne) addresses size equals: 2.
-	
-	customer := filteredList anyOne.
-	
-	self assertAddress: (customer addresses first) hasStreetName: 'San Martin' andStreetNumber: 3322 andTown: 'Olivos' andZipCode: 1636 andProvince: 'BsAs'.
-	self assertAddress: (customer addresses second) hasStreetName: 'Maipu' andStreetNumber: 888 andTown: 'Florida' andZipCode: 1122 andProvince: 'Buenos Aires'.! !
-
-!ImportTest methodsFor: 'assertions' stamp: 'BR 11/14/2023 20:23:18'!
-asssertAddressesCorrectlyLoadedForSecondCustomer
-
-	| filteredList customer |
-
-	filteredList := session select: [ :aCustomer | aCustomer identificationType = 'C' and: [ aCustomer identificationNumber = '23-25666777-9' ]] ofType: Customer.
-	
-	self assert: (filteredList size) equals:1.
-	self assert: (filteredList anyOne) addresses size equals: 1.
-	
-	customer := filteredList anyOne.
-	
-	self assertAddress: (customer addresses first) hasStreetName: 'Alem' andStreetNumber: 1122 andTown: 'CABA' andZipCode: 1001 andProvince: 'CABA'.! !
-
-
-!ImportTest methodsFor: 'testing' stamp: 'BR 11/14/2023 20:25:13'!
-test01CanImportCustomerSuccessfullyToDatabase
-
-	|filteredList |
-		
-	self importCustomers. 
-	
-	self assertFirstCustomerWasImportedSucessfully.
-	self assertSecondCustomerWasImportedSucessfully.
-	
-
-! !
-
-!ImportTest methodsFor: 'testing' stamp: 'BR 11/14/2023 20:25:32'!
-test02CanImportAddressSuccessfullyToCustomers
-
-	|filteredList customer |
-		
-	self importCustomers. 
-	
-	self asssertAddressesCorrectlyLoadedForFirstCustomer.
-	self asssertAddressesCorrectlyLoadedForSecondCustomer.
-! !
-
-
-!ImportTest methodsFor: 'setUp/tearDown' stamp: 'LR 11/13/2023 20:52:58'!
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'BR 11/16/2023 20:59:46'!
 setUp
 
-	session := DataBaseSession for: (Array with: Address with: Customer).
-	session beginTransaction! !
+	customerSystem := PersistentCustomerSystem new.
+	customerSystem start: self.
+	session beginTransaction.
+! !
 
-!ImportTest methodsFor: 'setUp/tearDown' stamp: 'LR 11/13/2023 20:55:48'!
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'BR 11/16/2023 20:56:13'!
+start
+
+	^ session := DataBaseSession for: (Array with: Address with: Customer)! !
+
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'HAW 5/22/2022 00:28:23'!
 tearDown
 
 	session commit.
-	session close.! !
+	session close.
+	! !
+
+
+!ImportTest methodsFor: 'customer' stamp: 'HAW 5/22/2022 18:14:22'!
+customerWithIdentificationType: anIdType number: anIdNumber
+
+	^ (session
+		select: [ :aCustomer | aCustomer identificationType = anIdType and: [ aCustomer identificationNumber = anIdNumber ]]
+		ofType: Customer) anyOne! !
+
+
+!ImportTest methodsFor: 'test data' stamp: 'BR 11/16/2023 20:21:39'!
+invalidImportDataWithLessThan5Fields
+
+	^ ReadStream on: 'C,Pepe,Sanchez,D'! !
+
+!ImportTest methodsFor: 'test data' stamp: 'BR 11/16/2023 20:11:21'!
+invalidImportDataWithMoreThan5Fields
+
+	^ ReadStream on: 'C,Pepe,Sanchez,D,22333444,x'! !
+
+!ImportTest methodsFor: 'test data' stamp: 'BR 11/16/2023 20:30:27'!
+validImportData
+
+	^ ReadStream on: ''! !
 
 
 !classDefinition: #Address category: 'CustomerImporter'!
@@ -146,6 +240,11 @@ province: aProvince
 	province := aProvince
 	! !
 
+
+!Address methodsFor: 'street' stamp: 'HAW 5/22/2022 17:55:46'!
+isAt: aStreetName
+
+	^streetName = aStreetName ! !
 
 !Address methodsFor: 'street' stamp: 'HAW 5/22/2022 00:19:29'!
 streetName
@@ -202,6 +301,11 @@ addAddress: anAddress
 
 	addresses add: anAddress ! !
 
+!Customer methodsFor: 'addresses' stamp: 'HAW 5/22/2022 17:55:17'!
+addressAt: aStreetName ifNone: aNoneBlock
+
+	^addresses detect: [ :address | address isAt: aStreetName ] ifNone: aNoneBlock ! !
+
 !Customer methodsFor: 'addresses' stamp: 'HAW 5/22/2022 00:19:29'!
 addresses
 
@@ -257,51 +361,142 @@ initialize
 	super initialize.
 	addresses := OrderedCollection new.! !
 
-!Customer methodsFor: 'initialization' stamp: 'LR 11/13/2023 21:20:55'!
-initializeWithName: aFirstName lastName: aLastName identificationType: anIdType identificationNumber: anIdNmb.
-	firstName := aFirstName.
-	lastName := aLastName.
-	identificationType := anIdType.
-	identificationNumber := anIdNmb.
-	
-	! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'Customer class' category: 'CustomerImporter'!
-Customer class
-	instanceVariableNames: ''!
-
-
-!Customer class methodsFor: 'as yet unclassified' stamp: 'LR 11/13/2023 21:15:06'!
-customerWithName: firstName lastName: lastName identificationType: idType identificationNumber: idNmb  
-	^self new initializeWithName: firstName lastName: lastName identificationType: idType identificationNumber: idNmb.! !
-
 
-!classDefinition: #DataBaseSession category: 'CustomerImporter'!
-Object subclass: #DataBaseSession
-	instanceVariableNames: 'configuration tables id'
+!classDefinition: #CustomerImporter category: 'CustomerImporter'!
+Object subclass: #CustomerImporter
+	instanceVariableNames: 'session readStream newCustomer line register'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'CustomerImporter'!
 
-!DataBaseSession methodsFor: 'transaction management' stamp: 'HAW 5/22/2022 00:19:29'!
+!CustomerImporter methodsFor: 'initialization' stamp: 'HAW 5/22/2022 18:06:47'!
+initializeFrom: aReadStream into: aSession
+	session := aSession.
+	readStream := aReadStream.! !
+
+
+!CustomerImporter methodsFor: 'evaluating' stamp: 'BR 11/16/2023 20:08:19'!
+createRegister
+
+	^ register := line findTokens: $,! !
+
+!CustomerImporter methodsFor: 'evaluating' stamp: 'BR 11/16/2023 19:48:08'!
+importAddressRegister: anAddressRegister
+
+	| newAddress |
+	
+	newAddress := Address new.
+	newCustomer addAddress: newAddress.
+	newAddress streetName: anAddressRegister second.
+	newAddress streetNumber: anAddressRegister third asNumber .
+	newAddress town: anAddressRegister fourth.
+	newAddress zipCode: anAddressRegister fifth asNumber .
+	newAddress province: anAddressRegister sixth! !
+
+!CustomerImporter methodsFor: 'evaluating' stamp: 'BR 11/16/2023 19:47:27'!
+importCustomerRegister: aCustomerRegister
+
+	newCustomer := Customer new.
+	newCustomer firstName: aCustomerRegister second.
+	newCustomer lastName: aCustomerRegister third.
+	newCustomer identificationType: aCustomerRegister fourth.
+	newCustomer identificationNumber: aCustomerRegister fifth.
+	session persist: newCustomer! !
+
+!CustomerImporter methodsFor: 'evaluating' stamp: 'BR 11/16/2023 20:26:42'!
+readLine
+
+	line := readStream nextLine. 
+	(line size = 5) ifFalse: [self error: self class invalidNumberOfFieldsErrorMessage].
+	^line notNil! !
+
+!CustomerImporter methodsFor: 'evaluating' stamp: 'BR 11/16/2023 20:08:42'!
+value
+
+	"
+	self importCustomers
+	"
+	
+	[ self readLine. ] 
+		whileTrue: [
+				self createRegister.
+				self importRegister.
+			].
+
+	! !
+
+
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'BR 11/16/2023 20:05:16'!
+importRegister
+	
+	(line beginsWith: 'C') ifTrue: [ self importCustomerRegister: register ].
+	(line beginsWith: 'A') ifTrue: [ self importAddressRegister: register ]! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'CustomerImporter class' category: 'CustomerImporter'!
+CustomerImporter class
+	instanceVariableNames: ''!
+
+!CustomerImporter class methodsFor: 'instance creation' stamp: 'HAW 5/22/2022 18:06:47'!
+from: aReadStream into: aSession
+	^self new initializeFrom: aReadStream into: aSession! !
+
+
+!CustomerImporter class methodsFor: 'importing' stamp: 'BR 11/16/2023 20:17:42'!
+invalidNumberOfFieldsErrorMessage
+	^'Invalid number of fields on register'.! !
+
+!CustomerImporter class methodsFor: 'importing' stamp: 'HAW 5/22/2022 18:11:27'!
+valueFrom: aReadStream into: aSession
+
+	^(self from: aReadStream into: aSession) value! !
+
+
+!classDefinition: #DataBaseSession category: 'CustomerImporter'!
+Object subclass: #DataBaseSession
+	instanceVariableNames: 'configuration tables id inTransaction closed'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!DataBaseSession methodsFor: 'transaction management' stamp: 'HAW 11/14/2023 08:52:25'!
 beginTransaction
 
-	! !
+	inTransaction := true.! !
 
-!DataBaseSession methodsFor: 'transaction management' stamp: 'HAW 5/22/2022 19:17:36'!
+!DataBaseSession methodsFor: 'transaction management' stamp: 'HAW 11/14/2023 08:52:18'!
 commit
 
-	(tables at: Customer ifAbsent: [#()]) do: [ :aCustomer | self persistAddressesOf: aCustomer ]
-	! !
+	inTransaction := false.! !
 
 
-!DataBaseSession methodsFor: 'closing' stamp: 'HAW 5/22/2022 00:19:29'!
+!DataBaseSession methodsFor: 'closing' stamp: 'HAW 11/14/2023 08:52:30'!
 close
 
-	! !
+	closed := true.! !
 
+
+!DataBaseSession methodsFor: 'persistence - private' stamp: 'HAW 11/14/2023 08:49:30'!
+assertCanUseDatabase
+
+	self assertIsOpen.
+	self assertInTransaction ! !
+
+!DataBaseSession methodsFor: 'persistence - private' stamp: 'HAW 11/14/2023 08:48:43'!
+assertInTransaction
+
+	inTransaction ifFalse: [ self error: 'Not in transaction' ].! !
+
+!DataBaseSession methodsFor: 'persistence - private' stamp: 'HAW 11/14/2023 08:48:16'!
+assertIsOpen
+
+	closed ifTrue: [ self error: 'Connection with database closed' ].! !
+
+!DataBaseSession methodsFor: 'persistence - private' stamp: 'HAW 11/14/2023 09:09:07'!
+assertTypeIsPersisted: aType
+
+	(configuration includes: aType) ifFalse: [ self error: 'Object of type ', aType name, ' are not configured to be persisted' ].! !
 
 !DataBaseSession methodsFor: 'persistence - private' stamp: 'HAW 5/22/2022 00:19:29'!
 defineIdOf: anObject
@@ -313,24 +508,46 @@ delay
 
 	(Delay forMilliseconds: 100) wait! !
 
-!DataBaseSession methodsFor: 'persistence - private' stamp: 'HAW 5/22/2022 19:29:06'!
-objectsOfType: aType
+!DataBaseSession methodsFor: 'persistence - private' stamp: 'HAW 11/14/2023 08:58:59'!
+isRelationToPersist: possibleRelation
 
-	^ tables at: aType ifAbsent: [ #() ]! !
+	^ possibleRelation class = Set! !
 
-!DataBaseSession methodsFor: 'persistence - private' stamp: 'HAW 5/22/2022 00:19:29'!
-persistAddressesOf: anObjectWithAddresses
+!DataBaseSession methodsFor: 'persistence - private' stamp: 'HAW 11/14/2023 08:58:59'!
+persistPossibleRelationOf: anObject at: anInstVarOffset
 
-	anObjectWithAddresses addresses do: [ :anAddress | self persist: anAddress ]
-	! !
+	| possibleRelation |
+		
+	possibleRelation := anObject instVarAt: anInstVarOffset.
+	(self isRelationToPersist: possibleRelation) ifTrue: [ self persistRelationOf: anObject at: anInstVarOffset with: possibleRelation ]! !
+
+!DataBaseSession methodsFor: 'persistence - private' stamp: 'HAW 11/14/2023 08:58:03'!
+persistRelationOf: anObject at: anInstVarOffset with: aRelation
+
+	| persistentRelation |
+	
+	persistentRelation := PersistentSet on: self from: aRelation.
+	anObject instVarAt: anInstVarOffset put: persistentRelation! !
+
+!DataBaseSession methodsFor: 'persistence - private' stamp: 'HAW 11/14/2023 08:58:34'!
+persistRelationsOf: anObject
+
+	anObject class instVarNamesAndOffsetsDo: [ :anInstVarName :anInstVarOffset | self persistPossibleRelationOf: anObject at: anInstVarOffset]! !
+
+!DataBaseSession methodsFor: 'persistence - private' stamp: 'HAW 11/14/2023 09:06:24'!
+tableOfType: aType
+
+	^ tables at: aType ifAbsentPut: [ Set new ]! !
 
 
-!DataBaseSession methodsFor: 'initialization' stamp: 'HAW 5/22/2022 00:19:29'!
+!DataBaseSession methodsFor: 'initialization' stamp: 'HAW 11/14/2023 08:44:19'!
 initializeFor: aConfiguration
 
 	configuration := aConfiguration.
 	tables := Dictionary new.
-	id := 0.! !
+	id := 0.
+	inTransaction := false.
+	closed := false.! !
 
 
 !DataBaseSession methodsFor: 'id' stamp: 'HAW 5/22/2022 00:19:29'!
@@ -340,31 +557,39 @@ newIdFor: anObject
 	^id! !
 
 
-!DataBaseSession methodsFor: 'persistance' stamp: 'HAW 5/22/2022 00:19:29'!
+!DataBaseSession methodsFor: 'persistance' stamp: 'HAW 11/14/2023 09:06:24'!
 persist: anObject
 
 	| table |
 
+	self assertCanUseDatabase.
+	self assertTypeIsPersisted: anObject class.
 	self delay.
-	table := tables at: anObject class ifAbsentPut: [ Set new ].
-
+	
+	table := self tableOfType: anObject class.
 	self defineIdOf: anObject.
 	table add: anObject.
+	self persistRelationsOf: anObject.
+! !
 
-	(anObject isKindOf: Customer) ifTrue: [ self persistAddressesOf: anObject ].! !
 
-
-!DataBaseSession methodsFor: 'selecting' stamp: 'HAW 5/22/2022 19:29:06'!
+!DataBaseSession methodsFor: 'selecting' stamp: 'HAW 11/14/2023 09:06:56'!
 select: aCondition ofType: aType
 
+	self assertCanUseDatabase.
+	self assertTypeIsPersisted: aType.
 	self delay.
-	^(self objectsOfType: aType) select: aCondition ! !
+	
+	^(self tableOfType: aType) select: aCondition ! !
 
-!DataBaseSession methodsFor: 'selecting' stamp: 'HAW 5/22/2022 19:29:06'!
+!DataBaseSession methodsFor: 'selecting' stamp: 'HAW 11/14/2023 09:07:12'!
 selectAllOfType: aType
 
+	self assertCanUseDatabase.
+	self assertTypeIsPersisted: aType.
 	self delay.
-	^(self objectsOfType: aType) copy ! !
+	
+	^(self tableOfType: aType) copy ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -378,43 +603,9 @@ for: aConfiguration
 	^self new initializeFor: aConfiguration! !
 
 
-!classDefinition: #Importer category: 'CustomerImporter'!
-Object subclass: #Importer
+!classDefinition: #PersistentCustomerSystem category: 'CustomerImporter'!
+Object subclass: #PersistentCustomerSystem
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'CustomerImporter'!
-
-!Importer methodsFor: 'as yet unclassified' stamp: 'BR 11/14/2023 20:06:57'!
-importFrom: inputStream persistInto: dbSession
-	
-	
-	"
-	self importCustomers
-	"
-	|  newCustomer line |
-
-	line := inputStream nextLine.
-	[ line notNil ] whileTrue: [
-		(line beginsWith: 'C') ifTrue: [ | customerData |
-			customerData := line findTokens: $,.
-			newCustomer := Customer new.
-			newCustomer firstName: customerData second.
-			newCustomer lastName: customerData third.
-			newCustomer identificationType: customerData fourth.
-			newCustomer identificationNumber: customerData fifth.
-			dbSession persist: newCustomer ].
-
-		(line beginsWith: 'A') ifTrue: [ | addressData newAddress |
-			addressData := line findTokens: $,.
-			newAddress := Address new.
-			newCustomer addAddress: newAddress.
-			newAddress streetName: addressData second.
-			newAddress streetNumber: addressData third asNumber .
-			newAddress town: addressData fourth.
-			newAddress zipCode: addressData fifth asNumber .
-			newAddress province: addressData sixth ].
-
-		line := inputStream nextLine. ].
-
-	inputStream close.! !
