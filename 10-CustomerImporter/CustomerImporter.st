@@ -54,70 +54,98 @@ test01ImportCorrectDataFromCsv
 	self assertPepeSanchezWasImportedCorrecty.
 	self assertJuanPerezWasImportedCorrectly ! !
 
-!ImportTest methodsFor: 'tests' stamp: 'BR 11/16/2023 20:19:05'!
-test02CannotImportRegisterWithLessThan5Fields
+!ImportTest methodsFor: 'tests' stamp: 'BR 11/20/2023 15:22:37'!
+test02CannotImportCustomerRegisterWithMoreOrLessThan5Fields
 	
 	self should:[
-			CustomerImporter valueFrom: self invalidImportDataWithMoreThan5Fields into: session..
+			CustomerImporter valueFrom: (ReadStream on: 'C,Pepe,Sanchez,D,22333444,x') into: session..
 		] 
 	raise: Error - MessageNotUnderstood
 	withExceptionDo: [:error |
-						self assert: error messageText = CustomerImporter invalidNumberOfFieldsErrorMessage
+						self assert: error messageText = CustomerImporter invalidNumberOfFieldsErrorDescription.
+						self assert: (session selectAllOfType: Customer) isEmpty
 					].
-! !
-
-!ImportTest methodsFor: 'tests' stamp: 'BR 11/16/2023 20:23:09'!
-test03CannotImportRegisterWithMoreThan5Fields
 
 	self should:[
-			CustomerImporter valueFrom: self invalidImportDataWithMoreThan5Fields into: session..
+			CustomerImporter valueFrom: (ReadStream on: 'C,Pepe,Sanchez,D') into: session..
 		] 
 	raise: Error - MessageNotUnderstood
 	withExceptionDo: [:error |
-						self assert: error messageText = CustomerImporter invalidNumberOfFieldsErrorMessage
+						self assert: error messageText = CustomerImporter invalidNumberOfFieldsErrorDescription.
+						self assert: (session selectAllOfType: Customer) isEmpty
 					].! !
 
-!ImportTest methodsFor: 'tests' stamp: 'BR 11/16/2023 20:30:04'!
-test04EmptyCsvDoesNotImportAnything
+!ImportTest methodsFor: 'tests' stamp: 'BR 11/20/2023 15:24:02'!
+test03CannotImportAddressWithMoreOrLessThan6Fields
 
 	self should:[
-			CustomerImporter valueFrom: self emptyCsv into: session..
+			CustomerImporter valueFrom: (ReadStream on: 'C,Pepe,Sanchez,D,22333444
+A,San Martin,3322,Olivos,1636,BsAs,Tigre') into: session..
 		] 
 	raise: Error - MessageNotUnderstood
 	withExceptionDo: [:error |
-						self assert: error messageText = CustomerImporter invalidNumberOfFieldsErrorMessage
+						self assert: error messageText = CustomerImporter invalidNumberOfFieldsErrorDescription.
+						self assert: (session selectAllOfType: Customer) size = 1 .
+						self assert: (session selectAllOfType: Customer) anyOne addresses isEmpty
+					].
+				
+	self should:[
+			CustomerImporter valueFrom: (ReadStream on: 'A,San Martin,3322,Olivos,1636') into: session..
+		] 
+	raise: Error - MessageNotUnderstood
+	withExceptionDo: [:error |
+						self assert: error messageText = CustomerImporter invalidNumberOfFieldsErrorDescription.
+						self assert: (session selectAllOfType: Customer) size = 1 .
+						self assert: (session selectAllOfType: Customer) anyOne addresses isEmpty
 					].! !
 
-!ImportTest methodsFor: 'tests' stamp: 'BR 11/16/2023 20:34:41'!
-test05CsvWithAddressWithoutCustomerFails
+!ImportTest methodsFor: 'tests' stamp: 'BR 11/20/2023 15:18:26'!
+test06DoesNotImportRecordsThatStartWithAAndSomethingElse
 
-	CustomerImporter valueFrom: self validImportData into: session..! !
+	self should: [
+		CustomerImporter valueFrom: (ReadStream on: 'CQ,Pepe,Sanchez,D,22333444') into: session.]
+		raise: Error
+		withExceptionDo: [
+			:anError | self assert: anError messageText equals: (CustomerImporter invalidIdErrorDescription).
+					self assert: (session selectAllOfType: Customer) isEmpty
+					] 
+		! !
 
-!ImportTest methodsFor: 'tests' stamp: 'BR 11/16/2023 20:37:35'!
-test06DoesNotImportRecordsThatStartWithMoreThanOneC
+!ImportTest methodsFor: 'tests' stamp: 'BR 11/20/2023 15:18:35'!
+test07DoesNotImportRecordsThatStartWithCAndSomethingElse
 
-	CustomerImporter valueFrom: self validImportData into: session..! !
+	self should: [
+		CustomerImporter valueFrom: (ReadStream on: 'CQ,Pepe,Sanchez,D,22333444') into: session.]
+		raise: Error
+		withExceptionDo: [
+			:anError | self assert: anError messageText equals: (CustomerImporter invalidIdErrorDescription).
+					self assert: (session selectAllOfType: Customer) isEmpty
+					] 
+		! !
 
-!ImportTest methodsFor: 'tests' stamp: 'BR 11/16/2023 20:37:44'!
-test07DoesNotImportRecordsThatStartWithMoreThanOneA
-
-	CustomerImporter valueFrom: self validImportData into: session..! !
-
-!ImportTest methodsFor: 'tests' stamp: 'BR 11/16/2023 20:46:25'!
+!ImportTest methodsFor: 'tests' stamp: 'BR 11/20/2023 15:18:49'!
 test08CannotImportEmptyLine
 
 	self should: [
-		CustomerImporter valueFrom: (ReadStream on: 'A') into: session..
+		CustomerImporter valueFrom: (ReadStream on: '
+		') into: session..
 	]
 	raise: Error - MessageNotUnderstood
 	withExceptionDo: [:error |
-						self assert: error messageText = CustomerImporter invalidNumberOfFieldsErrorMessage
+						self assert: error messageText = CustomerImporter emptyLineErrorDescription.
+						self assert: (session selectAllOfType: Customer) isEmpty
 					].! !
 
-!ImportTest methodsFor: 'tests' stamp: 'BR 11/16/2023 20:39:36'!
-test09CannotImportInvalidRecords
+!ImportTest methodsFor: 'tests' stamp: 'BR 11/19/2023 15:47:55'!
+test09CannotImportAddressWithoutCustomer
 
-	CustomerImporter valueFrom: self validImportData into: session..! !
+	self should:[
+			CustomerImporter valueFrom: (ReadStream on: 'A,San Martin,3322,Olivos,1636,BsAs') into: session..
+		] 
+	raise: Error - MessageNotUnderstood
+	withExceptionDo: [:error |
+						self assert: error messageText = CustomerImporter missingCustomerForAddressErrorDescription
+					].! !
 
 
 !ImportTest methodsFor: 'assertions' stamp: 'HAW 5/22/2022 18:22:05'!
@@ -177,11 +205,10 @@ assertPepeSanchezWasImportedCorrecty
 	! !
 
 
-!ImportTest methodsFor: 'setUp/tearDown' stamp: 'BR 11/16/2023 20:59:46'!
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'BR 11/19/2023 13:31:14'!
 setUp
 
-	customerSystem := PersistentCustomerSystem new.
-	customerSystem start: self.
+	session := DataBaseSession for: (Array with: Address with: Customer).
 	session beginTransaction.
 ! !
 
@@ -206,20 +233,15 @@ customerWithIdentificationType: anIdType number: anIdNumber
 		ofType: Customer) anyOne! !
 
 
-!ImportTest methodsFor: 'test data' stamp: 'BR 11/16/2023 20:21:39'!
-invalidImportDataWithLessThan5Fields
-
-	^ ReadStream on: 'C,Pepe,Sanchez,D'! !
-
-!ImportTest methodsFor: 'test data' stamp: 'BR 11/16/2023 20:11:21'!
-invalidImportDataWithMoreThan5Fields
-
-	^ ReadStream on: 'C,Pepe,Sanchez,D,22333444,x'! !
-
-!ImportTest methodsFor: 'test data' stamp: 'BR 11/16/2023 20:30:27'!
+!ImportTest methodsFor: 'test data' stamp: 'HAW 5/22/2022 18:08:08'!
 validImportData
 
-	^ ReadStream on: ''! !
+	^ ReadStream on:
+'C,Pepe,Sanchez,D,22333444
+A,San Martin,3322,Olivos,1636,BsAs
+A,Maipu,888,Florida,1122,Buenos Aires
+C,Juan,Perez,C,23-25666777-9
+A,Alem,1122,CABA,1001,CABA'! !
 
 
 !classDefinition: #Address category: 'CustomerImporter'!
@@ -369,33 +391,54 @@ Object subclass: #CustomerImporter
 	poolDictionaries: ''
 	category: 'CustomerImporter'!
 
-!CustomerImporter methodsFor: 'initialization' stamp: 'HAW 5/22/2022 18:06:47'!
+!CustomerImporter methodsFor: 'initialization' stamp: 'BR 11/19/2023 15:44:51'!
 initializeFrom: aReadStream into: aSession
+
 	session := aSession.
 	readStream := aReadStream.! !
 
 
-!CustomerImporter methodsFor: 'evaluating' stamp: 'BR 11/16/2023 20:08:19'!
+!CustomerImporter methodsFor: 'evaluating' stamp: 'BR 11/20/2023 15:09:21'!
+assertAddressRegisterHas6Fields: anAddressRegister
+
+	^ (anAddressRegister size = 6) ifFalse: [self error: self class invalidNumberOfFieldsErrorDescription]! !
+
+!CustomerImporter methodsFor: 'evaluating' stamp: 'BR 11/20/2023 15:09:52'!
+assertCustomerRegisterHas5Fields: aCustomerRegister
+
+	^ (aCustomerRegister size = 5) ifFalse: [self error: self class invalidNumberOfFieldsErrorDescription]! !
+
+!CustomerImporter methodsFor: 'evaluating' stamp: 'BR 11/20/2023 15:10:29'!
+assertCustomerRegisterIsNotMissing
+
+	^ newCustomer isNil ifTrue: [self error: self class missingCustomerForAddressErrorDescription ]! !
+
+!CustomerImporter methodsFor: 'evaluating' stamp: 'BR 11/19/2023 15:46:35'!
 createRegister
 
-	^ register := line findTokens: $,! !
+	register := line findTokens: $,.
+	(register isEmpty) ifTrue: [self error: self class emptyLineErrorDescription.]! !
 
-!CustomerImporter methodsFor: 'evaluating' stamp: 'BR 11/16/2023 19:48:08'!
+!CustomerImporter methodsFor: 'evaluating' stamp: 'BR 11/20/2023 15:11:35'!
 importAddressRegister: anAddressRegister
 
 	| newAddress |
 	
+	self assertAddressRegisterHas6Fields: anAddressRegister.
+	self assertCustomerRegisterIsNotMissing.
+	
 	newAddress := Address new.
-	newCustomer addAddress: newAddress.
 	newAddress streetName: anAddressRegister second.
 	newAddress streetNumber: anAddressRegister third asNumber .
 	newAddress town: anAddressRegister fourth.
 	newAddress zipCode: anAddressRegister fifth asNumber .
-	newAddress province: anAddressRegister sixth! !
+	newAddress province: anAddressRegister sixth.
+	newCustomer addAddress: newAddress.! !
 
-!CustomerImporter methodsFor: 'evaluating' stamp: 'BR 11/16/2023 19:47:27'!
+!CustomerImporter methodsFor: 'evaluating' stamp: 'BR 11/20/2023 15:09:52'!
 importCustomerRegister: aCustomerRegister
 
+ 	self assertCustomerRegisterHas5Fields: aCustomerRegister.
 	newCustomer := Customer new.
 	newCustomer firstName: aCustomerRegister second.
 	newCustomer lastName: aCustomerRegister third.
@@ -403,11 +446,10 @@ importCustomerRegister: aCustomerRegister
 	newCustomer identificationNumber: aCustomerRegister fifth.
 	session persist: newCustomer! !
 
-!CustomerImporter methodsFor: 'evaluating' stamp: 'BR 11/16/2023 20:26:42'!
+!CustomerImporter methodsFor: 'evaluating' stamp: 'BR 11/19/2023 13:39:35'!
 readLine
 
 	line := readStream nextLine. 
-	(line size = 5) ifFalse: [self error: self class invalidNumberOfFieldsErrorMessage].
 	^line notNil! !
 
 !CustomerImporter methodsFor: 'evaluating' stamp: 'BR 11/16/2023 20:08:42'!
@@ -426,11 +468,22 @@ value
 	! !
 
 
-!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'BR 11/16/2023 20:05:16'!
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'BR 11/19/2023 15:46:54'!
 importRegister
 	
-	(line beginsWith: 'C') ifTrue: [ self importCustomerRegister: register ].
-	(line beginsWith: 'A') ifTrue: [ self importAddressRegister: register ]! !
+	(self isCustomer) ifTrue: [ ^self importCustomerRegister: register ].
+	(self isAddress) ifTrue: [ ^self importAddressRegister: register ].
+	^self error: self class invalidIdErrorDescription.! !
+
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'BR 11/19/2023 15:39:33'!
+isAddress
+
+	^ register first = 'A'! !
+
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'BR 11/19/2023 15:39:16'!
+isCustomer
+
+	^ register first = 'C'! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -443,9 +496,21 @@ from: aReadStream into: aSession
 	^self new initializeFrom: aReadStream into: aSession! !
 
 
-!CustomerImporter class methodsFor: 'importing' stamp: 'BR 11/16/2023 20:17:42'!
-invalidNumberOfFieldsErrorMessage
+!CustomerImporter class methodsFor: 'importing' stamp: 'BR 11/19/2023 15:46:35'!
+emptyLineErrorDescription
+	^'Empty line cannot be imported'.! !
+
+!CustomerImporter class methodsFor: 'importing' stamp: 'BR 11/19/2023 15:46:54'!
+invalidIdErrorDescription
+	^'Unrecognized record type id'.! !
+
+!CustomerImporter class methodsFor: 'importing' stamp: 'BR 11/19/2023 15:47:13'!
+invalidNumberOfFieldsErrorDescription
 	^'Invalid number of fields on register'.! !
+
+!CustomerImporter class methodsFor: 'importing' stamp: 'BR 11/19/2023 15:47:40'!
+missingCustomerForAddressErrorDescription
+	^'Missing customer to add address to'.! !
 
 !CustomerImporter class methodsFor: 'importing' stamp: 'HAW 5/22/2022 18:11:27'!
 valueFrom: aReadStream into: aSession
