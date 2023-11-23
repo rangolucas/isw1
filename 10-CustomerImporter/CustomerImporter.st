@@ -40,100 +40,100 @@ on: aSession from: aNonPersistentSet
 
 !classDefinition: #ImportTest category: 'CustomerImporter'!
 TestCase subclass: #ImportTest
-	instanceVariableNames: 'session customerSystem'
+	instanceVariableNames: 'customerSystem'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'CustomerImporter'!
 
-!ImportTest methodsFor: 'tests' stamp: 'BR 11/16/2023 20:09:23'!
+!ImportTest methodsFor: 'tests' stamp: 'LR 11/22/2023 23:04:30'!
 test01ImportCorrectDataFromCsv
 
-	CustomerImporter valueFrom: self validImportData into: session..
+	CustomerImporter valueFrom: self validImportData into: customerSystem.
 
 	self assertImportedRightNumberOfCustomers.
 	self assertPepeSanchezWasImportedCorrecty.
 	self assertJuanPerezWasImportedCorrectly ! !
 
-!ImportTest methodsFor: 'tests' stamp: 'BR 11/20/2023 15:22:37'!
+!ImportTest methodsFor: 'tests' stamp: 'LR 11/22/2023 23:05:17'!
 test02CannotImportCustomerRegisterWithMoreOrLessThan5Fields
 	
 	self should:[
-			CustomerImporter valueFrom: (ReadStream on: 'C,Pepe,Sanchez,D,22333444,x') into: session..
+			CustomerImporter valueFrom: (ReadStream on: 'C,Pepe,Sanchez,D,22333444,x') into: customerSystem.
 		] 
 	raise: Error - MessageNotUnderstood
 	withExceptionDo: [:error |
 						self assert: error messageText = CustomerImporter invalidNumberOfFieldsErrorDescription.
-						self assert: (session selectAllOfType: Customer) isEmpty
+						self assert: customerSystem selectAllCustomers isEmpty
 					].
 
 	self should:[
-			CustomerImporter valueFrom: (ReadStream on: 'C,Pepe,Sanchez,D') into: session..
+			CustomerImporter valueFrom: (ReadStream on: 'C,Pepe,Sanchez,D') into: customerSystem.
 		] 
 	raise: Error - MessageNotUnderstood
 	withExceptionDo: [:error |
 						self assert: error messageText = CustomerImporter invalidNumberOfFieldsErrorDescription.
-						self assert: (session selectAllOfType: Customer) isEmpty
+						self assert: customerSystem selectAllCustomers isEmpty
 					].! !
 
-!ImportTest methodsFor: 'tests' stamp: 'BR 11/20/2023 15:24:02'!
+!ImportTest methodsFor: 'tests' stamp: 'LR 11/22/2023 23:06:32'!
 test03CannotImportAddressWithMoreOrLessThan6Fields
 
 	self should:[
 			CustomerImporter valueFrom: (ReadStream on: 'C,Pepe,Sanchez,D,22333444
-A,San Martin,3322,Olivos,1636,BsAs,Tigre') into: session..
+A,San Martin,3322,Olivos,1636,BsAs,Tigre') into: customerSystem.
 		] 
 	raise: Error - MessageNotUnderstood
 	withExceptionDo: [:error |
 						self assert: error messageText = CustomerImporter invalidNumberOfFieldsErrorDescription.
-						self assert: (session selectAllOfType: Customer) size = 1 .
-						self assert: (session selectAllOfType: Customer) anyOne addresses isEmpty
+						self assert: customerSystem selectAllCustomers size equals: 1 .
+						self assert: customerSystem selectAllCustomers anyOne addresses isEmpty
 					].
 				
 	self should:[
-			CustomerImporter valueFrom: (ReadStream on: 'A,San Martin,3322,Olivos,1636') into: session..
+			CustomerImporter valueFrom: (ReadStream on: 'A,San Martin,3322,Olivos,1636') into: customerSystem.
 		] 
 	raise: Error - MessageNotUnderstood
 	withExceptionDo: [:error |
 						self assert: error messageText = CustomerImporter invalidNumberOfFieldsErrorDescription.
-						self assert: (session selectAllOfType: Customer) size = 1 .
-						self assert: (session selectAllOfType: Customer) anyOne addresses isEmpty
+						self assert: customerSystem selectAllCustomers size equals: 1 .
+						self assert: customerSystem selectAllCustomers anyOne addresses isEmpty
 					].! !
 
-!ImportTest methodsFor: 'tests' stamp: 'BR 11/20/2023 15:18:26'!
+!ImportTest methodsFor: 'tests' stamp: 'LR 11/22/2023 23:08:16'!
 test06DoesNotImportRecordsThatStartWithAAndSomethingElse
 
 	self should: [
-		CustomerImporter valueFrom: (ReadStream on: 'CQ,Pepe,Sanchez,D,22333444') into: session.]
+		CustomerImporter valueFrom: (ReadStream on: 'CQ,Pepe,Sanchez,D,22333444') into: customerSystem.]
 		raise: Error
 		withExceptionDo: [
 			:anError | self assert: anError messageText equals: (CustomerImporter invalidIdErrorDescription).
-					self assert: (session selectAllOfType: Customer) isEmpty
+					self assert: customerSystem selectAllCustomers isEmpty
 					] 
 		! !
 
-!ImportTest methodsFor: 'tests' stamp: 'BR 11/20/2023 15:18:35'!
+!ImportTest methodsFor: 'tests' stamp: 'LR 11/22/2023 23:08:29'!
 test07DoesNotImportRecordsThatStartWithCAndSomethingElse
 
 	self should: [
-		CustomerImporter valueFrom: (ReadStream on: 'CQ,Pepe,Sanchez,D,22333444') into: session.]
+		CustomerImporter valueFrom: (ReadStream on: 'CQ,Pepe,Sanchez,D,22333444') into: customerSystem.]
 		raise: Error
 		withExceptionDo: [
 			:anError | self assert: anError messageText equals: (CustomerImporter invalidIdErrorDescription).
-					self assert: (session selectAllOfType: Customer) isEmpty
+					self assert: customerSystem selectAllCustomers isEmpty
 					] 
 		! !
 
-!ImportTest methodsFor: 'tests' stamp: 'BR 11/20/2023 15:18:49'!
+!ImportTest methodsFor: 'tests' stamp: 'LR 11/22/2023 23:08:44'!
 test08CannotImportEmptyLine
 
 	self should: [
 		CustomerImporter valueFrom: (ReadStream on: '
-		') into: session..
+		') into: customerSystem.
 	]
 	raise: Error - MessageNotUnderstood
 	withExceptionDo: [:error |
 						self assert: error messageText = CustomerImporter emptyLineErrorDescription.
-						self assert: (session selectAllOfType: Customer) isEmpty
+						self assert: customerSystem selectAllCustomers isEmpty
 					].! !
 
 !ImportTest methodsFor: 'tests' stamp: 'BR 11/19/2023 15:47:55'!
@@ -178,10 +178,10 @@ assertCustomerWithIdentificationType: anIdType number: anIdNumber hasFirstName: 
 
 	! !
 
-!ImportTest methodsFor: 'assertions' stamp: 'HAW 5/22/2022 18:12:18'!
+!ImportTest methodsFor: 'assertions' stamp: 'LR 11/22/2023 23:02:00'!
 assertImportedRightNumberOfCustomers
 
-	^ self assert: 2 equals: (session selectAllOfType: Customer) size! !
+	^ self assert: 2 equals: customerSystem selectAllCustomers size! !
 
 !ImportTest methodsFor: 'assertions' stamp: 'HAW 5/22/2022 18:28:45'!
 assertJuanPerezWasImportedCorrectly
@@ -205,32 +205,23 @@ assertPepeSanchezWasImportedCorrecty
 	! !
 
 
-!ImportTest methodsFor: 'setUp/tearDown' stamp: 'BR 11/19/2023 13:31:14'!
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'LR 11/22/2023 23:24:29'!
 setUp
-
-	session := DataBaseSession for: (Array with: Address with: Customer).
-	session beginTransaction.
+	customerSystem := TransientCustomerSystem start.
 ! !
 
-!ImportTest methodsFor: 'setUp/tearDown' stamp: 'BR 11/16/2023 20:56:13'!
-start
-
-	^ session := DataBaseSession for: (Array with: Address with: Customer)! !
-
-!ImportTest methodsFor: 'setUp/tearDown' stamp: 'HAW 5/22/2022 00:28:23'!
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'LR 11/22/2023 22:54:51'!
 tearDown
-
-	session commit.
-	session close.
+	customerSystem shutDown.
 	! !
 
 
-!ImportTest methodsFor: 'customer' stamp: 'HAW 5/22/2022 18:14:22'!
+!ImportTest methodsFor: 'customer' stamp: 'LR 11/22/2023 23:14:01'!
 customerWithIdentificationType: anIdType number: anIdNumber
 
-	^ (session
-		select: [ :aCustomer | aCustomer identificationType = anIdType and: [ aCustomer identificationNumber = anIdNumber ]]
-		ofType: Customer) anyOne! !
+	^(customerSystem selectCustomers: [ :aCustomer | 
+		aCustomer identificationType = anIdType and: [ aCustomer identificationNumber = anIdNumber ]
+	]) anyOne! !
 
 
 !ImportTest methodsFor: 'test data' stamp: 'HAW 5/22/2022 18:08:08'!
@@ -435,7 +426,7 @@ importAddressRegister: anAddressRegister
 	newAddress province: anAddressRegister sixth.
 	newCustomer addAddress: newAddress.! !
 
-!CustomerImporter methodsFor: 'evaluating' stamp: 'BR 11/20/2023 15:09:52'!
+!CustomerImporter methodsFor: 'evaluating' stamp: 'LR 11/22/2023 23:10:11'!
 importCustomerRegister: aCustomerRegister
 
  	self assertCustomerRegisterHas5Fields: aCustomerRegister.
@@ -444,7 +435,7 @@ importCustomerRegister: aCustomerRegister
 	newCustomer lastName: aCustomerRegister third.
 	newCustomer identificationType: aCustomerRegister fourth.
 	newCustomer identificationNumber: aCustomerRegister fifth.
-	session persist: newCustomer! !
+	session addCustomer: newCustomer! !
 
 !CustomerImporter methodsFor: 'evaluating' stamp: 'BR 11/19/2023 13:39:35'!
 readLine
@@ -516,6 +507,140 @@ missingCustomerForAddressErrorDescription
 valueFrom: aReadStream into: aSession
 
 	^(self from: aReadStream into: aSession) value! !
+
+
+!classDefinition: #CustomerSystem category: 'CustomerImporter'!
+Object subclass: #CustomerSystem
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!CustomerSystem methodsFor: 'as yet unclassified' stamp: 'LR 11/22/2023 23:22:24'!
+addCustomer: customerToAdd
+
+	self subclassResponsibility! !
+
+!CustomerSystem methodsFor: 'as yet unclassified' stamp: 'LR 11/22/2023 23:22:28'!
+selectAllCustomers
+
+	self subclassResponsibility! !
+
+!CustomerSystem methodsFor: 'as yet unclassified' stamp: 'LR 11/22/2023 23:22:35'!
+selectCustomers: condition
+
+	self subclassResponsibility! !
+
+!CustomerSystem methodsFor: 'as yet unclassified' stamp: 'LR 11/22/2023 23:22:50'!
+shutDown
+
+	self subclassResponsibility! !
+
+!CustomerSystem methodsFor: 'as yet unclassified' stamp: 'LR 11/22/2023 23:22:59'!
+start
+
+	self subclassResponsibility! !
+
+
+!classDefinition: #PersistentCustomerSystem category: 'CustomerImporter'!
+CustomerSystem subclass: #PersistentCustomerSystem
+	instanceVariableNames: 'session'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'LR 11/22/2023 22:52:39'!
+addCustomer: customerToAdd
+	session beginTransaction.
+	session persist: customerToAdd.
+	session commit.
+! !
+
+!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'LR 11/22/2023 23:17:29'!
+executeTransaction: transaction
+	session beginTransaction.
+	transaction value.
+	session commit.
+	! !
+
+!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'LR 11/22/2023 23:17:23'!
+selectAllCustomers
+	| customers |
+	self executeTransaction: [ customers := session selectAllOfType: Customer ].
+	^customers! !
+
+!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'LR 11/22/2023 23:20:58'!
+selectCustomers: condition
+	| customers |
+	self executeTransaction: [customers := session select: condition ofType: Customer.].
+	^customers! !
+
+!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'LR 11/22/2023 22:53:02'!
+shutDown
+	session close.! !
+
+!PersistentCustomerSystem methodsFor: 'as yet unclassified' stamp: 'LR 11/22/2023 23:19:16'!
+start
+	session := DataBaseSession for: (Array with: Address with: Customer).! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'PersistentCustomerSystem class' category: 'CustomerImporter'!
+PersistentCustomerSystem class
+	instanceVariableNames: ''!
+
+!PersistentCustomerSystem class methodsFor: 'as yet unclassified' stamp: 'LR 11/22/2023 23:20:22'!
+start
+	| customerSystem |
+	customerSystem := self new.
+	customerSystem start.
+	^customerSystem! !
+
+
+!classDefinition: #TransientCustomerSystem category: 'CustomerImporter'!
+CustomerSystem subclass: #TransientCustomerSystem
+	instanceVariableNames: 'session customers'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'LR 11/22/2023 23:24:10'!
+addCustomer: customerToAdd
+
+	customers add: customerToAdd! !
+
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'LR 11/22/2023 23:23:21'!
+initialize
+	customers := Bag new.! !
+
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'LR 11/22/2023 23:23:46'!
+selectAllCustomers
+
+	^customers! !
+
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'LR 11/22/2023 23:23:59'!
+selectCustomers: condition
+
+	^customers select: condition! !
+
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'LR 11/22/2023 23:23:34'!
+shutDown! !
+
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'LR 11/22/2023 23:23:30'!
+start! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TransientCustomerSystem class' category: 'CustomerImporter'!
+TransientCustomerSystem class
+	instanceVariableNames: ''!
+
+!TransientCustomerSystem class methodsFor: 'as yet unclassified' stamp: 'LR 11/22/2023 23:25:42'!
+start
+	| customerSystem |
+	customerSystem := self new.
+	customerSystem start.
+	^customerSystem! !
 
 
 !classDefinition: #DataBaseSession category: 'CustomerImporter'!
@@ -666,11 +791,3 @@ DataBaseSession class
 for: aConfiguration
 
 	^self new initializeFor: aConfiguration! !
-
-
-!classDefinition: #PersistentCustomerSystem category: 'CustomerImporter'!
-Object subclass: #PersistentCustomerSystem
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'CustomerImporter'!
