@@ -1,0 +1,2890 @@
+
+
+----QUIT----(13 August 2023 19:14:09) CuisUniversity-5981.image priorSource: 5713367!
+
+----STARTUP---- (13 August 2023 19:14:10) as /Users/hernan/Documents/Cuis/5.0-64Bits/Cuis-University-Installer/CuisUniversity-5981.image!
+
+
+----QUIT----(13 August 2023 19:14:10) CuisUniversity-5981.image priorSource: 10197065!
+
+----STARTUP---- (23 November 2023 17:29:28) as /home/clinux01/Descargas/linux64/linux64/CuisUniversity-5981.image!
+
+
+----End fileIn of /home/clinux01/Descargas/linux64/linux64/CustomerImporter-3.st----!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 18:16:26'!
+test01! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 18:16:55'!
+test01SingleSupplierIsImportedCorrectly! !
+
+self makeCurrent!
+!DevelopmentEnvironment class methodsFor: 'current' stamp: 'LR 11/23/2023 18:19:30' prior: 50651311 overrides: 50651259!
+isCurrent
+
+	"
+	self makeCurrent DevelopmentEnvironment .
+	"
+	^self environmentVariable = self identifier! !
+
+!testRun: #ImportTest #test01 stamp: 'LR 11/23/2023 18:19:30'!
+PASSED!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:19:30'!
+PASSED!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 18:19:30'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 18:19:30'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 18:19:30'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 18:19:30'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 18:19:30'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 18:19:30'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 18:19:30'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 18:19:30'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 18:19:30'!
+PASSED!
+!DevelopmentEnvironment class methodsFor: 'current' stamp: 'LR 11/23/2023 18:19:36' prior: 50651366 overrides: 50651259!
+isCurrent
+
+	"
+	self makeCurrent
+	"
+	^self environmentVariable = self identifier! !
+
+!methodRemoval: ImportTest #test01 stamp: 'LR 11/23/2023 18:20:37'!
+test01!
+
+!classDefinition: #SupplierImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:21:34'!
+CustomerImporter subclass: #SupplierImporter
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 18:21:18' prior: 50651360!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream |
+	SupplierImporter import: stream into: system.
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 18:24:49' prior: 50651427!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream |
+	stream := ReadStream on: 'S,Supplier1,D,123'.
+	SupplierImporter import: stream into: system.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	
+	
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 18:29:17' prior: 50651434!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream supplier |
+	stream := ReadStream on: 'S,Supplier1,D,123'.
+	SupplierImporter import: stream into: system.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	supplier := system selectSupplierIdentifiedAs: 'D' numbered: '123'.
+	self assert: (supplier isIdentifiedAs: 'D' withNumber: '123' withName: 'Supplier1').
+	self assert: supplier hasNoCustomers.
+	self assert: supplier hasNoAdresses.
+	
+	
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 18:30:37' prior: 50651444!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream supplier |
+	stream := ReadStream on: 'S,Supplier1,D,123'.
+	SupplierImporter valueFrom: stream into: system.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	supplier := system selectSupplierIdentifiedAs: 'D' numbered: '123'.
+	self assert: (supplier isIdentifiedAs: 'D' withNumber: '123' withName: 'Supplier1').
+	self assert: supplier hasNoCustomers.
+	self assert: supplier hasNoAdresses.
+	
+	
+	! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:31:13'!
+ERROR!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:31:13'!
+ERROR!
+!SupplierImporter methodsFor: 'evaluating - private' stamp: 'LR 11/23/2023 18:31:46' overrides: 50650859!
+importRecord
+
+	self assertRecordNotEmpty.
+
+	self isCustomerRecord ifTrue: [ ^self importCustomer ].
+	self isAddressRecord ifTrue: [ ^self importAddress ].
+
+	self error: self class invalidRecordTypeErrorDescription! !
+!CustomerImporter methodsFor: 'evaluating - private' stamp: 'LR 11/23/2023 18:31:46' prior: 50650859!
+importRecord
+
+	self subclassResponsibility! !
+!CustomerImporter methodsFor: 'evaluating - private' stamp: 'LR 11/23/2023 18:31:57' prior: 50651495!
+importRecord
+
+	self assertRecordNotEmpty.
+
+	self isCustomerRecord ifTrue: [ ^self importCustomer ].
+	self isAddressRecord ifTrue: [ ^self importAddress ].
+
+	self error: self class invalidRecordTypeErrorDescription! !
+
+!methodRemoval: SupplierImporter #importRecord stamp: 'LR 11/23/2023 18:31:57'!
+importRecord
+
+	self assertRecordNotEmpty.
+
+	self isCustomerRecord ifTrue: [ ^self importCustomer ].
+	self isAddressRecord ifTrue: [ ^self importAddress ].
+
+	self error: self class invalidRecordTypeErrorDescription!
+!SupplierImporter methodsFor: 'nil' stamp: 'LR 11/23/2023 18:32:20' overrides: 50651500!
+importRecord
+	! !
+
+!classDefinition: #Supplier category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:33:50'!
+Customer subclass: #Supplier
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 18:33:43' prior: 50651519 overrides: 50651500!
+importRecord
+
+	^Supplier withName: record second identificationType: record third identificationNumber: record fourth
+	! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:34:10'!
+ERROR!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 18:34:10'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 18:34:10'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 18:34:10'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 18:34:10'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 18:34:10'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 18:34:10'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 18:34:10'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 18:34:10'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 18:34:10'!
+PASSED!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:34:10'!
+ERROR!
+!Supplier class methodsFor: 'instance creation' stamp: 'LR 11/23/2023 18:34:24'!
+withName: aRenameMe1 identificationType: aRenameMe2 identificationNumber: aRenameMe3 
+	"DO NOT FORGET TO RENAME COLLABORATORS AND REMOVE THIS COMMENT!!!!"
+	self shouldBeImplemented.
+	^self new initializeWithName: aRenameMe1 identificationType: aRenameMe2 identificationNumber: aRenameMe3 ! !
+!Supplier class methodsFor: 'instance creation' stamp: 'LR 11/23/2023 18:34:52' prior: 50651576!
+withName: aName identificationType: anIdType identificationNumber: aRenameMe3 
+	^self new initializeWithName: aName identificationType: anIdType identificationNumber: aRenameMe3 ! !
+!Supplier class methodsFor: 'instance creation' stamp: 'LR 11/23/2023 18:34:55' prior: 50651589!
+withName: aName identificationType: anIdType identificationNumber: anIdNumber 
+	^self new initializeWithName: aName identificationType: anIdType identificationNumber: anIdNumber ! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:34:57'!
+ERROR!
+
+!classDefinition: #Supplier category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:35:07'!
+Customer subclass: #Supplier
+	instanceVariableNames: 'name'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #Supplier category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:35:07'!
+Customer subclass: #Supplier
+	instanceVariableNames: 'name idType'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #Supplier category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:35:07'!
+Customer subclass: #Supplier
+	instanceVariableNames: 'name idType idNumber'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!Supplier methodsFor: 'initialization' stamp: 'LR 11/23/2023 18:35:07'!
+initializeWithName: aName identificationType: anIdType identificationNumber: anIdNumber 
+	self shouldBeImplemented.
+	name := aName.
+	idType := anIdType.
+	idNumber := anIdNumber.! !
+!Supplier methodsFor: 'initialization' stamp: 'LR 11/23/2023 18:35:13' prior: 50651632!
+initializeWithName: aName identificationType: anIdType identificationNumber: anIdNumber 
+	name := aName.
+	idType := anIdType.
+	idNumber := anIdNumber.! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:35:15'!
+ERROR!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:35:43'!
+ERROR!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 18:35:43'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 18:35:43'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 18:35:43'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 18:35:43'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 18:35:43'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 18:35:43'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 18:35:43'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 18:35:43'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 18:35:43'!
+PASSED!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:35:43'!
+ERROR!
+!CustomerSystem methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:36:10'!
+numberOfSuppliers
+	self shouldBeImplemented.! !
+!CustomerSystem methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:36:28' prior: 50651690!
+numberOfSuppliers
+	self subclassResponsibility .! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:36:32'!
+ERROR!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 18:36:32'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 18:36:32'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 18:36:32'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 18:36:32'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 18:36:32'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 18:36:32'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 18:36:32'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 18:36:32'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 18:36:32'!
+PASSED!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:36:32'!
+ERROR!
+!TransientCustomerSystem methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:36:44' overrides: 50651695!
+numberOfSuppliers
+	self shouldBeImplemented.! !
+
+!classDefinition: #TransientCustomerSystem category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:36:58'!
+CustomerSystem subclass: #TransientCustomerSystem
+	instanceVariableNames: 'customers suppliers'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!TransientCustomerSystem methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:36:56' prior: 50651739 overrides: 50651695!
+numberOfSuppliers
+	^suppliers size! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:37:02'!
+ERROR!
+!TransientCustomerSystem methodsFor: 'system lifecycle' stamp: 'LR 11/23/2023 18:37:33' prior: 50651023 overrides: 50650944!
+start
+
+	customers := OrderedCollection new.
+	suppliers := OrderedCollection new.! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:37:48'!
+FAILURE!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 18:37:48'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 18:37:48'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 18:37:48'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 18:37:48'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 18:37:48'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 18:37:48'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 18:37:48'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 18:37:48'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 18:37:48'!
+PASSED!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:37:48'!
+FAILURE!
+!PersistentSet methodsFor: 'adding' stamp: 'LR 11/23/2023 18:39:12'!
+addCustomer: newObject
+
+	super add: newObject.
+	session persist: newObject.
+	
+	^newObject! !
+!CustomerSystem methodsFor: 'customers' stamp: 'LR 11/23/2023 18:39:12'!
+addCustomer: aCustomer
+
+	self subclassResponsibility ! !
+!PersistentCustomerSystem methodsFor: 'customers' stamp: 'LR 11/23/2023 18:39:12' overrides: 50651812!
+addCustomer: aCustomer
+
+	^session persist: aCustomer ! !
+!TransientCustomerSystem methodsFor: 'customers' stamp: 'LR 11/23/2023 18:39:12' overrides: 50651812!
+addCustomer: aCustomer
+
+	customers add: aCustomer ! !
+!PersistentSet methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 18:39:12' prior: 50650342 overrides: 16935667!
+add: newObject
+
+	super addCustomer: newObject.
+	session persist: newObject.
+	
+	^newObject! !
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 18:39:12' prior: 50651041 overrides: 50650922!
+add: aCustomer
+
+	customers addCustomer: aCustomer ! !
+!Customer methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 18:39:12' prior: 50650702!
+addAddress: anAddress
+
+	addresses addCustomer: anAddress ! !
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 18:39:12' prior: 50650794!
+importCustomer
+
+	self assertValidCustomerRecord.
+
+	newCustomer := Customer new.
+	newCustomer firstName: record second.
+	newCustomer lastName: record third.
+	newCustomer identificationType: record fourth.
+	newCustomer identificationNumber: record fifth.
+	system addCustomer: newCustomer! !
+!DataBaseSession methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 18:39:12' prior: 50651177!
+persist: anObject
+
+	| table |
+
+	self assertCanUseDatabase.
+	self assertTypeIsPersisted: anObject class.
+	self delay.
+	
+	table := self tableOfType: anObject class.
+	self defineIdOf: anObject.
+	table addCustomer: anObject.
+	self persistRelationsOf: anObject.
+! !
+!PersistentSet methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 18:39:12' prior: 50651806!
+addCustomer: newObject
+
+	super addCustomer: newObject.
+	session persist: newObject.
+	
+	^newObject! !
+!TransientCustomerSystem methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 18:39:12' prior: 50651822 overrides: 50651812!
+addCustomer: aCustomer
+
+	customers addCustomer: aCustomer ! !
+
+!methodRemoval: PersistentSet #add: stamp: 'LR 11/23/2023 18:39:12'!
+add: newObject
+
+	super addCustomer: newObject.
+	session persist: newObject.
+	
+	^newObject!
+
+!methodRemoval: CustomerSystem #add: stamp: 'LR 11/23/2023 18:39:12'!
+add: aCustomer
+
+	self subclassResponsibility !
+
+!methodRemoval: PersistentCustomerSystem #add: stamp: 'LR 11/23/2023 18:39:12'!
+add: aCustomer
+
+	^session persist: aCustomer !
+
+!methodRemoval: TransientCustomerSystem #add: stamp: 'LR 11/23/2023 18:39:12'!
+add: aCustomer
+
+	customers addCustomer: aCustomer !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:39:22'!
+FAILURE!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 18:39:22'!
+ERROR!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 18:39:22'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 18:39:22'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 18:39:22'!
+ERROR!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 18:39:22'!
+ERROR!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 18:39:22'!
+ERROR!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 18:39:22'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 18:39:22'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 18:39:22'!
+PASSED!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 18:39:50'!
+ERROR!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 18:39:50'!
+ERROR!
+!TransientCustomerSystem methodsFor: 'customers' stamp: 'LR 11/23/2023 18:40:02' prior: 50651879 overrides: 50651812!
+addCustomer: aCustomer
+
+	customers add: aCustomer ! !
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 18:40:05'!
+ERROR!
+!Customer methodsFor: 'addresses' stamp: 'LR 11/23/2023 18:40:23' prior: 50651840!
+addAddress: anAddress
+
+	addresses add: anAddress ! !
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 18:40:25'!
+PASSED!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:40:27'!
+FAILURE!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 18:40:27'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 18:40:27'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 18:40:27'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 18:40:27'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 18:40:27'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 18:40:27'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 18:40:27'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 18:40:27'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 18:40:27'!
+PASSED!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:40:27'!
+FAILURE!
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 18:40:44' prior: 50651531 overrides: 50651500!
+importRecord
+
+	^system addSupplier: (Supplier withName: record second identificationType: record third identificationNumber: record fourth)
+	! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:40:49'!
+ERROR!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 18:40:49'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 18:40:49'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 18:40:49'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 18:40:49'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 18:40:49'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 18:40:49'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 18:40:49'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 18:40:49'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 18:40:49'!
+PASSED!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:40:49'!
+ERROR!
+!TransientCustomerSystem methodsFor: 'updating' stamp: 'LR 11/23/2023 18:41:28'!
+addSupplier: aRenameMe1 
+	self shouldBeImplemented.! !
+!TransientCustomerSystem methodsFor: 'updating' stamp: 'LR 11/23/2023 18:41:41' prior: 50652045!
+addSupplier: aSupplier
+	suppliers add: aSupplier! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:41:42'!
+ERROR!
+!TransientCustomerSystem methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:42:26'!
+selectSupplierIdentifiedAs: aRenameMe1 numbered: aRenameMe2 
+	self shouldBeImplemented.! !
+!TransientCustomerSystem methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:43:57' prior: 50652058!
+selectSupplierIdentifiedAs: aRenameMe1 numbered: aRenameMe2 
+	^suppliers select: [ :supplier | supplier isIdentifiedAs: aRenameMe1 numbered: aRenameMe2 ]! !
+!TransientCustomerSystem methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:44:06' prior: 50652064!
+selectSupplierIdentifiedAs: anIdType numbered: aRenameMe2 
+	^suppliers select: [ :supplier | supplier isIdentifiedAs: anIdType numbered: aRenameMe2 ]! !
+!TransientCustomerSystem methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:44:10' prior: 50652072!
+selectSupplierIdentifiedAs: anIdType numbered: anIdNumber 
+	^suppliers select: [ :supplier | supplier isIdentifiedAs: anIdType numbered: anIdNumber ]! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:44:13'!
+ERROR!
+!Supplier methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:44:27'!
+isIdentifiedAs: anIdType numbered: anIdNumber 
+	self shouldBeImplemented.! !
+!Supplier methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:45:02' prior: 50652091!
+isIdentifiedAs: anIdType numbered: anIdNumber 
+	^identificationType = anIdType and: [ identificationNumber = anIdNumber ]! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:45:04'!
+ERROR!
+
+----End fileIn of /home/clinux01/Descargas/linux64/linux64/Packages/TerseGuide.pck.st----!
+!TransientCustomerSystem methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:46:41'!
+supplierWithIdentificationType: anIdType number: anIdNumber 
+	^suppliers select: [ :supplier | supplier isIdentifiedAs: anIdType numbered: anIdNumber ]! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 18:46:41' prior: 50651461!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream supplier |
+	stream := ReadStream on: 'S,Supplier1,D,123'.
+	SupplierImporter valueFrom: stream into: system.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	supplier := system supplierWithIdentificationType: 'D' number: '123'.
+	self assert: (supplier isIdentifiedAs: 'D' withNumber: '123' withName: 'Supplier1').
+	self assert: supplier hasNoCustomers.
+	self assert: supplier hasNoAdresses.
+	
+	
+	! !
+
+!methodRemoval: TransientCustomerSystem #selectSupplierIdentifiedAs:numbered: stamp: 'LR 11/23/2023 18:46:41'!
+selectSupplierIdentifiedAs: anIdType numbered: anIdNumber 
+	^suppliers select: [ :supplier | supplier isIdentifiedAs: anIdType numbered: anIdNumber ]!
+!TransientCustomerSystem methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:46:46' prior: 50655027!
+supplierWithIdentificationType: anIdType number: anIdNumber 
+	^suppliers detect: [ :supplier | supplier isIdentifiedAs: anIdType numbered: anIdNumber ]! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:46:48'!
+ERROR!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 18:46:48'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 18:46:48'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 18:46:48'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 18:46:48'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 18:46:48'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 18:46:48'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 18:46:48'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 18:46:48'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 18:46:48'!
+PASSED!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:46:48'!
+ERROR!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:47:22'!
+ERROR!
+
+suppliers!
+
+identificationType = anIdType!
+
+identificationType!
+
+Customer subclass: #Supplier
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #Supplier category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:49:53'!
+Customer subclass: #Supplier
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!Supplier methodsFor: 'initialization' stamp: 'LR 11/23/2023 18:50:07' prior: 50651641!
+initializeWithName: aName identificationType: anIdType identificationNumber: anIdNumber 
+	firstName := aName.
+	identificationType := anIdType.
+	identificationNumber := anIdNumber.! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:50:14'!
+ERROR!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 18:50:14'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 18:50:14'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 18:50:14'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 18:50:14'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 18:50:14'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 18:50:14'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 18:50:14'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 18:50:14'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 18:50:14'!
+PASSED!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:50:14'!
+ERROR!
+!Supplier methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:50:26'!
+isIdentifiedAs: aRenameMe1 withNumber: aRenameMe2 withName: aRenameMe3 
+	self shouldBeImplemented.! !
+!Supplier methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:51:17' prior: 50655171!
+isIdentifiedAs: aRenameMe1 withNumber: aRenameMe2 withName: aRenameMe3 
+	^identificationType = aRenameMe1 and: [
+		identificationNumber = aRenameMe2 and: [
+			firstName = aRenameMe3
+		]
+	]! !
+!Supplier methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:51:27' prior: 50655177!
+isIdentifiedAs: anIdType withNumber: aRenameMe2 withName: aRenameMe3 
+	^identificationType = anIdType and: [
+		identificationNumber = aRenameMe2 and: [
+			firstName = aRenameMe3
+		]
+	]! !
+!Supplier methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:51:31' prior: 50655186!
+isIdentifiedAs: anIdType withNumber: anIdNumber withName: aRenameMe3 
+	^identificationType = anIdType and: [
+		identificationNumber = anIdNumber and: [
+			firstName = aRenameMe3
+		]
+	]! !
+!Supplier methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:51:35' prior: 50655195!
+isIdentifiedAs: anIdType withNumber: anIdNumber withName: aName 
+	^identificationType = anIdType and: [
+		identificationNumber = anIdNumber and: [
+			firstName = aName
+		]
+	]! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:51:37'!
+ERROR!
+!Supplier methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:51:46'!
+hasNoCustomers
+	self shouldBeImplemented.! !
+!Supplier methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:51:52' prior: 50655215!
+hasNoCustomers
+	^true! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:51:57'!
+ERROR!
+!Supplier methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:52:05'!
+hasNoAdresses
+	self shouldBeImplemented.! !
+!Supplier methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:52:10' prior: 50655227!
+hasNoAdresses
+	^true! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:52:11'!
+PASSED!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:52:19'!
+PASSED!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 18:52:19'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 18:52:19'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 18:52:19'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 18:52:19'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 18:52:19'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 18:52:19'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 18:52:19'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 18:52:19'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 18:52:19'!
+PASSED!
+
+#CSVImporter subclass: #CustomerImporter
+	instanceVariableNames: 'readStream newCustomer line record system'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+Object subclass: #CSVImporter
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #CSVImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:53:06'!
+Object subclass: #CSVImporter
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+CSVImporter subclass: #CustomerImporter
+	instanceVariableNames: 'readStream newCustomer line record system'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #CustomerImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:53:16'!
+CSVImporter subclass: #CustomerImporter
+	instanceVariableNames: 'readStream newCustomer line record system'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #CustomerImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:53:26'!
+CSVImporter subclass: #CustomerImporter
+	instanceVariableNames: 'newCustomer line record system'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #CSVImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:53:26'!
+Object subclass: #CSVImporter
+	instanceVariableNames: 'readStream'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #CustomerImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:53:37'!
+CSVImporter subclass: #CustomerImporter
+	instanceVariableNames: 'newCustomer record system'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #CSVImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:53:37'!
+Object subclass: #CSVImporter
+	instanceVariableNames: 'readStream line'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #CustomerImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:53:42'!
+CSVImporter subclass: #CustomerImporter
+	instanceVariableNames: 'newCustomer system'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #CSVImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:53:42'!
+Object subclass: #CSVImporter
+	instanceVariableNames: 'readStream line record'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #CustomerImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:53:47'!
+CSVImporter subclass: #CustomerImporter
+	instanceVariableNames: 'system'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #CSVImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:53:47'!
+Object subclass: #CSVImporter
+	instanceVariableNames: 'readStream line record newCustomer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #CustomerImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:53:54'!
+CSVImporter subclass: #CustomerImporter
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #CSVImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:53:54'!
+Object subclass: #CSVImporter
+	instanceVariableNames: 'readStream line record newCustomer system'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #CSVImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:54:04'!
+Object subclass: #CSVImporter
+	instanceVariableNames: 'readStream line record system'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #CustomerImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:54:04'!
+CSVImporter subclass: #CustomerImporter
+	instanceVariableNames: 'newCustomer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!CSVImporter methodsFor: 'initialization' stamp: 'LR 11/23/2023 18:54:24'!
+initializeFrom: aReadStream into: aCustomerSystem
+
+	readStream := aReadStream.
+	system := aCustomerSystem ! !
+
+!methodRemoval: CustomerImporter #initializeFrom:into: stamp: 'LR 11/23/2023 18:54:24'!
+initializeFrom: aReadStream into: aCustomerSystem
+
+	readStream := aReadStream.
+	system := aCustomerSystem !
+!CSVImporter methodsFor: 'evaluating' stamp: 'LR 11/23/2023 18:54:34' overrides: 16902254!
+value
+
+	[ self hasLineToImport ] whileTrue: [
+		self createRecord.
+		self importRecord ].
+
+	! !
+
+!methodRemoval: CustomerImporter #value stamp: 'LR 11/23/2023 18:54:35'!
+value
+
+	[ self hasLineToImport ] whileTrue: [
+		self createRecord.
+		self importRecord ].
+
+	!
+!CSVImporter methodsFor: 'evaluating - private' stamp: 'LR 11/23/2023 18:54:47'!
+assertRecordNotEmpty
+
+	record isEmpty ifTrue: [ self error: self class invalidRecordTypeErrorDescription ]! !
+
+!methodRemoval: CustomerImporter #assertRecordNotEmpty stamp: 'LR 11/23/2023 18:54:47'!
+assertRecordNotEmpty
+
+	record isEmpty ifTrue: [ self error: self class invalidRecordTypeErrorDescription ]!
+!CSVImporter methodsFor: 'evaluating - private' stamp: 'LR 11/23/2023 18:54:50'!
+createRecord
+
+	^ record := line findTokens: $,! !
+
+!methodRemoval: CustomerImporter #createRecord stamp: 'LR 11/23/2023 18:54:50'!
+createRecord
+
+	^ record := line findTokens: $,!
+!CSVImporter methodsFor: 'evaluating - private' stamp: 'LR 11/23/2023 18:54:53'!
+hasLineToImport
+
+	line := readStream nextLine.
+	^line notNil! !
+
+!methodRemoval: CustomerImporter #hasLineToImport stamp: 'LR 11/23/2023 18:54:53'!
+hasLineToImport
+
+	line := readStream nextLine.
+	^line notNil!
+!CSVImporter methodsFor: 'evaluating - private' stamp: 'LR 11/23/2023 18:54:59'!
+importRecord
+
+	self subclassResponsibility! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:55:03'!
+PASSED!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 18:55:03'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 18:55:03'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 18:55:03'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 18:55:03'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 18:55:03'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 18:55:03'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 18:55:03'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 18:55:03'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 18:55:03'!
+PASSED!
+
+CSVImporter subclass: #SupplierImporter
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #SupplierImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:55:17'!
+CSVImporter subclass: #SupplierImporter
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:55:20'!
+ERROR!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 18:55:20'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 18:55:20'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 18:55:20'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 18:55:20'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 18:55:20'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 18:55:20'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 18:55:20'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 18:55:20'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 18:55:20'!
+PASSED!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:55:20'!
+ERROR!
+!CSVImporter class methodsFor: 'instance creation' stamp: 'LR 11/23/2023 18:55:35'!
+from: aReadStream into: aCustomerSystem
+
+	^self new initializeFrom: aReadStream into: aCustomerSystem! !
+
+!methodRemoval: CustomerImporter class #from:into: stamp: 'LR 11/23/2023 18:55:35'!
+from: aReadStream into: aCustomerSystem
+
+	^self new initializeFrom: aReadStream into: aCustomerSystem!
+!CSVImporter class methodsFor: 'error messages' stamp: 'LR 11/23/2023 18:55:44'!
+invalidRecordTypeErrorDescription
+
+	^'Invalid record type'! !
+
+!methodRemoval: CustomerImporter class #invalidRecordTypeErrorDescription stamp: 'LR 11/23/2023 18:55:44'!
+invalidRecordTypeErrorDescription
+
+	^'Invalid record type'!
+!CSVImporter class methodsFor: 'importing' stamp: 'LR 11/23/2023 18:55:49'!
+valueFrom: aReadStream into: aCustomerSystem
+
+	^(self from: aReadStream into: aCustomerSystem) value! !
+
+!methodRemoval: CustomerImporter class #valueFrom:into: stamp: 'LR 11/23/2023 18:55:49'!
+valueFrom: aReadStream into: aCustomerSystem
+
+	^(self from: aReadStream into: aCustomerSystem) value!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:55:51'!
+PASSED!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 18:55:51'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 18:55:51'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 18:55:51'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 18:55:51'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 18:55:51'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 18:55:51'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 18:55:51'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 18:55:51'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 18:55:51'!
+PASSED!
+
+Object subclass: #Party
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #Party category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:56:28'!
+Object subclass: #Party
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+Party subclass: #Customer
+	instanceVariableNames: 'id firstName lastName identificationType identificationNumber addresses'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #Customer category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:56:35'!
+Party subclass: #Customer
+	instanceVariableNames: 'id firstName lastName identificationType identificationNumber addresses'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+Party subclass: #Customer
+	instanceVariableNames: 'firstName lastName identificationType identificationNumber addresses'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #Customer category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:57:17'!
+Party subclass: #Customer
+	instanceVariableNames: 'firstName lastName identificationType identificationNumber addresses'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:57:20'!
+PASSED!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 18:57:20'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 18:57:20'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 18:57:20'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 18:57:20'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 18:57:20'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 18:57:20'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 18:57:20'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 18:57:20'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 18:57:20'!
+PASSED!
+
+!classDefinition: #Customer category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:58:39'!
+Party subclass: #Customer
+	instanceVariableNames: 'firstName lastName identificationNumber addresses'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #Party category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:58:39'!
+Object subclass: #Party
+	instanceVariableNames: 'identificationType'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #Customer category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:58:43'!
+Party subclass: #Customer
+	instanceVariableNames: 'firstName lastName addresses'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #Party category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:58:44'!
+Object subclass: #Party
+	instanceVariableNames: 'identificationType identificationNumber'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #Customer category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:58:49'!
+Party subclass: #Customer
+	instanceVariableNames: 'firstName lastName'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #Party category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:58:49'!
+Object subclass: #Party
+	instanceVariableNames: 'identificationType identificationNumber addresses'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #Customer category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:58:55'!
+Party subclass: #Customer
+	instanceVariableNames: 'lastName'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #Party category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:58:55'!
+Object subclass: #Party
+	instanceVariableNames: 'identificationType identificationNumber addresses firstName'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+Party subclass: #Supplier
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #Supplier category: 'CustomerImporter' stamp: 'LR 11/23/2023 18:59:03'!
+Party subclass: #Supplier
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!Party methodsFor: 'addresses' stamp: 'LR 11/23/2023 18:59:23'!
+isAddressesEmpty
+
+	^addresses isEmpty ! !
+
+!methodRemoval: Customer #isAddressesEmpty stamp: 'LR 11/23/2023 18:59:23'!
+isAddressesEmpty
+
+	^addresses isEmpty !
+
+!methodRemoval: Supplier #hasNoAdresses stamp: 'LR 11/23/2023 18:59:30'!
+hasNoAdresses
+	^true!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:59:41'!
+ERROR!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 18:59:41'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 18:59:41'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 18:59:41'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 18:59:41'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 18:59:41'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 18:59:41'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 18:59:41'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 18:59:41'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 18:59:41'!
+PASSED!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 18:59:41'!
+ERROR!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 18:59:52' prior: 50655035!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream supplier |
+	stream := ReadStream on: 'S,Supplier1,D,123'.
+	SupplierImporter valueFrom: stream into: system.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	supplier := system supplierWithIdentificationType: 'D' number: '123'.
+	self assert: (supplier isIdentifiedAs: 'D' withNumber: '123' withName: 'Supplier1').
+	self assert: supplier hasNoCustomers.
+	self assert: supplier isAddressesEmpty.
+	
+	
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 19:00:01' prior: 50655816!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream supplier |
+	stream := ReadStream on: 'S,Supplier1,D,123'.
+	SupplierImporter valueFrom: stream into: system.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	supplier := system supplierWithIdentificationType: 'D' number: '123'.
+	self assert: (supplier isIdentifiedAs: 'D' withNumber: '123' withName: 'Supplier1').
+	self assert: supplier hasNoCustomers.
+	self assert: supplier isAddressesEmpty.
+	
+	
+	! !
+!Supplier methodsFor: 'evaluating' stamp: 'LR 11/23/2023 19:00:09'!
+isCustomersEmpty
+	^true! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 19:00:09' prior: 50655834!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream supplier |
+	stream := ReadStream on: 'S,Supplier1,D,123'.
+	SupplierImporter valueFrom: stream into: system.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	supplier := system supplierWithIdentificationType: 'D' number: '123'.
+	self assert: (supplier isIdentifiedAs: 'D' withNumber: '123' withName: 'Supplier1').
+	self assert: supplier isCustomersEmpty.
+	self assert: supplier isAddressesEmpty.
+	
+	
+	! !
+
+!methodRemoval: Supplier #hasNoCustomers stamp: 'LR 11/23/2023 19:00:10'!
+hasNoCustomers
+	^true!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 19:00:13'!
+ERROR!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 19:00:13'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 19:00:13'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 19:00:13'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 19:00:13'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 19:00:13'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 19:00:13'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 19:00:13'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 19:00:13'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 19:00:13'!
+PASSED!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 19:00:13'!
+ERROR!
+!Party methodsFor: 'initialization' stamp: 'LR 11/23/2023 19:00:32' overrides: 16920235!
+initialize
+
+	super initialize.
+	addresses := OrderedCollection new.! !
+
+!methodRemoval: Customer #initialize stamp: 'LR 11/23/2023 19:00:32'!
+initialize
+
+	super initialize.
+	addresses := OrderedCollection new.!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 19:00:35'!
+PASSED!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 19:00:35'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 19:00:35'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 19:00:35'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 19:00:35'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 19:00:35'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 19:00:35'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 19:00:35'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 19:00:35'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 19:00:35'!
+PASSED!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 19:04:10'!
+test02FailsWithEmptyLine
+
+	| stream |
+	stream := ReadStream on: '
+	'.
+	self should: [SupplierImporter valueFrom: stream into: system.] 
+	
+	
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 19:04:34' prior: 50655959!
+test02FailsWithEmptyLine
+
+	| stream |
+	stream := ReadStream on: '
+	'.
+	self should: [
+		SupplierImporter valueFrom: stream into: system.
+		]
+		 
+	
+	
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 19:05:14' prior: 50655967!
+test02FailsWithEmptyLine
+
+	| stream |
+	stream := ReadStream on: '
+	'.
+	self should: [
+		SupplierImporter valueFrom: stream into: system.
+		]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: self! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 19:06:14' prior: 50655975!
+test02FailsWithEmptyLine
+
+	| stream |
+	stream := ReadStream on: '
+	'.
+	self should: [
+		SupplierImporter valueFrom: stream into: system.
+		]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: SupplierImporter invalidRecordTypeErrorDescription! !
+
+!testRun: #ImportTest #test02FailsWithEmptyLine stamp: 'LR 11/23/2023 19:06:21'!
+FAILURE!
+
+!testRun: #ImportTest #test02FailsWithEmptyLine stamp: 'LR 11/23/2023 19:06:21'!
+FAILURE!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 19:07:56' prior: 50655985!
+test02FailsWithEmptyLine
+
+	| stream |
+	stream := ReadStream on: '
+	'.
+	self should: [
+		SupplierImporter valueFrom: stream into: system.
+		]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: [:error | self assert: error equals: SupplierImporter invalidRecordTypeErrorDescription]! !
+
+!testRun: #ImportTest #test02FailsWithEmptyLine stamp: 'LR 11/23/2023 19:07:59'!
+ERROR!
+
+!testRun: #ImportTest #test02FailsWithEmptyLine stamp: 'LR 11/23/2023 19:07:59'!
+ERROR!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 19:08:28' prior: 50656002!
+test02FailsWithEmptyLine
+
+	| stream |
+	stream := ReadStream on: '
+	'.
+	self should: [
+		SupplierImporter valueFrom: stream into: system.
+		]
+		 raise: Error - MessageNotUnderstood
+		 withExceptionDo: [:error | self assert: error equals: SupplierImporter invalidRecordTypeErrorDescription]! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 19:08:34' prior: 50656020!
+test02FailsWithEmptyLine
+
+	| stream |
+	stream := ReadStream on: '
+	'.
+	self should: [
+		SupplierImporter valueFrom: stream into: system.
+		]
+		 raise: Error - MessageNotUnderstood
+		 withExceptionDo: [:error | self assert: error messageText equals: SupplierImporter invalidRecordTypeErrorDescription]! !
+
+!testRun: #ImportTest #test02FailsWithEmptyLine stamp: 'LR 11/23/2023 19:08:37'!
+FAILURE!
+
+!testRun: #ImportTest #test02FailsWithEmptyLine stamp: 'LR 11/23/2023 19:08:37'!
+FAILURE!
+
+!testRun: #ImportTest #test02FailsWithEmptyLine stamp: 'LR 11/23/2023 19:09:44'!
+FAILURE!
+
+!testRun: #ImportTest #test02FailsWithEmptyLine stamp: 'LR 11/23/2023 19:09:53'!
+FAILURE!
+
+!testRun: #ImportTest #test02FailsWithEmptyLine stamp: 'LR 11/23/2023 19:09:53'!
+FAILURE!
+
+record!
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 19:14:32' prior: 50651999 overrides: 50655457!
+importRecord
+
+	self assertRecordNotEmpty.
+	
+	^system addSupplier: (Supplier withName: record second identificationType: record third identificationNumber: record fourth)
+	! !
+
+!testRun: #ImportTest #test02FailsWithEmptyLine stamp: 'LR 11/23/2023 19:14:37'!
+PASSED!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 19:16:25' prior: 50655855!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream supplier |
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs'.
+	SupplierImporter valueFrom: stream into: system.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	supplier := system supplierWithIdentificationType: 'D' number: '123'.
+	self assert: (supplier isIdentifiedAs: 'D' withNumber: '123' withName: 'Supplier1').
+	self assert: supplier isCustomersEmpty.
+	self assert: supplier isAddressesEmpty.
+	
+	
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 19:17:56' prior: 50656072!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream supplier |
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs'.
+	SupplierImporter valueFrom: stream into: system.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	supplier := system supplierWithIdentificationType: 'D' number: '123'.
+	self assert: (supplier isIdentifiedAs: 'D' withNumber: '123' withName: 'Supplier1').
+	self assert: supplier isCustomersEmpty.
+	
+	
+	
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 19:20:46' prior: 50656091!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream supplier |
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs'.
+	SupplierImporter valueFrom: stream into: system.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	supplier := system supplierWithIdentificationType: 'D' number: '123'.
+	self assert: (supplier isIdentifiedAs: 'D' withNumber: '123' withName: 'Supplier1').
+	self assert: supplier isCustomersEmpty.
+	self assertAddressOf: supplier at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'
+	
+	
+	! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 19:20:51'!
+FAILURE!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 19:20:51'!
+FAILURE!
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 19:22:30' prior: 50656060 overrides: 50655457!
+importRecord
+
+	self assertRecordNotEmpty.
+	
+	record first = 'S' ifTrue: [^system addSupplier: (Supplier withName: record second identificationType: record third identificationNumber: record fourth)].
+	record first = 'A' ifTrue: [ ^self. ]
+	! !
+
+!classDefinition: #SupplierImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 19:24:26'!
+CSVImporter subclass: #SupplierImporter
+	instanceVariableNames: 'newSupplier'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 19:24:20'!
+importAddress
+
+	| newAddress |
+
+
+	newAddress := Address new.
+	newSupplier addAddress: newAddress.
+	newAddress streetName: record second.
+	newAddress streetNumber: record third asNumber .
+	newAddress town: record fourth.
+	newAddress zipCode: record fifth asNumber .
+	newAddress province: record sixth! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 19:27:49' prior: 50656138 overrides: 50655457!
+importRecord
+
+	self assertRecordNotEmpty.
+	
+	record first = 'S' ifTrue: [
+		|supplier|
+		supplier := Supplier withName: record second identificationType: record third identificationNumber: record fourth.
+		^system addSupplier: supplier].
+	record first = 'A' ifTrue: [ ^self. ]
+	! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 19:30:43' prior: 50656171 overrides: 50655457!
+importRecord
+
+	self assertRecordNotEmpty.
+	
+	record first = 'S' ifTrue: [
+		|supplier|
+		supplier := Supplier withName: record second identificationType: record third identificationNumber: record fourth.
+		system addSupplier: supplier].
+	record first = 'A' ifTrue: [ ^self. ]
+	! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 19:31:01'!
+importSupplier
+
+	|supplier|
+		supplier := Supplier withName: record second identificationType: record third identificationNumber: record fourth.
+		system addSupplier: supplier! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 19:31:01' prior: 50656184 overrides: 50655457!
+importRecord
+
+	self assertRecordNotEmpty.
+	
+	record first = 'S' ifTrue: [
+		self importSupplier].
+	record first = 'A' ifTrue: [ ^self. ]
+	! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 19:31:07' prior: 50656206 overrides: 50655457!
+importRecord
+
+	self assertRecordNotEmpty.
+	
+	record first = 'S' ifTrue: [self importSupplier].
+	record first = 'A' ifTrue: [ ^self. ]
+	! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 19:31:12' prior: 50656215 overrides: 50655457!
+importRecord
+
+	self assertRecordNotEmpty.
+	
+	record first = 'S' ifTrue: [^self importSupplier].
+	record first = 'A' ifTrue: [ ^self. ]
+	! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 19:31:23' prior: 50656196!
+importSupplier
+
+	|supplier|
+	supplier := Supplier withName: record second identificationType: record third identificationNumber: record fourth.
+	system addSupplier: supplier! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 19:31:37' prior: 50656224 overrides: 50655457!
+importRecord
+
+	self assertRecordNotEmpty.
+	
+	record first = 'S' ifTrue: [^self importSupplier].
+	record first = 'A' ifTrue: [ ^self importAddress.]
+	! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 19:50:42' prior: 50656242 overrides: 50655457!
+importRecord
+
+	self assertRecordNotEmpty.
+	
+	record first = 'S' ifTrue: [^self importSupplier].
+	record first = 'A' ifTrue: [^self importAddress.]
+	! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 19:51:29'!
+ERROR!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 19:51:29'!
+ERROR!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 19:52:10'!
+ERROR!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 19:52:10'!
+ERROR!
+!Supplier methodsFor: 'evaluating' stamp: 'LR 11/23/2023 19:52:48'!
+addAddress: anAddress
+
+	addresses add: anAddress ! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 19:53:04'!
+ERROR!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 19:53:04'!
+ERROR!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 19:53:09'!
+ERROR!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 19:53:09'!
+ERROR!
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 19:53:42' prior: 50656232!
+importSupplier
+
+	newSupplier := Supplier withName: record second identificationType: record third identificationNumber: record fourth.
+	system addSupplier: newSupplier! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 19:53:50'!
+ERROR!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 19:53:50'!
+ERROR!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 19:54:16'!
+ERROR!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 19:54:16'!
+ERROR!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 19:55:30' prior: 50650471!
+assertAddressOf: aSupplier at: aStreetName hasNumber: aStreetNumber town: aTown zipCode: aZipCode province: aProvinceName
+	
+	
+	
+	! !
+!ImportTest methodsFor: 'assertions' stamp: 'HAW 5/22/2022 18:22:05' prior: 50656311!
+assertAddressOf: importedCustomer at: aStreetName hasNumber: aNumber town: aTown zipCode: aZipCode province: aProvince
+
+	| importedAddress |
+
+	importedAddress := importedCustomer addressAt: aStreetName ifNone: [ self fail ].
+	self assert: aStreetName equals: importedAddress streetName.
+	self assert: aNumber equals: importedAddress streetNumber.
+	self assert: aTown equals: importedAddress town.
+	self assert: aZipCode equals: importedAddress zipCode.
+	self assert: aProvince equals: importedAddress province.
+
+	! !
+!Supplier methodsFor: 'evaluating' stamp: 'LR 11/23/2023 19:58:34'!
+addressAt: aStreetName ifNone: aNoneBlock
+
+	^addresses detect: [ :address | address isAt: aStreetName ] ifNone: aNoneBlock ! !
+!Party methodsFor: 'evaluating' stamp: 'LR 11/23/2023 19:58:46'!
+addressAt: aStreetName ifNone: aNoneBlock
+
+	^addresses detect: [ :address | address isAt: aStreetName ] ifNone: aNoneBlock ! !
+
+!methodRemoval: Supplier #addressAt:ifNone: stamp: 'LR 11/23/2023 19:58:46'!
+addressAt: aStreetName ifNone: aNoneBlock
+
+	^addresses detect: [ :address | address isAt: aStreetName ] ifNone: aNoneBlock !
+
+!methodRemoval: Customer #addressAt:ifNone: stamp: 'LR 11/23/2023 19:58:46'!
+addressAt: aStreetName ifNone: aNoneBlock
+
+	^addresses detect: [ :address | address isAt: aStreetName ] ifNone: aNoneBlock !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 19:59:13'!
+PASSED!
+
+CSVImporter subclass: #AddressImporter
+	instanceVariableNames: 'readStream line record system'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+CSVImporter subclass: #AddressImporter
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #AddressImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 20:02:09'!
+CSVImporter subclass: #AddressImporter
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+AddressImporter subclass: #CustomerImporter
+	instanceVariableNames: 'newCustomer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #CustomerImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 20:02:20'!
+AddressImporter subclass: #CustomerImporter
+	instanceVariableNames: 'newCustomer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+CSVImporter subclass: #CustomerImporter
+	instanceVariableNames: 'newCustomer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #CustomerImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 20:02:43'!
+CSVImporter subclass: #CustomerImporter
+	instanceVariableNames: 'newCustomer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classRemoval: #AddressImporter stamp: 'LR 11/23/2023 20:03:25'!
+CSVImporter subclass: #AddressImporter
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #AddressImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 20:06:38'!
+Object subclass: #AddressImporter
+	instanceVariableNames: 'record importer party'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!AddressImporter class methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:06:38'!
+for: aCsvImporter party: aNewParty record: aRecord
+	^self new initializeFor: aCsvImporter party: aNewParty record: aRecord! !
+!AddressImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:06:38'!
+initializeFor: aCsvImporter party: aNewParty record: aRecord
+	record := aRecord.
+	importer := aCsvImporter.
+	party := aNewParty.! !
+!AddressImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:06:38'!
+import
+
+	| newAddress |
+
+	importer assertCustomerWasImported.
+	importer assertValidAddressRecord.
+
+	newAddress := Address new.
+	party addAddress: newAddress.
+	newAddress streetName: record second.
+	newAddress streetNumber: record third asNumber .
+	newAddress town: record fourth.
+	newAddress zipCode: record fifth asNumber .
+	newAddress province: record sixth! !
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:06:38' prior: 50650824!
+importAddress
+	(AddressImporter for: self party: newCustomer record: record) import! !
+!CustomerImporter methodsFor: 'address' stamp: 'LR 11/23/2023 20:10:03' prior: 50656453!
+importAddress
+	| addressImporter |
+	addressImporter := AddressImporter for: self party: newCustomer record: record.
+	(addressImporter) import! !
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:10:18' prior: 50656459!
+importAddress
+	 
+	addressImporter := AddressImporter for: self party: newCustomer record: record.
+	(addressImporter) import! !
+
+!classDefinition: #CustomerImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 20:10:18'!
+CSVImporter subclass: #CustomerImporter
+	instanceVariableNames: 'newCustomer addressImporter'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!CustomerImporter methodsFor: 'address' stamp: 'LR 11/23/2023 20:10:51' prior: 50656467!
+importAddress
+	addressImporter importFor: self party: newCustomer record: record! !
+
+!methodRemoval: AddressImporter #initializeFor:party:record: stamp: 'LR 11/23/2023 20:11:12'!
+initializeFor: aCsvImporter party: aNewParty record: aRecord
+	record := aRecord.
+	importer := aCsvImporter.
+	party := aNewParty.!
+!AddressImporter methodsFor: 'evaluating' stamp: 'LR 11/23/2023 20:11:41'!
+importFor: anImporter party: aParty record: aRecord
+
+	| newAddress |
+
+	importer assertCustomerWasImported.
+	importer assertValidAddressRecord.
+
+	newAddress := Address new.
+	party addAddress: newAddress.
+	newAddress streetName: record second.
+	newAddress streetNumber: record third asNumber .
+	newAddress town: record fourth.
+	newAddress zipCode: record fifth asNumber .
+	newAddress province: record sixth! !
+
+Object subclass: #AddressImporter
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #AddressImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 20:11:47'!
+Object subclass: #AddressImporter
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!AddressImporter methodsFor: 'evaluating' stamp: 'LR 11/23/2023 20:12:16' prior: 50656495!
+importFor: anImporter party: aParty record: aRecord
+
+	| newAddress |
+
+	anImporter assertCustomerWasImported.
+	anImporter assertValidAddressRecord.
+
+	newAddress := Address new.
+	aParty addAddress: newAddress.
+	newAddress streetName: aRecord second.
+	newAddress streetNumber: aRecord third asNumber .
+	newAddress town: aRecord fourth.
+	newAddress zipCode: aRecord fifth asNumber .
+	newAddress province: aRecord sixth! !
+
+!methodRemoval: AddressImporter #import stamp: 'LR 11/23/2023 20:12:18'!
+import
+
+	| newAddress |
+
+	importer assertCustomerWasImported.
+	importer assertValidAddressRecord.
+
+	newAddress := Address new.
+	party addAddress: newAddress.
+	newAddress streetName: record second.
+	newAddress streetNumber: record third asNumber .
+	newAddress town: record fourth.
+	newAddress zipCode: record fifth asNumber .
+	newAddress province: record sixth!
+!AddressImporter methodsFor: 'evaluating' stamp: 'LR 11/23/2023 20:21:39'!
+importParty: aParty from: aRecord
+
+	| newAddress |
+
+	newAddress := Address new.
+	aParty addAddress: newAddress.
+	newAddress streetName: aRecord second.
+	newAddress streetNumber: aRecord third asNumber .
+	newAddress town: aRecord fourth.
+	newAddress zipCode: aRecord fifth asNumber .
+	newAddress province: aRecord sixth! !
+!CustomerImporter methodsFor: 'address' stamp: 'LR 11/23/2023 20:22:09' prior: 50656483!
+importAddress
+	
+	self assertCustomerWasImported.
+	addressImporter importParty: newCustomer from: record! !
+!AddressImporter methodsFor: 'evaluating' stamp: 'LR 11/23/2023 20:22:20' prior: 50656552!
+importParty: aParty from: aRecord
+
+	| newAddress |
+
+	self assertValidAddressRecord.
+	newAddress := Address new.
+	aParty addAddress: newAddress.
+	newAddress streetName: aRecord second.
+	newAddress streetNumber: aRecord third asNumber .
+	newAddress town: aRecord fourth.
+	newAddress zipCode: aRecord fifth asNumber .
+	newAddress province: aRecord sixth! !
+
+!methodRemoval: AddressImporter #importFor:party:record: stamp: 'LR 11/23/2023 20:22:23'!
+importFor: anImporter party: aParty record: aRecord
+
+	| newAddress |
+
+	anImporter assertCustomerWasImported.
+	anImporter assertValidAddressRecord.
+
+	newAddress := Address new.
+	aParty addAddress: newAddress.
+	newAddress streetName: aRecord second.
+	newAddress streetNumber: aRecord third asNumber .
+	newAddress town: aRecord fourth.
+	newAddress zipCode: aRecord fifth asNumber .
+	newAddress province: aRecord sixth!
+
+!methodRemoval: CustomerImporter #assertValidAddressRecord stamp: 'LR 11/23/2023 20:22:41'!
+assertValidAddressRecord
+
+	^ record size ~= 6 ifTrue: [ self error: self class invalidAddressRecordErrorDescription ]!
+
+!classDefinition: #AddressImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 20:22:49'!
+Object subclass: #AddressImporter
+	instanceVariableNames: 'record'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!AddressImporter methodsFor: 'evaluating' stamp: 'LR 11/23/2023 20:22:46'!
+assertValidAddressRecord
+
+	^ record size ~= 6 ifTrue: [ self error: self class invalidAddressRecordErrorDescription ]! !
+!AddressImporter methodsFor: 'evaluating' stamp: 'LR 11/23/2023 20:23:59' prior: 50656572!
+importParty: aParty from: aRecord
+
+	| newAddress |
+
+	self assertValidAddressRecord: aRecord.
+	newAddress := Address new.
+	aParty addAddress: newAddress.
+	newAddress streetName: aRecord second.
+	newAddress streetNumber: aRecord third asNumber .
+	newAddress town: aRecord fourth.
+	newAddress zipCode: aRecord fifth asNumber .
+	newAddress province: aRecord sixth! !
+!AddressImporter methodsFor: 'evaluating' stamp: 'LR 11/23/2023 20:24:12'!
+assertValidAddressRecord: aRecord
+
+	^ aRecord size ~= 6 ifTrue: [ self error: self class invalidAddressRecordErrorDescription ]! !
+
+Object subclass: #AddressImporter
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #AddressImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 20:24:16'!
+Object subclass: #AddressImporter
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!methodRemoval: AddressImporter #assertValidAddressRecord stamp: 'LR 11/23/2023 20:24:18'!
+assertValidAddressRecord
+
+	^ record size ~= 6 ifTrue: [ self error: self class invalidAddressRecordErrorDescription ]!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 20:24:27'!
+ERROR!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 20:24:27'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 20:24:27'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 20:24:27'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 20:24:27'!
+ERROR!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 20:24:27'!
+ERROR!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 20:24:27'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 20:24:27'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 20:24:27'!
+PASSED!
+!AddressImporter methodsFor: 'evaluating' stamp: 'LR 11/23/2023 20:25:21'!
+importToParty: aParty from: aRecord
+
+	| newAddress |
+
+	self assertValidAddressRecord: aRecord.
+	newAddress := Address new.
+	aParty addAddress: newAddress.
+	newAddress streetName: aRecord second.
+	newAddress streetNumber: aRecord third asNumber .
+	newAddress town: aRecord fourth.
+	newAddress zipCode: aRecord fifth asNumber .
+	newAddress province: aRecord sixth! !
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:25:21' prior: 50656565!
+importAddress
+	
+	self assertCustomerWasImported.
+	addressImporter importToParty: newCustomer from: record! !
+
+!methodRemoval: AddressImporter #importParty:from: stamp: 'LR 11/23/2023 20:25:21'!
+importParty: aParty from: aRecord
+
+	| newAddress |
+
+	self assertValidAddressRecord: aRecord.
+	newAddress := Address new.
+	aParty addAddress: newAddress.
+	newAddress streetName: aRecord second.
+	newAddress streetNumber: aRecord third asNumber .
+	newAddress town: aRecord fourth.
+	newAddress zipCode: aRecord fifth asNumber .
+	newAddress province: aRecord sixth!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 20:25:43'!
+PASSED!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 20:25:43'!
+ERROR!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 20:25:43'!
+PASSED!
+
+!testRun: #ImportTest #test02FailsWithEmptyLine stamp: 'LR 11/23/2023 20:25:43'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 20:25:43'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 20:25:43'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 20:25:43'!
+ERROR!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 20:25:43'!
+ERROR!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 20:25:43'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 20:25:43'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 20:25:43'!
+PASSED!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 20:25:47'!
+PASSED!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 20:25:49'!
+ERROR!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 20:25:49'!
+ERROR!
+!CustomerImporter methodsFor: 'nil' stamp: 'LR 11/23/2023 20:32:24'!
+initializeFrom: aReadStream into: aCustomerSystem withAddressImporter: anAddressImporter
+
+	self initializeFrom: aReadStream into: aCustomerSystem.
+	addressImporter := anAddressImporter.! !
+!SupplierImporter methodsFor: 'nil' stamp: 'LR 11/23/2023 20:32:36'!
+initializeFrom: aReadStream into: aCustomerSystem withAddressImporter: anAddressImporter
+
+	| addressImporter |
+	self initializeFrom: aReadStream into: aCustomerSystem.
+	addressImporter := anAddressImporter.! !
+
+!classDefinition: #SupplierImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 20:32:52'!
+CSVImporter subclass: #SupplierImporter
+	instanceVariableNames: 'newSupplier addressImporter'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:32:49' prior: 50656785!
+initializeFrom: aReadStream into: aCustomerSystem withAddressImporter: anAddressImporter
+
+	self initializeFrom: aReadStream into: aCustomerSystem.
+	addressImporter := anAddressImporter.! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:33:19' prior: 50656157!
+importAddress
+
+	addressImporter! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:33:46' prior: 50656814!
+importAddress
+
+	addressImporter importToParty: newSupplier from: record! !
+!CSVImporter class methodsFor: 'instance creation' stamp: 'LR 11/23/2023 20:35:01' prior: 50655547!
+from: aReadStream into: aCustomerSystem 
+
+	^self new initializeFrom: aReadStream into: aCustomerSystem! !
+!CustomerImporter class methodsFor: 'instance creation' stamp: 'LR 11/23/2023 20:35:51' overrides: 50656825!
+from: aReadStream into: aCustomerSystem 
+
+	^self new initializeFrom: aReadStream into: aCustomerSystem! !
+!SupplierImporter class methodsFor: 'instance creation' stamp: 'LR 11/23/2023 20:35:51' overrides: 50656825!
+from: aReadStream into: aCustomerSystem 
+
+	^self new initializeFrom: aReadStream into: aCustomerSystem! !
+!CSVImporter class methodsFor: 'instance creation' stamp: 'LR 11/23/2023 20:35:51' prior: 50656825!
+from: aReadStream into: aCustomerSystem
+
+	self subclassResponsibility! !
+!CustomerImporter class methodsFor: 'instance creation' stamp: 'LR 11/23/2023 20:36:14' prior: 50656832 overrides: 50656846!
+from: aReadStream into: aCustomerSystem 
+
+	^self new initializeFrom: aReadStream into: aCustomerSystem! !
+
+!methodRemoval: CSVImporter class #from:into: stamp: 'LR 11/23/2023 20:36:18'!
+from: aReadStream into: aCustomerSystem
+
+	self subclassResponsibility!
+!CustomerImporter class methodsFor: 'instance creation' stamp: 'LR 11/23/2023 20:36:59'!
+from: aReadStream into: aCustomerSystem addressImporter: andAddressImporter  
+
+	^self new initializeFrom: aReadStream into: aCustomerSystem! !
+!SupplierImporter class methodsFor: 'instance creation' stamp: 'LR 11/23/2023 20:37:00'!
+from: aReadStream into: aCustomerSystem addressImporter: andAddressImporter  
+
+	^self new initializeFrom: aReadStream into: aCustomerSystem! !
+!CSVImporter class methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:37:00' prior: 50655569!
+valueFrom: aReadStream into: aCustomerSystem
+
+	^(self from: aReadStream into: aCustomerSystem addressImporter: anAddressImporter) value! !
+
+!methodRemoval: CustomerImporter class #from:into: stamp: 'LR 11/23/2023 20:37:00'!
+from: aReadStream into: aCustomerSystem 
+
+	^self new initializeFrom: aReadStream into: aCustomerSystem!
+
+!methodRemoval: SupplierImporter class #from:into: stamp: 'LR 11/23/2023 20:37:00'!
+from: aReadStream into: aCustomerSystem 
+
+	^self new initializeFrom: aReadStream into: aCustomerSystem!
+!SupplierImporter class methodsFor: 'instance creation' stamp: 'LR 11/23/2023 20:38:04' prior: 50656872!
+from: aReadStream into: aCustomerSystem addressImporter: andAddressImporter  
+
+	^self new initializeFrom: aReadStream into: aCustomerSystem ! !
+!SupplierImporter class methodsFor: 'instance creation' stamp: 'LR 11/23/2023 20:38:30' prior: 50656900!
+from: aReadStream into: aCustomerSystem addressImporter: anAddressImporter  
+
+	^self new initializeFrom: aReadStream into: aCustomerSystem withAddressImporter: anAddressImporter! !
+!CustomerImporter class methodsFor: 'instance creation' stamp: 'LR 11/23/2023 20:38:49' prior: 50656864!
+from: aReadStream into: aCustomerSystem addressImporter: anAddressImporter  
+
+	^self new initializeFrom: aReadStream into: aCustomerSystem withAddressImporter: anAddressImporter! !
+!CSVImporter class methodsFor: 'importing' stamp: 'LR 11/23/2023 20:42:43'!
+valueFrom: aReadStream into: aCustomerSystem anAddressImporter: addressImporter 
+
+	^(self from: aReadStream into: aCustomerSystem addressImporter: anAddressImporter) value! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:42:43' prior: 50650378!
+test01ValidDataIsImportedCorrectly
+
+	CustomerImporter valueFrom: self validImportData into: system anAddressImporter: addressImporter..
+
+	self assertImportedRightNumberOfCustomers.
+	self assertPepeSanchezWasImportedCorrecty.
+	self assertJuanPerezWasImportedCorrectly ! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:42:43' prior: 50656032!
+test02FailsWithEmptyLine
+
+	| stream |
+	stream := ReadStream on: '
+	'.
+	self should: [
+		SupplierImporter valueFrom: stream into: system anAddressImporter: addressImporter.
+		]
+		 raise: Error - MessageNotUnderstood
+		 withExceptionDo: [:error | self assert: error messageText equals: SupplierImporter invalidRecordTypeErrorDescription]! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:42:43' prior: 50650559!
+shouldFailImporting: aReadStream messageText: anErrorMessageText asserting: anAssertionBlock
+
+	self
+		should: [ CustomerImporter valueFrom: aReadStream into: system anAddressImporter: addressImporter. ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError |
+			self assert: anErrorMessageText equals: anError messageText.
+			anAssertionBlock value ]
+
+	! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:42:43' prior: 50656109!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream supplier |
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs'.
+	SupplierImporter valueFrom: stream into: system anAddressImporter: addressImporter.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	supplier := system supplierWithIdentificationType: 'D' number: '123'.
+	self assert: (supplier isIdentifiedAs: 'D' withNumber: '123' withName: 'Supplier1').
+	self assert: supplier isCustomersEmpty.
+	self assertAddressOf: supplier at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'
+	
+	
+	! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:42:43' prior: 50650388!
+test02CanNotImportAddressWithoutCustomer
+
+	self
+		should: [ CustomerImporter valueFrom: self addressWithoutCustomerData into: system anAddressImporter: addressImporter. ]
+		raise: Error - MessageNotUnderstood
+		withMessageText: CustomerImporter canNotImportAddressWithoutCustomerErrorDescription
+
+	! !
+
+!methodRemoval: CSVImporter class #valueFrom:into: stamp: 'LR 11/23/2023 20:42:43'!
+valueFrom: aReadStream into: aCustomerSystem
+
+	^(self from: aReadStream into: aCustomerSystem addressImporter: anAddressImporter) value!
+!CSVImporter class methodsFor: 'importing' stamp: 'LR 11/23/2023 20:42:54' prior: 50656926!
+valueFrom: aReadStream into: aCustomerSystem anAddressImporter: anAddressImporter 
+
+	^(self from: aReadStream into: aCustomerSystem addressImporter: anAddressImporter) value! !
+!CustomerImporter class methodsFor: 'importing' stamp: 'LR 11/23/2023 20:43:59' overrides: 50657018!
+valueFrom: aReadStream into: aCustomerSystem anAddressImporter: anAddressImporter 
+
+	^(self from: aReadStream into: aCustomerSystem addressImporter: anAddressImporter) value! !
+!SupplierImporter class methodsFor: 'importing' stamp: 'LR 11/23/2023 20:44:00' overrides: 50657018!
+valueFrom: aReadStream into: aCustomerSystem anAddressImporter: anAddressImporter 
+
+	^(self from: aReadStream into: aCustomerSystem addressImporter: anAddressImporter) value! !
+!CSVImporter class methodsFor: 'importing' stamp: 'LR 11/23/2023 20:44:00' prior: 50657018!
+valueFrom: aReadStream into: aCustomerSystem anAddressImporter: anAddressImporter
+
+	self subclassResponsibility! !
+
+!methodRemoval: CSVImporter class #valueFrom:into:anAddressImporter: stamp: 'LR 11/23/2023 20:44:06'!
+valueFrom: aReadStream into: aCustomerSystem anAddressImporter: anAddressImporter
+
+	self subclassResponsibility!
+
+!classDefinition: #ImportTest category: 'CustomerImporter' stamp: 'LR 11/23/2023 20:45:21'!
+TestCase subclass: #ImportTest
+	instanceVariableNames: 'system addressImporter'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 20:45:19' prior: 50656976!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream supplier |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs'.
+	SupplierImporter valueFrom: stream into: system anAddressImporter: addressImporter.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	supplier := system supplierWithIdentificationType: 'D' number: '123'.
+	self assert: (supplier isIdentifiedAs: 'D' withNumber: '123' withName: 'Supplier1').
+	self assert: supplier isCustomersEmpty.
+	self assertAddressOf: supplier at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'
+	
+	
+	! !
+!ImportTest methodsFor: 'setUp/tearDown' stamp: 'LR 11/23/2023 20:45:37' prior: 50650573 overrides: 16961394!
+setUp
+
+	system := Environment current createCustomerSystem.
+	system start.
+	system beginTransaction.
+	addressImporter := AddressImporter new.
+! !
+
+!methodRemoval: AddressImporter class #for:party:record: stamp: 'LR 11/23/2023 20:45:49'!
+for: aCsvImporter party: aNewParty record: aRecord
+	^self new initializeFor: aCsvImporter party: aNewParty record: aRecord!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 20:46:09'!
+PASSED!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 20:46:10'!
+PASSED!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 20:46:14'!
+PASSED!
+
+!testRun: #ImportTest #test02FailsWithEmptyLine stamp: 'LR 11/23/2023 20:46:14'!
+PASSED!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 20:46:16'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 20:46:16'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 20:46:16'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 20:46:16'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 20:46:16'!
+ERROR!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 20:46:16'!
+ERROR!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 20:46:16'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 20:46:16'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 20:46:16'!
+PASSED!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 20:47:09'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 20:47:09'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 20:47:09'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 20:47:09'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 20:47:09'!
+ERROR!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 20:47:09'!
+ERROR!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 20:47:09'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 20:47:09'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 20:47:09'!
+PASSED!
+!ImportTest methodsFor: 'tests - customer' stamp: 'LR 11/23/2023 20:47:25' prior: 50650420!
+test05CanNotImportAddressRecordWithLessThanSixFields
+
+	self
+		shouldFailImporting: self addressRecordWithLessThanSixFields
+		messageText: AddressImporter invalidAddressRecordErrorDescription
+		asserting: [ self assertImportedOneCustomerWithoutAddress ]
+
+	! !
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 20:47:28'!
+ERROR!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 20:47:28'!
+ERROR!
+
+!methodRemoval: CustomerImporter class #invalidAddressRecordErrorDescription stamp: 'LR 11/23/2023 20:48:10'!
+invalidAddressRecordErrorDescription
+
+	^'Address record has to have six fields'!
+!AddressImporter class methodsFor: 'nil' stamp: 'LR 11/23/2023 20:48:16'!
+invalidAddressRecordErrorDescription
+
+	^'Address record has to have six fields'! !
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 20:48:25'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 20:48:27'!
+ERROR!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 20:48:27'!
+ERROR!
+!ImportTest methodsFor: 'tests - customer' stamp: 'LR 11/23/2023 20:48:37' prior: 50650431!
+test06CanNotImportAddressRecordWithMoreThanSixFields
+
+	self
+		shouldFailImporting: self addressRecordWithMoreThanSixFields
+		messageText: AddressImporter invalidAddressRecordErrorDescription
+		asserting: [ self assertImportedOneCustomerWithoutAddress ]
+
+	! !
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 20:48:39'!
+PASSED!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'LR 11/23/2023 20:48:46'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'LR 11/23/2023 20:48:46'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'LR 11/23/2023 20:48:46'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'LR 11/23/2023 20:48:46'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'LR 11/23/2023 20:48:46'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'LR 11/23/2023 20:48:46'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'LR 11/23/2023 20:48:46'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'LR 11/23/2023 20:48:46'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'LR 11/23/2023 20:48:46'!
+PASSED!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 20:48:49'!
+PASSED!
+
+!testRun: #ImportTest #test02FailsWithEmptyLine stamp: 'LR 11/23/2023 20:48:49'!
+PASSED!
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:49:47'!
+assertIsSupplier
+
+	^ record first = 'S'! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:49:47' prior: 50656251 overrides: 50655457!
+importRecord
+
+	self assertRecordNotEmpty.
+	
+	self assertIsSupplier ifTrue: [^self importSupplier].
+	record first = 'A' ifTrue: [^self importAddress.]
+	! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:50:26'!
+isSuplierRecord
+
+	^ record first = 'S'! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:50:26' prior: 50657281 overrides: 50655457!
+importRecord
+
+	self assertRecordNotEmpty.
+	
+	self isSuplierRecord ifTrue: [^self importSupplier].
+	record first = 'A' ifTrue: [^self importAddress.]
+	! !
+
+!methodRemoval: SupplierImporter #assertIsSupplier stamp: 'LR 11/23/2023 20:50:26'!
+assertIsSupplier
+
+	^ record first = 'S'!
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:50:37'!
+isSupplierRecord
+
+	^ record first = 'S'! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:50:37' prior: 50657295 overrides: 50655457!
+importRecord
+
+	self assertRecordNotEmpty.
+	
+	self isSupplierRecord ifTrue: [^self importSupplier].
+	record first = 'A' ifTrue: [^self importAddress.]
+	! !
+
+!methodRemoval: SupplierImporter #isSuplierRecord stamp: 'LR 11/23/2023 20:50:37'!
+isSuplierRecord
+
+	^ record first = 'S'!
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:51:05'!
+isAddressRecord
+
+	^ record first = 'A'! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 20:51:05' prior: 50657313 overrides: 50655457!
+importRecord
+
+	self assertRecordNotEmpty.
+	
+	self isSupplierRecord ifTrue: [^self importSupplier].
+	self isAddressRecord ifTrue: [^self importAddress.]
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 20:53:19' prior: 50657067!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream supplier |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs
+NC,Pepe,Sanchez,D,22333444'.
+	SupplierImporter valueFrom: stream into: system anAddressImporter: addressImporter.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	supplier := system supplierWithIdentificationType: 'D' number: '123'.
+	self assert: (supplier isIdentifiedAs: 'D' withNumber: '123' withName: 'Supplier1').
+	self assert: supplier isCustomersEmpty.
+	self assertAddressOf: supplier at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'
+	
+	
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 20:57:17' prior: 50657339!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream supplier |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs
+NC,Pepe,Sanchez,D,22333444'.
+	SupplierImporter valueFrom: stream into: system anAddressImporter: addressImporter.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	supplier := system supplierWithIdentificationType: 'D' number: '123'.
+	self assert: (supplier isIdentifiedAs: 'D' withNumber: '123' withName: 'Supplier1').
+	self assertAddressOf: supplier at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'
+	
+	
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 21:00:59' prior: 50657362!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream supplier importedCustomer|
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs
+NC,Pepe,Sanchez,D,22333444'.
+	SupplierImporter valueFrom: stream into: system anAddressImporter: addressImporter.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	supplier := system supplierWithIdentificationType: 'D' number: '123'.
+	self assert: (supplier isIdentifiedAs: 'D' withNumber: '123' withName: 'Supplier1').
+	importedCustomer := self assertCustomerWithIdentificationType: 'D' number: '22333444' hasFirstName: 'Pepe' lastName: 'Sanchez'.
+	self assertAddressOf: supplier at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'
+	
+	
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 21:05:15' prior: 50657384!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream supplier importedCustomer|
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs
+NC,Pepe,Sanchez,D,22333444'.
+	SupplierImporter valueFrom: stream into: system anAddressImporter: addressImporter.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	supplier := system supplierWithIdentificationType: 'D' number: '123'.
+	self assert: (supplier isIdentifiedAs: 'D' withNumber: '123' withName: 'Supplier1').
+	importedCustomer := self assertCustomerWithIdentificationType: 'D' number: '22333444' hasFirstName: 'Pepe' lastName: 'Sanchez'.
+	self assert: supplier customers size = 1.
+	self assert: supplier customers anyOne equals: importedCustomer.
+	self assertAddressOf: supplier at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'
+	
+	
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 21:07:28' prior: 50657410!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream supplier importedCustomer associatedCustomer |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs
+NC,Pepe,Sanchez,D,22333444'.
+	SupplierImporter valueFrom: stream into: system anAddressImporter: addressImporter.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	supplier := system supplierWithIdentificationType: 'D' number: '123'.
+	self assert: (supplier isIdentifiedAs: 'D' withNumber: '123' withName: 'Supplier1').
+	importedCustomer := self assertCustomerWithIdentificationType: 'D' number: '22333444' hasFirstName: 'Pepe' lastName: 'Sanchez'.
+	self assert: supplier customers size equals: 1.
+	associatedCustomer := supplier customers anyOne.
+	self assert: supplier customers anyOne equals: importedCustomer.
+	self assertAddressOf: supplier at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'
+	
+	
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 21:08:20' prior: 50657440!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream supplier importedCustomer associatedCustomer |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs
+NC,Pepe,Sanchez,D,22333444'.
+	SupplierImporter valueFrom: stream into: system anAddressImporter: addressImporter.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	supplier := system supplierWithIdentificationType: 'D' number: '123'.
+	self assert: (supplier isIdentifiedAs: 'D' withNumber: '123' withName: 'Supplier1').
+	importedCustomer := self assertCustomerWithIdentificationType: 'D' number: '22333444' hasFirstName: 'Pepe' lastName: 'Sanchez'.
+	self assert: supplier customers size equals: 1.
+	associatedCustomer := supplier customers anyOne.
+	self assert: 'Pepe' equals: importedCustomer firstName.
+	self assert: 'Sanchez' equals: importedCustomer lastName.
+	self assert: 'D' equals: importedCustomer identificationType.
+	self assert: '223344' equals: importedCustomer identificationNumber.
+	self assertAddressOf: supplier at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'
+	
+	
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 21:08:46' prior: 50657472!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream supplier importedCustomer associatedCustomer |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs
+NC,Pepe,Sanchez,D,22333444'.
+	SupplierImporter valueFrom: stream into: system anAddressImporter: addressImporter.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	supplier := system supplierWithIdentificationType: 'D' number: '123'.
+	self assert: (supplier isIdentifiedAs: 'D' withNumber: '123' withName: 'Supplier1').
+	importedCustomer := self assertCustomerWithIdentificationType: 'D' number: '22333444' hasFirstName: 'Pepe' lastName: 'Sanchez'.
+	self assert: supplier customers size equals: 1.
+	associatedCustomer := supplier customers anyOne.
+	self assert: 'Pepe' equals: associatedCustomer firstName.
+	self assert: 'Sanchez' equals: associatedCustomer lastName.
+	self assert: 'D' equals: associatedCustomer identificationType.
+	self assert: '223344' equals: associatedCustomer identificationNumber.
+	self assertAddressOf: supplier at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'
+	
+	
+	! !
+!Customer methodsFor: 'addresses' stamp: 'LR 11/23/2023 21:16:54'!
+hasFirstName: aName hasLastName: aLastName hasIdentificationNumber: anIdNumber hasIdType: anIdType
+
+	firstName = aName and:[
+				lastName = aLastName and:[
+						identificationType = anIdType and:[
+								identificationNumber = anIdNumber
+							]
+					]
+			]! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 21:18:28' prior: 50657510!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream supplier importedCustomer associatedCustomer |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs
+NC,Pepe,Sanchez,D,22333444'.
+	SupplierImporter valueFrom: stream into: system anAddressImporter: addressImporter.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	supplier := system supplierWithIdentificationType: 'D' number: '123'.
+	self assert: (supplier isIdentifiedAs: 'D' withNumber: '123' withName: 'Supplier1').
+	importedCustomer := self assertCustomerWithIdentificationType: 'D' number: '22333444' hasFirstName: 'Pepe' lastName: 'Sanchez'.
+	self assert: supplier customers size equals: 1.
+	associatedCustomer := supplier customers anyOne.
+	self assert: (associatedCustomer hasFirstName: 'Pepe' hasLastName: 'Sanchez' hasIdentificationNumber: '22333444' hasIdType: 'D').
+	self assertAddressOf: supplier at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'
+	
+	
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'LR 11/23/2023 21:18:46' prior: 50657559!
+test01SingleSupplierIsImportedCorrectly
+
+	| stream supplier associatedCustomer |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs
+NC,Pepe,Sanchez,D,22333444'.
+	SupplierImporter valueFrom: stream into: system anAddressImporter: addressImporter.
+	
+	self assert: system numberOfSuppliers equals: 1.
+	supplier := system supplierWithIdentificationType: 'D' number: '123'.
+	self assert: (supplier isIdentifiedAs: 'D' withNumber: '123' withName: 'Supplier1').
+	self assertCustomerWithIdentificationType: 'D' number: '22333444' hasFirstName: 'Pepe' lastName: 'Sanchez'.
+	self assert: supplier customers size equals: 1.
+	associatedCustomer := supplier customers anyOne.
+	self assert: (associatedCustomer hasFirstName: 'Pepe' hasLastName: 'Sanchez' hasIdentificationNumber: '22333444' hasIdType: 'D').
+	self assertAddressOf: supplier at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'
+	
+	
+	! !
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 21:18:51'!
+ERROR!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectly stamp: 'LR 11/23/2023 21:18:51'!
+ERROR!
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 21:20:07' prior: 50657331 overrides: 50655457!
+importRecord
+
+	self assertRecordNotEmpty.
+	
+	self isSupplierRecord ifTrue: [^self importSupplier].
+	self isAddressRecord ifTrue: [^self importAddress.].
+	self record first = 'NC' ifTrue: [^self importCustomer].
+	! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 21:20:22' prior: 50657633 overrides: 50655457!
+importRecord
+
+	self assertRecordNotEmpty.
+	
+	self isSupplierRecord ifTrue: [^self importSupplier].
+	self isAddressRecord ifTrue: [^self importAddress.].
+	record first = 'NC' ifTrue: [^self importCustomer].
+	! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 21:21:30'!
+importCustomer
+	
+	! !
+
+!classDefinition: #SupplierImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 21:22:09'!
+CSVImporter subclass: #SupplierImporter
+	instanceVariableNames: 'newSupplier addressImporter newCustomer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 21:22:08' prior: 50657654!
+importCustomer
+
+	self assertValidCustomerRecord.
+
+	newCustomer := Customer new.
+	newCustomer firstName: record second.
+	newCustomer lastName: record third.
+	newCustomer identificationType: record fourth.
+	newCustomer identificationNumber: record fifth.
+	system addCustomer: newCustomer! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 21:23:12' prior: 50657667!
+importCustomer
+
+	
+	self assertValidCustomerRecord.
+
+	newCustomer := Customer new.
+	newCustomer firstName: record second.
+	newCustomer lastName: record third.
+	newCustomer identificationType: record fourth.
+	newCustomer identificationNumber: record fifth.
+	system addCustomer: newCustomer! !
+
+CSVImporter subclass: #SupplierImporter
+	instanceVariableNames: 'newSupplier addressImporter'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!classDefinition: #SupplierImporter category: 'CustomerImporter' stamp: 'LR 11/23/2023 21:23:18'!
+CSVImporter subclass: #SupplierImporter
+	instanceVariableNames: 'newSupplier addressImporter'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 21:23:30' prior: 50657680!
+importCustomer
+
+	|newCustomer|
+	
+	self assertValidCustomerRecord.
+
+	newCustomer := Customer new.
+	newCustomer firstName: record second.
+	newCustomer lastName: record third.
+	newCustomer identificationType: record fourth.
+	newCustomer identificationNumber: record fifth.
+	system addCustomer: newCustomer! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 21:24:48' prior: 50657707!
+importCustomer
+
+	|newCustomer|
+	
+	self assertValidCustomerRecord.
+
+	newCustomer := Customer new.
+	newCustomer firstName: record second.
+	newCustomer lastName: record third.
+	newCustomer identificationType: record fourth.
+	newCustomer identificationNumber: record fifth.
+	system addCustomer: newCustomer! !
+!SupplierImporter methodsFor: 'as yet unclassified' stamp: 'LR 11/23/2023 21:25:09'!
+assertValidCustomerRecord
+
+	^ record size ~= 5 ifTrue: [ self error: self class invalidCustomerRecordErrorDescription ]! !
+
+----QUIT----(23 November 2023 21:53:32) CuisUniversity-5981.image priorSource: 10197292!
