@@ -430,6 +430,166 @@ EC,C,23-25666777-9'.
 	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self juanPerezId name: 'Juan' lastName: 'Perez'.
 	! !
 
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:34:51'!
+test06SingleSupplierIsImportedCorrectlyWithManyAddresses
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs
+A,Maipu,888,Florida,1122,Buenos Aires'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 0.
+	self assert: system numberOfCustomers equals: 0.
+	self assertAddressOf: importedSupplier at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'.
+	self assertAddressOf: importedSupplier at: 'Maipu' hasNumber: 888 town: 'Florida' zipCode: 1122 province: 'Buenos Aires'
+	! !
+
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:39:29'!
+test07SingleSupplierDoesNotReimportAlreadyExistingCustomer
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,D,22333444'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 1.
+	self assert: system numberOfCustomers equals: 1.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:47:01'!
+test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers
+
+	| stream importedSupplier supplierId |
+	
+	system addCustomer: self juanPerez.
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,C,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 2.
+	self assert: system numberOfCustomers equals: 2.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:25:17'!
+test09ImportingFailsWhenAttemptingToImportNonExistentCustomer
+
+	| stream supplierId importedSupplier|
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+EC,C,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: ErpSystem nonExistentCustomerId.
+		self assert: system numberOfSuppliers equals: 1.
+		importedSupplier := self assertSupplierWithIdentification: supplierId hasFirstName: 'Supplier1'.
+		self assert: importedSupplier numberOfCustomers equals: 0.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	! !
+
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:25:10'!
+test10ImportingFailsWhenAttemptingToImportWithEmptySupplier
+
+	| stream |
+	
+	stream := ReadStream on: 'NC,Pepe,Sanchez,D,22333444'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: SupplierImporter canNotImportCustomerWithoutSupplierErrorDescription.
+		self assert: system numberOfSuppliers equals: 0.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	! !
+
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:23:41'!
+test11ImportingFailsWhenAttemptingToImportAddressWithEmptySupplier
+
+	| stream |
+	
+	stream := ReadStream on: 'A,San Martin,3322,Olivos,1636,BsAs'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: SupplierImporter canNotImportAddressWithoutSupplierErrorDescription.
+		self assert: system numberOfSuppliers equals: 0.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	! !
+
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:33:53'!
+test12ManySuppliersAreImportedCorrectly
+
+	| stream importedSupplier1 importedSupplier2 supplierId1 supplierId2 |
+	
+	system addCustomer: self juanPerez.
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+S,Supplier2,E,1234
+EC,C,23-25666777-9'.
+	supplierId1 := PartyId ofType: 'D' numbered: '123'.
+	supplierId2 := PartyId ofType: 'E' numbered: '1234'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier1 := system supplierWithIdentification: supplierId1.
+	importedSupplier2 := system supplierWithIdentification: supplierId2.
+	
+	self assert: importedSupplier1 numberOfCustomers equals: 1.
+	self assert: importedSupplier2 numberOfCustomers equals: 1.
+	self assert: system numberOfCustomers equals: 2.
+	self assert: system numberOfSuppliers equals: 2.
+	self assertCorrectlyImportedCustomerOf: importedSupplier1 withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+	self assertCorrectlyImportedCustomerOf: importedSupplier2 withId: self juanPerezId name: 'Juan' lastName: 'Perez'.
+
+	! !
+
 
 !classDefinition: #Address category: 'CustomerImporter'!
 Object subclass: #Address
@@ -620,20 +780,23 @@ CSVImporter subclass: #SupplierImporter
 	poolDictionaries: ''
 	category: 'CustomerImporter'!
 
-!SupplierImporter methodsFor: 'customer' stamp: 'LR 11/24/2023 15:40:44'!
+!SupplierImporter methodsFor: 'customer' stamp: 'BR 11/26/2023 19:16:59'!
 importCustomer
 	
 	| parsedCustomer |
+	self assertSupplierWasImportedWhenImportingCustomer.
 	parsedCustomer := self parseRecordWith: CustomerRecordParser.
 	system addCustomer: parsedCustomer.
 	newSupplier addCustomer: parsedCustomer.! !
 
-!SupplierImporter methodsFor: 'customer' stamp: 'LR 11/24/2023 16:11:57'!
+!SupplierImporter methodsFor: 'customer' stamp: 'BR 11/26/2023 19:20:23'!
 importExistingCustomer
 	
-	| parsedId |
+	| parsedId existingCustomer |
+	self assertSupplierWasImportedWhenImportingCustomer.
 	parsedId := self parseRecordWith: PartyIdRecordParser.
-	newSupplier addCustomer: (Customer withFirstName: 'Pepe' lastName: 'Sanchez' identification: parsedId)! !
+	existingCustomer := system customerWithIdentification: parsedId.
+	newSupplier addCustomer: existingCustomer.! !
 
 !SupplierImporter methodsFor: 'customer' stamp: 'LR 11/24/2023 16:06:44'!
 isExistingCustomerRecord
@@ -646,10 +809,11 @@ isNewCustomerRecord
 	^ record first = 'NC'! !
 
 
-!SupplierImporter methodsFor: 'address' stamp: 'LR 11/24/2023 13:39:01'!
+!SupplierImporter methodsFor: 'address' stamp: 'BR 11/26/2023 19:17:47'!
 importAddress
 
 	| parsedAddress |
+	self assertSupplierWasImportedWhenAddingAddress.
 	parsedAddress := self parseRecordWith: AddressRecordParser.
 	newSupplier addAddress: parsedAddress.! !
 
@@ -670,6 +834,16 @@ importRecord
 	self isExistingCustomerRecord ifTrue: [^self importExistingCustomer].	! !
 
 
+!SupplierImporter methodsFor: 'supplier' stamp: 'BR 11/26/2023 19:16:46'!
+assertSupplierWasImportedWhenAddingAddress
+
+	^ newSupplier ifNil: [ self error: self class canNotImportAddressWithoutSupplierErrorDescription ]! !
+
+!SupplierImporter methodsFor: 'supplier' stamp: 'BR 11/26/2023 19:17:23'!
+assertSupplierWasImportedWhenImportingCustomer
+
+	^ newSupplier ifNil: [ self error: self class canNotImportCustomerWithoutSupplierErrorDescription ]! !
+
 !SupplierImporter methodsFor: 'supplier' stamp: 'LR 11/24/2023 13:40:02'!
 importSupplier
 
@@ -680,6 +854,22 @@ importSupplier
 isSupplierRecord
 
 	^ record first = 'S'! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'SupplierImporter class' category: 'CustomerImporter'!
+SupplierImporter class
+	instanceVariableNames: ''!
+
+!SupplierImporter class methodsFor: 'as yet unclassified' stamp: 'BR 11/26/2023 19:18:44'!
+canNotImportAddressWithoutSupplierErrorDescription
+
+	^'Cannot import Address without Supplier'! !
+
+!SupplierImporter class methodsFor: 'as yet unclassified' stamp: 'BR 11/26/2023 19:18:18'!
+canNotImportCustomerWithoutSupplierErrorDescription
+
+	^'Cannot import customer without Supplier'! !
 
 
 !classDefinition: #CSVRecordParser category: 'CustomerImporter'!
@@ -1146,6 +1336,16 @@ addSupplier: aSupplier
 
 	self subclassResponsibility! !
 
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'ErpSystem class' category: 'CustomerImporter'!
+ErpSystem class
+	instanceVariableNames: ''!
+
+!ErpSystem class methodsFor: 'as yet unclassified' stamp: 'BR 11/26/2023 18:58:39'!
+nonExistentCustomerId
+	^'Customer id is not registered in the system'.! !
+
 
 !classDefinition: #PersistentErpSystem category: 'CustomerImporter'!
 ErpSystem subclass: #PersistentErpSystem
@@ -1159,13 +1359,15 @@ addCustomer: aCustomer
 
 	^session persist: aCustomer ! !
 
-!PersistentErpSystem methodsFor: 'customers' stamp: 'LR 11/24/2023 11:50:45'!
+!PersistentErpSystem methodsFor: 'customers' stamp: 'BR 11/26/2023 18:58:54'!
 customerWithIdentification: anId
-
-	^(session
+	|filtered|
+	filtered := (session
 		select: [ :aCustomer | aCustomer isIdentifiedWith: anId ]
 		ofType: Customer
-	) anyOne! !
+	).
+	filtered isEmpty ifTrue: [^self error: self class nonExistentCustomerId]. 
+	^filtered anyOne! !
 
 !PersistentErpSystem methodsFor: 'customers' stamp: 'HAW 5/22/2022 21:08:47'!
 numberOfCustomers
@@ -1238,9 +1440,9 @@ addCustomer: aCustomer
 
 	customers add: aCustomer ! !
 
-!TransientErpSystem methodsFor: 'customers' stamp: 'LR 11/24/2023 11:39:58'!
+!TransientErpSystem methodsFor: 'customers' stamp: 'BR 11/26/2023 18:59:16'!
 customerWithIdentification: anId 
-	^customers detect: [:customer | customer isIdentifiedWith: anId]! !
+	^customers detect: [:customer | customer isIdentifiedWith: anId] ifNone: [^self error: self class nonExistentCustomerId.].! !
 
 !TransientErpSystem methodsFor: 'customers' stamp: 'HAW 5/22/2022 21:21:43'!
 numberOfCustomers
