@@ -9418,3 +9418,1419 @@ PASSED!
 FAILURE!
 
 ----QUIT----(24 November 2023 16:24:24) CuisUniversity-5981.image priorSource: 10434842!
+
+----STARTUP---- (26 November 2023 17:38:32) as /home/bruno/Downloads/linux64(1)/linux64/CuisUniversity-5981.image!
+
+
+!testRun: #ImportTest #test05SingleSupplierIsImportedCorrectlyWithManyExistingCustomers stamp: 'BR 11/26/2023 17:42:03'!
+FAILURE!
+
+!testRun: #ImportTest #test05SingleSupplierIsImportedCorrectlyWithManyExistingCustomers stamp: 'BR 11/26/2023 17:42:03'!
+FAILURE!
+
+!testRun: #ImportTest #test05SingleSupplierIsImportedCorrectlyWithManyExistingCustomers stamp: 'BR 11/26/2023 17:51:19'!
+FAILURE!
+
+!testRun: #ImportTest #test05SingleSupplierIsImportedCorrectlyWithManyExistingCustomers stamp: 'BR 11/26/2023 17:51:19'!
+FAILURE!
+
+importedSupplier!
+!TransientErpSystem methodsFor: 'customers' stamp: 'BR 11/26/2023 17:56:50' prior: 50659383 overrides: 50659389!
+customerWithIdentification: anId 
+	^customers detect: [:customer | customer isIdentifiedWith: anId] ifNone: [].! !
+
+!testRun: #ImportTest #test05SingleSupplierIsImportedCorrectlyWithManyExistingCustomers stamp: 'BR 11/26/2023 17:57:42'!
+FAILURE!
+
+!testRun: #ImportTest #test05SingleSupplierIsImportedCorrectlyWithManyExistingCustomers stamp: 'BR 11/26/2023 17:57:42'!
+FAILURE!
+
+supplier!
+
+a Customer!
+
+!testRun: #ImportTest #test05SingleSupplierIsImportedCorrectlyWithManyExistingCustomers stamp: 'BR 11/26/2023 18:20:48'!
+FAILURE!
+
+!testRun: #ImportTest #test05SingleSupplierIsImportedCorrectlyWithManyExistingCustomers stamp: 'BR 11/26/2023 18:20:48'!
+FAILURE!
+
+parsedId!
+!SupplierImporter methodsFor: 'customer' stamp: 'BR 11/26/2023 18:25:04' prior: 50665325!
+importExistingCustomer
+	
+	| parsedId existingCustomer |
+	parsedId := self parseRecordWith: PartyIdRecordParser.
+	existingCustomer := system customerWithIdentification: parsedId.
+	newSupplier addCustomer: (Customer withFirstName: 'Pepe' lastName: 'Sanchez' identification: parsedId)! !
+!SupplierImporter methodsFor: 'customer' stamp: 'BR 11/26/2023 18:25:42' prior: 50666046!
+importExistingCustomer
+	
+	| parsedId existingCustomer |
+	parsedId := self parseRecordWith: PartyIdRecordParser.
+	existingCustomer := system customerWithIdentification: parsedId.
+	newSupplier addCustomer: existingCustomer.! !
+
+!testRun: #ImportTest #test05SingleSupplierIsImportedCorrectlyWithManyExistingCustomers stamp: 'BR 11/26/2023 18:25:48'!
+PASSED!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:28:59'!
+test06SingleSupplierIsImportedCorrectlyWithAddresses
+
+	| stream importedSupplier supplierId |
+	
+	system addCustomer: self pepeSanchez.
+	system addCustomer: self juanPerez.
+	stream := ReadStream on: 'S,Supplier1,D,123
+EC,D,22333444
+EC,C,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 2.
+	self assert: system numberOfCustomers equals: 2.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self juanPerezId name: 'Juan' lastName: 'Perez'.
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:29:22' prior: 50666072!
+test06SingleSupplierIsImportedCorrectlyWithAddresses
+
+	| stream importedSupplier supplierId |
+	
+	system addCustomer: self pepeSanchez.
+	system addCustomer: self juanPerez.
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs
+A,Maipu,888,Florida,1122,Buenos Aires'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 2.
+	self assert: system numberOfCustomers equals: 2.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self juanPerezId name: 'Juan' lastName: 'Perez'.
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:29:38' prior: 50666100!
+test06SingleSupplierIsImportedCorrectlyWithAddresses
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs
+A,Maipu,888,Florida,1122,Buenos Aires'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 2.
+	self assert: system numberOfCustomers equals: 2.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self juanPerezId name: 'Juan' lastName: 'Perez'.
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:30:16' prior: 50666129!
+test06SingleSupplierIsImportedCorrectlyWithAddresses
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs
+A,Maipu,888,Florida,1122,Buenos Aires'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 0.
+	self assert: system numberOfCustomers equals: 0.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self juanPerezId name: 'Juan' lastName: 'Perez'.
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:34:39' prior: 50666155!
+test06SingleSupplierIsImportedCorrectlyWithAddresses
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs
+A,Maipu,888,Florida,1122,Buenos Aires'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 0.
+	self assert: system numberOfCustomers equals: 0.
+	self assertAddressOf: importedSupplier at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'.
+	self assertAddressOf: importedSupplier at: 'Maipu' hasNumber: 888 town: 'Florida' zipCode: 1122 province: 'Buenos Aires'
+	! !
+
+!testRun: #ImportTest #test06SingleSupplierIsImportedCorrectlyWithAddresses stamp: 'BR 11/26/2023 18:34:41'!
+PASSED!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:34:51'!
+test06SingleSupplierIsImportedCorrectlyWithManyAddresses
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs
+A,Maipu,888,Florida,1122,Buenos Aires'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 0.
+	self assert: system numberOfCustomers equals: 0.
+	self assertAddressOf: importedSupplier at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'.
+	self assertAddressOf: importedSupplier at: 'Maipu' hasNumber: 888 town: 'Florida' zipCode: 1122 province: 'Buenos Aires'
+	! !
+
+!methodRemoval: ImportTest #test06SingleSupplierIsImportedCorrectlyWithAddresses stamp: 'BR 11/26/2023 18:34:51'!
+test06SingleSupplierIsImportedCorrectlyWithAddresses
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs
+A,Maipu,888,Florida,1122,Buenos Aires'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 0.
+	self assert: system numberOfCustomers equals: 0.
+	self assertAddressOf: importedSupplier at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'.
+	self assertAddressOf: importedSupplier at: 'Maipu' hasNumber: 888 town: 'Florida' zipCode: 1122 province: 'Buenos Aires'
+	!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:35:47'!
+test07SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+A,San Martin,3322,Olivos,1636,BsAs
+A,Maipu,888,Florida,1122,Buenos Aires'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 0.
+	self assert: system numberOfCustomers equals: 0.
+	self assertAddressOf: importedSupplier at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'.
+	self assertAddressOf: importedSupplier at: 'Maipu' hasNumber: 888 town: 'Florida' zipCode: 1122 province: 'Buenos Aires'
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:36:16' prior: 50666264!
+test07SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,D,5456774'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 0.
+	self assert: system numberOfCustomers equals: 0.
+	self assertAddressOf: importedSupplier at: 'San Martin' hasNumber: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'.
+	self assertAddressOf: importedSupplier at: 'Maipu' hasNumber: 888 town: 'Florida' zipCode: 1122 province: 'Buenos Aires'
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:37:08' prior: 50666291!
+test07SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,D,5456774'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 1.
+	self assert: system numberOfCustomers equals: 2.
+
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:37:48' prior: 50666317!
+test07SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,D,5456774'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 1.
+	self assert: system numberOfCustomers equals: 1.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:38:17' prior: 50666336!
+test07SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,D,22333444'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 1.
+	self assert: system numberOfCustomers equals: 1.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+
+!testRun: #ImportTest #test07SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers stamp: 'BR 11/26/2023 18:38:22'!
+PASSED!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:39:03'!
+test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,D,22333444'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 1.
+	self assert: system numberOfCustomers equals: 1.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:39:29'!
+test07SingleSupplierDoesNotReimportAlreadyExistingCustomer
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,D,22333444'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 1.
+	self assert: system numberOfCustomers equals: 1.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+
+!methodRemoval: ImportTest #test07SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers stamp: 'BR 11/26/2023 18:39:29'!
+test07SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,D,22333444'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 1.
+	self assert: system numberOfCustomers equals: 1.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:40:04' prior: 50666384!
+test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,D,5456774'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 1.
+	self assert: system numberOfCustomers equals: 1.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:42:22' prior: 50666451!
+test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers
+
+	| stream importedSupplier supplierId |
+	
+	system addCustomer: self juanPerez.
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,D,5456774'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 1.
+	self assert: system numberOfCustomers equals: 1.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:42:40' prior: 50666473!
+test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers
+
+	| stream importedSupplier supplierId |
+	
+	system addCustomer: self pepeSanchez.
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,D,5456774'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 1.
+	self assert: system numberOfCustomers equals: 1.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:43:30' prior: 50666496!
+test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers
+
+	| stream importedSupplier supplierId |
+	
+	system addCustomer: self pepeSanchez.
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,D,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 1.
+	self assert: system numberOfCustomers equals: 1.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:43:49' prior: 50666519!
+test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers
+
+	| stream importedSupplier supplierId |
+	
+	system addCustomer: self juanPerez.
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,D,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 1.
+	self assert: system numberOfCustomers equals: 1.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:44:31' prior: 50666543!
+test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers
+
+	| stream importedSupplier supplierId |
+	
+	system addCustomer: self juanPerez.
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,D,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 2.
+	self assert: system numberOfCustomers equals: 1.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+
+!testRun: #ImportTest #test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers stamp: 'BR 11/26/2023 18:44:34'!
+ERROR!
+
+!testRun: #ImportTest #test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers stamp: 'BR 11/26/2023 18:44:34'!
+ERROR!
+
+!testRun: #ImportTest #test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers stamp: 'BR 11/26/2023 18:45:12'!
+ERROR!
+
+!testRun: #ImportTest #test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers stamp: 'BR 11/26/2023 18:45:12'!
+ERROR!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:45:32' prior: 50666567!
+test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers
+
+	| stream importedSupplier supplierId |
+	
+	system addCustomer: self juanPerez.
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,D,23256667779'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 2.
+	self assert: system numberOfCustomers equals: 1.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+
+!testRun: #ImportTest #test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers stamp: 'BR 11/26/2023 18:45:33'!
+ERROR!
+
+!testRun: #ImportTest #test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers stamp: 'BR 11/26/2023 18:45:33'!
+ERROR!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:46:23' prior: 50666607!
+test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers
+
+	| stream importedSupplier supplierId |
+	
+	system addCustomer: self juanPerez.
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,C,23256667779'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 2.
+	self assert: system numberOfCustomers equals: 1.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+
+!testRun: #ImportTest #test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers stamp: 'BR 11/26/2023 18:46:25'!
+ERROR!
+
+!testRun: #ImportTest #test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers stamp: 'BR 11/26/2023 18:46:25'!
+ERROR!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:46:45' prior: 50666639!
+test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers
+
+	| stream importedSupplier supplierId |
+	
+	system addCustomer: self juanPerez.
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,C,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 2.
+	self assert: system numberOfCustomers equals: 1.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+
+!testRun: #ImportTest #test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers stamp: 'BR 11/26/2023 18:46:47'!
+FAILURE!
+
+!testRun: #ImportTest #test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers stamp: 'BR 11/26/2023 18:46:47'!
+FAILURE!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:47:01' prior: 50666671!
+test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers
+
+	| stream importedSupplier supplierId |
+	
+	system addCustomer: self juanPerez.
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,C,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 2.
+	self assert: system numberOfCustomers equals: 2.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+
+!testRun: #ImportTest #test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers stamp: 'BR 11/26/2023 18:47:03'!
+PASSED!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:48:11'!
+test09ImportingFailsWhenAttemptintToImportNonExistentCustomer
+
+	| stream importedSupplier supplierId |
+	
+	system addCustomer: self juanPerez.
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,C,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 2.
+	self assert: system numberOfCustomers equals: 2.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:48:25' prior: 50666730!
+test09ImportingFailsWhenAttemptintToImportNonExistentCustomer
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+EC,C,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 2.
+	self assert: system numberOfCustomers equals: 2.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:48:40' prior: 50666753!
+test09ImportingFailsWhenAttemptintToImportNonExistentCustomer
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+EC,C,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 0.
+	self assert: system numberOfCustomers equals: 0.
+
+	! !
+
+!testRun: #ImportTest #test09ImportingFailsWhenAttemptintToImportNonExistentCustomer stamp: 'BR 11/26/2023 18:48:41'!
+ERROR!
+
+!testRun: #ImportTest #test09ImportingFailsWhenAttemptintToImportNonExistentCustomer stamp: 'BR 11/26/2023 18:48:41'!
+ERROR!
+
+Set new anyOne!
+!PersistentErpSystem methodsFor: 'customers' stamp: 'BR 11/26/2023 18:58:05' prior: 50659781 overrides: 50659389!
+customerWithIdentification: anId
+	|filtered|
+	filtered := (session
+		select: [ :aCustomer | aCustomer isIdentifiedWith: anId ]
+		ofType: Customer
+	).
+	filtered isEmpty ifTrue: [^self error: self nonExistentCustomerId]. 
+	^filtered anyOne! !
+!ErpSystem class methodsFor: 'nil' stamp: 'BR 11/26/2023 18:58:39'!
+nonExistentCustomerId
+	^'Customer id is not registered in the system'.! !
+!PersistentErpSystem methodsFor: 'customers' stamp: 'BR 11/26/2023 18:58:54' prior: 50666801 overrides: 50659389!
+customerWithIdentification: anId
+	|filtered|
+	filtered := (session
+		select: [ :aCustomer | aCustomer isIdentifiedWith: anId ]
+		ofType: Customer
+	).
+	filtered isEmpty ifTrue: [^self error: self class nonExistentCustomerId]. 
+	^filtered anyOne! !
+!TransientErpSystem methodsFor: 'customers' stamp: 'BR 11/26/2023 18:59:16' prior: 50666022 overrides: 50659389!
+customerWithIdentification: anId 
+	^customers detect: [:customer | customer isIdentifiedWith: anId] ifNone: [^self error: self class nonExistentCustomerId.].! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 18:59:56' prior: 50666774!
+test09ImportingFailsWhenAttemptintToImportNonExistentCustomer
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+EC,C,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 0.
+	self assert: system numberOfCustomers equals: 0.
+	
+	ErpSystem nonExistentCustomerId
+
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:00:00' prior: 50666837!
+test09ImportingFailsWhenAttemptintToImportNonExistentCustomer
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+EC,C,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 0.
+	self assert: system numberOfCustomers equals: 0.
+	
+	ErpSystem nonExistentCustomerId.
+
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:02:10' prior: 50666856!
+test09ImportingFailsWhenAttemptintToImportNonExistentCustomer
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+EC,C,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	importedSupplier := system supplierWithIdentification: supplierId.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: ErpSystem nonExistentCustomerId.
+		self assert: importedSupplier numberOfCustomers equals: 0.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	! !
+
+!testRun: #ImportTest #test09ImportingFailsWhenAttemptintToImportNonExistentCustomer stamp: 'BR 11/26/2023 19:02:18'!
+ERROR!
+
+!testRun: #ImportTest #test09ImportingFailsWhenAttemptintToImportNonExistentCustomer stamp: 'BR 11/26/2023 19:02:18'!
+ERROR!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:03:52' prior: 50666875!
+test09ImportingFailsWhenAttemptintToImportNonExistentCustomer
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+EC,C,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: ErpSystem nonExistentCustomerId.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	! !
+
+!testRun: #ImportTest #test09ImportingFailsWhenAttemptintToImportNonExistentCustomer stamp: 'BR 11/26/2023 19:03:57'!
+PASSED!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:06:24' prior: 50666906!
+test09ImportingFailsWhenAttemptintToImportNonExistentCustomer
+
+	| stream importedSupplier supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+EC,C,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: ErpSystem nonExistentCustomerId.
+		self assertNoSupplierWasImported.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	! !
+
+!testRun: #ImportTest #test09ImportingFailsWhenAttemptintToImportNonExistentCustomer stamp: 'BR 11/26/2023 19:06:29'!
+FAILURE!
+
+!testRun: #ImportTest #test09ImportingFailsWhenAttemptintToImportNonExistentCustomer stamp: 'BR 11/26/2023 19:06:29'!
+FAILURE!
+
+!testRun: #ImportTest #test09ImportingFailsWhenAttemptintToImportNonExistentCustomer stamp: 'BR 11/26/2023 19:06:42'!
+FAILURE!
+
+!testRun: #ImportTest #test09ImportingFailsWhenAttemptintToImportNonExistentCustomer stamp: 'BR 11/26/2023 19:06:42'!
+FAILURE!
+
+!testRun: #ImportTest #test09ImportingFailsWhenAttemptintToImportNonExistentCustomer stamp: 'BR 11/26/2023 19:06:46'!
+FAILURE!
+
+!testRun: #ImportTest #test09ImportingFailsWhenAttemptintToImportNonExistentCustomer stamp: 'BR 11/26/2023 19:06:51'!
+FAILURE!
+
+!testRun: #ImportTest #test09ImportingFailsWhenAttemptintToImportNonExistentCustomer stamp: 'BR 11/26/2023 19:06:51'!
+FAILURE!
+
+!testRun: #ImportTest #test02FailsWithEmptyLine stamp: 'BR 11/26/2023 19:06:55'!
+PASSED!
+
+!testRun: #ImportTest #test09ImportingFailsWhenAttemptintToImportNonExistentCustomer stamp: 'BR 11/26/2023 19:06:57'!
+FAILURE!
+
+!testRun: #ImportTest #test09ImportingFailsWhenAttemptintToImportNonExistentCustomer stamp: 'BR 11/26/2023 19:06:57'!
+FAILURE!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:08:42' prior: 50666929!
+test09ImportingFailsWhenAttemptintToImportNonExistentCustomer
+
+	| stream supplierId |
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+EC,C,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: ErpSystem nonExistentCustomerId.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	! !
+
+!testRun: #ImportTest #test09ImportingFailsWhenAttemptintToImportNonExistentCustomer stamp: 'BR 11/26/2023 19:08:54'!
+PASSED!
+
+!testRun: #ImportTest #test01SingleSupplierIsImportedCorrectlyWithOneNewCustomer stamp: 'BR 11/26/2023 19:08:54'!
+PASSED!
+
+!testRun: #ImportTest #test01ValidDataIsImportedCorrectly stamp: 'BR 11/26/2023 19:08:54'!
+PASSED!
+
+!testRun: #ImportTest #test02CanNotImportAddressWithoutCustomer stamp: 'BR 11/26/2023 19:08:54'!
+PASSED!
+
+!testRun: #ImportTest #test02FailsWithEmptyLine stamp: 'BR 11/26/2023 19:08:54'!
+PASSED!
+
+!testRun: #ImportTest #test03DoesNotImportRecordsStartingWithCButMoreCharacters stamp: 'BR 11/26/2023 19:08:54'!
+PASSED!
+
+!testRun: #ImportTest #test03SingleSupplierIsImportedCorrectlyWithManyNewCustomers stamp: 'BR 11/26/2023 19:08:54'!
+PASSED!
+
+!testRun: #ImportTest #test04DoesNotImportRecordsStartingWithAButMoreCharacters stamp: 'BR 11/26/2023 19:08:54'!
+PASSED!
+
+!testRun: #ImportTest #test04SingleSupplierIsImportedCorrectlyWithOneExistingCustomer stamp: 'BR 11/26/2023 19:08:54'!
+PASSED!
+
+!testRun: #ImportTest #test05CanNotImportAddressRecordWithLessThanSixFields stamp: 'BR 11/26/2023 19:08:54'!
+PASSED!
+
+!testRun: #ImportTest #test05SingleSupplierIsImportedCorrectlyWithManyExistingCustomers stamp: 'BR 11/26/2023 19:08:54'!
+PASSED!
+
+!testRun: #ImportTest #test06CanNotImportAddressRecordWithMoreThanSixFields stamp: 'BR 11/26/2023 19:08:54'!
+PASSED!
+
+!testRun: #ImportTest #test06SingleSupplierIsImportedCorrectlyWithManyAddresses stamp: 'BR 11/26/2023 19:08:54'!
+PASSED!
+
+!testRun: #ImportTest #test07CanNotImportCustomerRecordWithLessThanFiveFields stamp: 'BR 11/26/2023 19:08:54'!
+PASSED!
+
+!testRun: #ImportTest #test07SingleSupplierDoesNotReimportAlreadyExistingCustomer stamp: 'BR 11/26/2023 19:08:54'!
+PASSED!
+
+!testRun: #ImportTest #test08CanNotImportCustomerRecordWithMoreThanFiveFields stamp: 'BR 11/26/2023 19:08:54'!
+PASSED!
+
+!testRun: #ImportTest #test08SingleSupplierIsImportedCorrectlyWithExistingAndNewCustomers stamp: 'BR 11/26/2023 19:08:54'!
+PASSED!
+
+!testRun: #ImportTest #test09CannotImportEmptyLine stamp: 'BR 11/26/2023 19:08:54'!
+PASSED!
+
+!testRun: #ImportTest #test09ImportingFailsWhenAttemptintToImportNonExistentCustomer stamp: 'BR 11/26/2023 19:08:54'!
+PASSED!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:10:07' prior: 50666988!
+test09ImportingFailsWhenAttemptintToImportNonExistentCustomer
+
+	| stream supplierId importedSupplier|
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+EC,C,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: ErpSystem nonExistentCustomerId.
+		self assert: system numberOfSuppliers equals: 1.
+		importedSupplier := self assertSupplierWithIdentification: supplierId hasFirstName: 'Supplier1'.
+		self assert: importedSupplier numberOfCustomers equals: 1.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:10:18' prior: 50667077!
+test09ImportingFailsWhenAttemptintToImportNonExistentCustomer
+
+	| stream supplierId importedSupplier|
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+EC,C,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: ErpSystem nonExistentCustomerId.
+		self assert: system numberOfSuppliers equals: 1.
+		importedSupplier := self assertSupplierWithIdentification: supplierId hasFirstName: 'Supplier1'.
+		self assert: importedSupplier numberOfCustomers equals: 0.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	! !
+
+!testRun: #ImportTest #test09ImportingFailsWhenAttemptintToImportNonExistentCustomer stamp: 'BR 11/26/2023 19:10:20'!
+PASSED!
+!SupplierImporter class methodsFor: 'nil' stamp: 'BR 11/26/2023 19:13:20'!
+canNotImportCustomerWithoutSupplier
+
+	^'Cannot import customer without Supplier'! !
+!SupplierImporter methodsFor: 'address' stamp: 'BR 11/26/2023 19:14:41' prior: 50662565!
+importAddress
+
+	| parsedAddress |
+	self assertSupplierWasImported.
+	parsedAddress := self parseRecordWith: AddressRecordParser.
+	newSupplier addAddress: parsedAddress.! !
+!SupplierImporter methodsFor: 'customer' stamp: 'BR 11/26/2023 19:14:50' prior: 50664078!
+importCustomer
+	
+	| parsedCustomer |
+	self assertCustomerWasImported.
+	parsedCustomer := self parseRecordWith: CustomerRecordParser.
+	system addCustomer: parsedCustomer.
+	newSupplier addCustomer: parsedCustomer.! !
+!SupplierImporter methodsFor: 'customer' stamp: 'BR 11/26/2023 19:14:58' prior: 50667147!
+importCustomer
+	
+	| parsedCustomer |
+	self assertSupplierWasImported.
+	parsedCustomer := self parseRecordWith: CustomerRecordParser.
+	system addCustomer: parsedCustomer.
+	newSupplier addCustomer: parsedCustomer.! !
+!SupplierImporter methodsFor: 'supplier' stamp: 'BR 11/26/2023 19:16:46'!
+assertSupplierWasImportedWhenAddingAddress
+
+	^ newSupplier ifNil: [ self error: self class canNotImportAddressWithoutSupplierErrorDescription ]! !
+!SupplierImporter methodsFor: 'customer' stamp: 'BR 11/26/2023 19:16:59' prior: 50667157!
+importCustomer
+	
+	| parsedCustomer |
+	self assertSupplierWasImportedWhenImportingCustomer.
+	parsedCustomer := self parseRecordWith: CustomerRecordParser.
+	system addCustomer: parsedCustomer.
+	newSupplier addCustomer: parsedCustomer.! !
+!SupplierImporter methodsFor: 'supplier' stamp: 'BR 11/26/2023 19:17:23'!
+assertSupplierWasImportedWhenImportingCustomer
+
+	^ newSupplier ifNil: [ self error: self class canNotImportCustomerWithoutSupplierErrorDescription ]! !
+!SupplierImporter methodsFor: 'address' stamp: 'BR 11/26/2023 19:17:47' prior: 50667138!
+importAddress
+
+	| parsedAddress |
+	self assertSupplierWasImportedWhenAddingAddress.
+	parsedAddress := self parseRecordWith: AddressRecordParser.
+	newSupplier addAddress: parsedAddress.! !
+!SupplierImporter class methodsFor: 'as yet unclassified' stamp: 'BR 11/26/2023 19:18:18'!
+canNotImportCustomerWithoutSupplierErrorDescription
+
+	^'Cannot import customer without Supplier'! !
+!SupplierImporter class methodsFor: 'as yet unclassified' stamp: 'BR 11/26/2023 19:18:44'!
+canNotImportAddressWithoutSupplierErrorDescription
+
+	^'Cannot import Address without Supplier'! !
+
+!methodRemoval: SupplierImporter class #canNotImportCustomerWithoutSupplier stamp: 'BR 11/26/2023 19:19:19'!
+canNotImportCustomerWithoutSupplier
+
+	^'Cannot import customer without Supplier'!
+!SupplierImporter methodsFor: 'customer' stamp: 'BR 11/26/2023 19:20:23' prior: 50666058!
+importExistingCustomer
+	
+	| parsedId existingCustomer |
+	self assertSupplierWasImportedWhenImportingCustomer.
+	parsedId := self parseRecordWith: PartyIdRecordParser.
+	existingCustomer := system customerWithIdentification: parsedId.
+	newSupplier addCustomer: existingCustomer.! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:21:04'!
+test10ImportingFailsWhenAttemptintToImportWithEmptySupplier
+
+	| stream supplierId importedSupplier|
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+EC,C,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: ErpSystem nonExistentCustomerId.
+		self assert: system numberOfSuppliers equals: 1.
+		importedSupplier := self assertSupplierWithIdentification: supplierId hasFirstName: 'Supplier1'.
+		self assert: importedSupplier numberOfCustomers equals: 0.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:21:45' prior: 50667232!
+test10ImportingFailsWhenAttemptintToImportWithEmptySupplier
+
+	| stream supplierId importedSupplier|
+	
+	stream := ReadStream on: 'NC,Pepe,Sanchez,D,22333444'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: ErpSystem nonExistentCustomerId.
+		self assert: system numberOfSuppliers equals: 1.
+		importedSupplier := self assertSupplierWithIdentification: supplierId hasFirstName: 'Supplier1'.
+		self assert: importedSupplier numberOfCustomers equals: 0.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:22:06' prior: 50667258!
+test10ImportingFailsWhenAttemptintToImportWithEmptySupplier
+
+	| stream |
+	
+	stream := ReadStream on: 'NC,Pepe,Sanchez,D,22333444'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: ErpSystem nonExistentCustomerId.
+		self assert: system numberOfSuppliers equals: 0.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:22:40' prior: 50667282!
+test10ImportingFailsWhenAttemptintToImportWithEmptySupplier
+
+	| stream |
+	
+	stream := ReadStream on: 'NC,Pepe,Sanchez,D,22333444'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: SupplierImporter canNotImportCustomerWithoutSupplierErrorDescription.
+		self assert: system numberOfSuppliers equals: 0.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	! !
+
+!testRun: #ImportTest #test10ImportingFailsWhenAttemptintToImportWithEmptySupplier stamp: 'BR 11/26/2023 19:22:42'!
+PASSED!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:22:56'!
+test11ImportingFailsWhenAttemptintToImportAddressWithEmptySupplier
+
+	| stream |
+	
+	stream := ReadStream on: 'NC,Pepe,Sanchez,D,22333444'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: SupplierImporter canNotImportCustomerWithoutSupplierErrorDescription.
+		self assert: system numberOfSuppliers equals: 0.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:23:03' prior: 50667323!
+test11ImportingFailsWhenAttemptintToImportAddressWithEmptySupplier
+
+	| stream |
+	
+	stream := ReadStream on: 'NC,Pepe,Sanchez,D,22333444'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: SupplierImporter canNotImportAddressWithoutSupplierErrorDescription.
+		self assert: system numberOfSuppliers equals: 0.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:23:24' prior: 50667342!
+test11ImportingFailsWhenAttemptintToImportAddressWithEmptySupplier
+
+	| stream |
+	
+	stream := ReadStream on: 'A,San Martin,3322,Olivos,1636,BsAs'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: SupplierImporter canNotImportAddressWithoutSupplierErrorDescription.
+		self assert: system numberOfSuppliers equals: 0.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	! !
+
+!testRun: #ImportTest #test11ImportingFailsWhenAttemptintToImportAddressWithEmptySupplier stamp: 'BR 11/26/2023 19:23:30'!
+PASSED!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:23:41'!
+test11ImportingFailsWhenAttemptingToImportAddressWithEmptySupplier
+
+	| stream |
+	
+	stream := ReadStream on: 'A,San Martin,3322,Olivos,1636,BsAs'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: SupplierImporter canNotImportAddressWithoutSupplierErrorDescription.
+		self assert: system numberOfSuppliers equals: 0.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	! !
+
+!methodRemoval: ImportTest #test11ImportingFailsWhenAttemptintToImportAddressWithEmptySupplier stamp: 'BR 11/26/2023 19:23:41'!
+test11ImportingFailsWhenAttemptintToImportAddressWithEmptySupplier
+
+	| stream |
+	
+	stream := ReadStream on: 'A,San Martin,3322,Olivos,1636,BsAs'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: SupplierImporter canNotImportAddressWithoutSupplierErrorDescription.
+		self assert: system numberOfSuppliers equals: 0.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:25:10'!
+test10ImportingFailsWhenAttemptingToImportWithEmptySupplier
+
+	| stream |
+	
+	stream := ReadStream on: 'NC,Pepe,Sanchez,D,22333444'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: SupplierImporter canNotImportCustomerWithoutSupplierErrorDescription.
+		self assert: system numberOfSuppliers equals: 0.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	! !
+
+!methodRemoval: ImportTest #test10ImportingFailsWhenAttemptintToImportWithEmptySupplier stamp: 'BR 11/26/2023 19:25:10'!
+test10ImportingFailsWhenAttemptintToImportWithEmptySupplier
+
+	| stream |
+	
+	stream := ReadStream on: 'NC,Pepe,Sanchez,D,22333444'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: SupplierImporter canNotImportCustomerWithoutSupplierErrorDescription.
+		self assert: system numberOfSuppliers equals: 0.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:25:17'!
+test09ImportingFailsWhenAttemptingToImportNonExistentCustomer
+
+	| stream supplierId importedSupplier|
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+EC,C,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: ErpSystem nonExistentCustomerId.
+		self assert: system numberOfSuppliers equals: 1.
+		importedSupplier := self assertSupplierWithIdentification: supplierId hasFirstName: 'Supplier1'.
+		self assert: importedSupplier numberOfCustomers equals: 0.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	! !
+
+!methodRemoval: ImportTest #test09ImportingFailsWhenAttemptintToImportNonExistentCustomer stamp: 'BR 11/26/2023 19:25:17'!
+test09ImportingFailsWhenAttemptintToImportNonExistentCustomer
+
+	| stream supplierId importedSupplier|
+	
+	stream := ReadStream on: 'S,Supplier1,D,123
+EC,C,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+
+	self should: [
+		SupplierImporter valueFrom: stream into: system .
+		]
+	 raise: Error - MessageNotUnderstood
+	 withExceptionDo: [:error | 
+		self assert: error messageText equals: ErpSystem nonExistentCustomerId.
+		self assert: system numberOfSuppliers equals: 1.
+		importedSupplier := self assertSupplierWithIdentification: supplierId hasFirstName: 'Supplier1'.
+		self assert: importedSupplier numberOfCustomers equals: 0.
+		self assert: system numberOfCustomers equals: 0.
+	]
+
+	
+	
+	
+	
+	
+
+	!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:27:49'!
+test12ManySuppliersAreImportedCorrectly
+
+	| stream importedSupplier supplierId |
+	
+	system addCustomer: self juanPerez.
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,C,23-25666777-9
+S,Supplier2,E,1234'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 2.
+	self assert: system numberOfCustomers equals: 2.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:28:17' prior: 50667513!
+test12ManySuppliersAreImportedCorrectly
+
+	| stream importedSupplier supplierId |
+	
+	system addCustomer: self juanPerez.
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+EC,C,23-25666777-9
+S,Supplier2,E,1234'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 2.
+	self assert: system numberOfCustomers equals: 2.
+	self assert: system numberOfSuppliers equals: 2.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+
+!testRun: #ImportTest #test12ManySuppliersAreImportedCorrectly stamp: 'BR 11/26/2023 19:28:19'!
+PASSED!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:29:35' prior: 50667536!
+test12ManySuppliersAreImportedCorrectly
+
+	| stream importedSupplier supplierId |
+	
+	system addCustomer: self juanPerez.
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+S,Supplier2,E,1234
+EC,C,23-25666777-9'.
+	supplierId := PartyId ofType: 'D' numbered: '123'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier := system supplierWithIdentification: supplierId.
+	self assert: importedSupplier numberOfCustomers equals: 2.
+	self assert: system numberOfCustomers equals: 2.
+	self assert: system numberOfSuppliers equals: 2.
+	self assertCorrectlyImportedCustomerOf: importedSupplier withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+
+	! !
+
+!testRun: #ImportTest #test12ManySuppliersAreImportedCorrectly stamp: 'BR 11/26/2023 19:29:36'!
+FAILURE!
+
+!testRun: #ImportTest #test12ManySuppliersAreImportedCorrectly stamp: 'BR 11/26/2023 19:29:36'!
+FAILURE!
+
+!testRun: #ImportTest #test12ManySuppliersAreImportedCorrectly stamp: 'BR 11/26/2023 19:30:47'!
+FAILURE!
+
+!testRun: #ImportTest #test12ManySuppliersAreImportedCorrectly stamp: 'BR 11/26/2023 19:30:47'!
+FAILURE!
+!ImportTest methodsFor: 'tests - supplier' stamp: 'BR 11/26/2023 19:33:53' prior: 50667564!
+test12ManySuppliersAreImportedCorrectly
+
+	| stream importedSupplier1 importedSupplier2 supplierId1 supplierId2 |
+	
+	system addCustomer: self juanPerez.
+	stream := ReadStream on: 'S,Supplier1,D,123
+NC,Pepe,Sanchez,D,22333444
+S,Supplier2,E,1234
+EC,C,23-25666777-9'.
+	supplierId1 := PartyId ofType: 'D' numbered: '123'.
+	supplierId2 := PartyId ofType: 'E' numbered: '1234'.
+	SupplierImporter valueFrom: stream into: system .
+	
+	importedSupplier1 := system supplierWithIdentification: supplierId1.
+	importedSupplier2 := system supplierWithIdentification: supplierId2.
+	
+	self assert: importedSupplier1 numberOfCustomers equals: 1.
+	self assert: importedSupplier2 numberOfCustomers equals: 1.
+	self assert: system numberOfCustomers equals: 2.
+	self assert: system numberOfSuppliers equals: 2.
+	self assertCorrectlyImportedCustomerOf: importedSupplier1 withId: self pepeSanchezId name: 'Pepe' lastName: 'Sanchez'.
+	self assertCorrectlyImportedCustomerOf: importedSupplier2 withId: self juanPerezId name: 'Juan' lastName: 'Perez'.
+
+	! !
+
+!testRun: #ImportTest #test12ManySuppliersAreImportedCorrectly stamp: 'BR 11/26/2023 19:33:57'!
+PASSED!
+
+----QUIT----(26 November 2023 19:38:41) CuisUniversity-5981.image priorSource: 10699094!
